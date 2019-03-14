@@ -1,0 +1,7 @@
+numpy
+astropy
+matplotlib
+pyyaml
+sphinxcontrib-apidoc
+numpydoc ==0.6.0
+sphinx ==1.6.7
