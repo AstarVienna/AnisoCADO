@@ -1,8 +1,8 @@
 Welcome to AnisoCADO's documentation!
 =======================================
 
-AnisoCADO is the package created around Eric Gendron's code for analytically
-generating field-varying SCAO PSFs for MICADO at the ELT.
+AnisoCADO is the python package created around Eric Gendron's code for
+analytically generating field-varying SCAO PSFs for MICADO at the ELT.
 
 
 .. figure:: ./_static/psf_grid_Ks_band.png
