@@ -13,6 +13,10 @@ generating field-varying SCAO PSFs for MICADO at the ELT.
    Reference API <reference/anisocado>
 
 
+.. warning:: While the code for this package exists, I haven't yet compiled it
+    into a ``pip install`` -able package. The should happen very soon.
+
+
 Basic Usage
 -----------
 
@@ -40,20 +44,21 @@ astropy ``ImageHDU`` object with ``.hdu``. Here the kernel is kept in the
 create the PSF kernel::
 
     psf.kernel
-    psf.hdu
+    psf.hdu.data
 
 
 Write PSF to a FITS file
 ++++++++++++++++++++++++
-Given that the PSF is already an astropy ``ImageHDU`` object, we can take
-advantage of the astropy functionality and simly save the ``.hdu`` to disk.::
+Given that the PSF can create an astropy ``ImageHDU`` object, we can take
+advantage of the astropy functionality and and override the ``.writeto()``
+method of an astropy ``ImageHDU`` object::
 
-    psf.hdu.writeto("My_SCAO_PSF.fits")
+    psf.writeto(filename="My_SCAO_PSF.fits")
 
-Obviously this is just an example. We will normally want to create multiple
-SCAO PSFs for different wavelengths and different positions over the field of
-view. To do this we can simply loop over a series of coordinates and add the
-``HDUs`` to an astropy ``HDUList`` object.::
+Obviously this will only work for single PSFs. We will normally want to create
+multiple SCAO PSFs for different wavelengths and different positions over the
+field of view. To do this we can simply loop over a series of coordinates and
+add the ``HDUs`` to an astropy ``HDUList`` object.::
 
     from astropy.io import fits
     from anisocado import AnalyticalScaoPsf
@@ -66,12 +71,13 @@ view. To do this we can simply loop over a series of coordinates and add the
             hdus += [psf.hdu]
 
     hdu_list = fits.HDUList(hdus)
-    hdu_list.writeto("My_bunch_of_SCAO_PSFs.fits)
+    hdu_list.writeto(filename="My_bunch_of_SCAO_PSFs.fits)
 
 
 Installation
 ------------
 
+Soon to be available via pip
 
 
 Dependencies
@@ -79,11 +85,12 @@ Dependencies
 
 The following packages are required for normal operation:
 
-* :mod:`numpy`
+* ``numpy``
+* ``astropy``
 
 The following packages are optional:
 
-* :mod:`matplotlib`
+* ``matplotlib``
 
 
 Indices and tables

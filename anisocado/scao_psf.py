@@ -337,6 +337,9 @@ class AnalyticalScaoPsf:
     def hdu(self):
         return self.get_hdu()
 
+    def writeto(self, **kwargs):
+        self.hdu.writeto(**kwargs)
+
     def get_hdu(self):
         w, h = self.psf_latest.shape
 
