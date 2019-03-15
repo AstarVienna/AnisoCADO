@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 with open('README.md') as f:
     __readme__ = f.read()
 
-with open('LICENCE') as f:
+with open('LICENSE') as f:
     __license__ = f.read()
 
 __version__ = "0.1dev"

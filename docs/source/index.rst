@@ -20,11 +20,53 @@ The most needed functionality is based around the ``AnalyticalScaoPsf`` class.
 Create one like this::
 
     from anisocado import AnalyticalScaoPsf
-    scao =
+    psf = AnalyticalScaoPsf(N=512, wavelengthIR=2.15e-6)
+
+where (for the moment) ``N`` is the side length of the PSF kernel image and
+``wavelengthIR`` is the central wavelength [um] of the PSF that we wish to
+simulate
+
+When we create an AnalyticalScaoPsf object, an initial PSF is created that is
+on-axis. This can be accessed with the ``.psf_on_axis`` attribute.
+
+To "move" the PSF off-axis, we call the ``.shift_psf_off_axis(dx, dy)`` method.
+Here ``dx, dy`` are in arcseconds.::
+
+    psf.shift_psf_off_axis(10, -5)
+
+We can access this PSF in two ways: as a numpy array with ``.kernel`` or as an
+astropy ``ImageHDU`` object with ``.hdu``. Here the kernel is kept in the
+``.data`` attribute, while the header contains all the parameters used to
+create the PSF kernel::
+
+    psf.kernel
+    psf.hdu
 
 
+Write PSF to a FITS file
+++++++++++++++++++++++++
+Given that the PSF is already an astropy ``ImageHDU`` object, we can take
+advantage of the astropy functionality and simly save the ``.hdu`` to disk.::
 
+    psf.hdu.writeto("My_SCAO_PSF.fits")
 
+Obviously this is just an example. We will normally want to create multiple
+SCAO PSFs for different wavelengths and different positions over the field of
+view. To do this we can simply loop over a series of coordinates and add the
+``HDUs`` to an astropy ``HDUList`` object.::
+
+    from astropy.io import fits
+    from anisocado import AnalyticalScaoPsf
+
+    psf = AnalyticalScaoPsf(N=256, wavelengthIR=1.2e-6)
+    hdus = []
+    for x in range(-25, 26, 5):
+        for y in range(-25, 26, 5):
+            psf.shift_psf_off_axis(x, y)
+            hdus += [psf.hdu]
+
+    hdu_list = fits.HDUList(hdus)
+    hdu_list.writeto("My_bunch_of_SCAO_PSFs.fits)
 
 
 Installation

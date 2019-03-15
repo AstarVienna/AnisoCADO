@@ -25,15 +25,15 @@ class TestInit:
 
     def test_on_axis_psf_is_made(self):
         psf = AnalyticalScaoPsf(N=128)
-        assert isinstance(psf._on_axis_psf, np.ndarray)
+        assert isinstance(psf.psf_on_axis, np.ndarray)
 
         if PLOTS:
-            plt.imshow(psf._on_axis_psf.T, origin="lower", norm=LogNorm())
+            plt.imshow(psf.psf_on_axis.T, origin="lower", norm=LogNorm())
             plt.show()
 
     def test_kernel_sums_to_one(self):
         psf = AnalyticalScaoPsf(N=256)
-        assert np.sum(psf._last_psf) == pytest.approx(1)
+        assert np.sum(psf.psf_latest) == pytest.approx(1)
 
 
 class TestShiftPSF:
@@ -48,29 +48,30 @@ class TestShiftPSF:
 
         if PLOTS:
             plt.subplot(121)
-            plt.imshow(psf._on_axis_psf.T, origin="lower", norm=LogNorm())
+            plt.imshow(psf.psf_on_axis.T, origin="lower", norm=LogNorm())
 
             plt.subplot(122)
-            plt.imshow(psf._last_psf.T, origin="lower", norm=LogNorm(), vmin=3e-8)
+            plt.imshow(psf.psf_latest.T, origin="lower", norm=LogNorm(), vmin=3e-8)
             plt.show()
 
     def test_kernel_sums_to_one(self):
         psf = AnalyticalScaoPsf(N=512)
         psf.shift_psf_off_axis(0, 0)
-        assert np.sum(psf._last_psf) == pytest.approx(1)
+        assert np.sum(psf.psf_latest) == pytest.approx(1)
 
 
 class TestHDUProperty:
     def test_returns_fits_imagehdu(self):
         psf = AnalyticalScaoPsf(N=512)
+        psf.shift_psf_off_axis(10, 10)
         hdu = psf.hdu
         assert isinstance(hdu, fits.ImageHDU)
         assert hdu.header["CDELT1"] == 4 / (3600 * 1000.)
+        assert hdu.header["CRVAL1"] == 10 / 3600.
 
         if PLOTS:
             plt.imshow(hdu.data, norm=LogNorm())
             plt.show()
-        print(dict(hdu.header))
 
 
 

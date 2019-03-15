@@ -45,7 +45,7 @@ class AnalyticalScaoPsf:
     dactu : float
         [m] Interactuator distance on M4. Default in 0.5403
     _last_x, _last_y : float
-        [arcsec] shifts used to generate the _last_psf kernel
+        [arcsec] shifts used to generate the psf_latest kernel
 
 
     Derived Attributes
@@ -77,12 +77,12 @@ class AnalyticalScaoPsf:
 
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **psf_on_axis):
         self.kwarg_names = ["N", "pixelSize", "wavelengthIR", "rotdegree",
                             "seeing", "r0Vis", "r0IR", "nmRms", "L0",
                             "profile_name", "zenDist", "deadSegments",
-                            "V", "Fe", "tret", "gain", "dactu", "_last_x",
-                            "_last_y"]
+                            "V", "Fe", "tret", "gain", "dactu", "x_last",
+                            "y_last"]
 
         # Variable attributes
         self.N = 512
@@ -100,15 +100,14 @@ class AnalyticalScaoPsf:
         self.tret = 0.004           # delay in the loop is 4 ms
         self.gain = 0.3             # closed-loop gain is 0.3
         self.dactu = 0.5403         # [m] distance betweem actuators on M4
-        self._last_x = 0            # [arcsec] x shift used to make _last_psf
-        self._last_y = 0            # [arcsec] x shift used to make _last_psf
+        self.x_last = 0            # [arcsec] x shift used to make psf_latest
+        self.y_last = 0            # [arcsec] x shift used to make psf_latest
 
         # Derived attributes
         self.r0Vis = None           # meters
         self.r0IR = None            # meters
-        self._on_axis_psf = None
-        self._last_psf = None
-        self.psf = None
+        self.psf_on_axis = None
+        self.psf_latest = None
         self.pup = None
         self.layerAltitude = None
         self.Cn2h = None
@@ -118,7 +117,7 @@ class AnalyticalScaoPsf:
         self.M4 = None
         self.W = None
 
-        self.__dict__.update(kwargs)
+        self.__dict__.update(psf_on_axis)
         self.update()
 
     def update(self, **kwargs):
@@ -163,9 +162,9 @@ class AnalyticalScaoPsf:
         # This is the turbulent spectrum ....
         self.W = computeWiener(self.kx, self.ky, self.L0, self.r0IR)
 
-        if self._on_axis_psf is None:
-            self._on_axis_psf = self.make_psf()
-            self._last_psf = self._on_axis_psf
+        if self.psf_on_axis is None:
+            self.psf_on_axis = self.make_psf()
+            self.psf_latest = self.psf_on_axis
 
     def make_psf(self):
         """
@@ -204,7 +203,7 @@ class AnalyticalScaoPsf:
         psf = core_generatePsf(Dphi, FTOtel)
         psf /= np.sum(psf)
         # psf = clean_psf(psf, 1E-7)
-        self._last_psf = psf
+        self.psf_latest = psf
 
         return psf
 
@@ -224,8 +223,8 @@ class AnalyticalScaoPsf:
             The PSF kernel
 
         """
-        self._last_x = dx
-        self._last_y = dy
+        self.x_last = dx
+        self.y_last = dy
 
         # Original setup starts in update()
 
@@ -240,11 +239,11 @@ class AnalyticalScaoPsf:
 
         # Here, the on-axis psf comes into play ... I take its Fourier transform
         # it's complex.
-        fto = np.fft.fft2(np.fft.fftshift(self._on_axis_psf)) / self.N ** 2
+        fto = np.fft.fft2(np.fft.fftshift(self.psf_on_axis)) / self.N ** 2
 
         psf = core_generatePsf(Dphi, fto)
         psf /= np.sum(psf)
-        self._last_psf = psf
+        self.psf_latest = psf
 
         return psf
 
@@ -275,7 +274,7 @@ class AnalyticalScaoPsf:
         # The dirty one.
         # Let's try to simulate the fluctuations due to short exposures.
         Waniso = anisoplanaticSpectrum(self.Cn2h, self.layerAltitude, self.L0,
-                                       self._last_x, self._last_x,
+                                       self.x_last, self.x_last,
                                        self.wavelengthIR, self.kx, self.ky,
                                        self.W, self.M4)
         Wfit = fittingSpectrum(self.W, self.M4)
@@ -322,30 +321,30 @@ class AnalyticalScaoPsf:
             ph1 = np.roll(ph1, stepPix, axis=0)
         psfLE /= niter
         psfLE /= np.sum(psfLE)
-        self._last_psf = psfLE
+        self.psf_latest = psfLE
 
         return psfLE
 
     @property
     def strehl_ratio(self):
-        return np.max(self._last_psf)
+        return np.max(self.psf_latest)
 
     @property
     def kernel(self):
-        return self._last_psf
+        return self.psf_latest
 
     @property
     def hdu(self):
         return self.get_hdu()
 
     def get_hdu(self):
-        w, h = self._last_psf.shape
+        w, h = self.psf_latest.shape
 
         hdr = fits.Header()
         hdr["CDELT1"] = self.pixelSize / (3600. * 1000.)
         hdr["CDELT2"] = self.pixelSize / (3600. * 1000.)   #because pixelSize is in mas
-        hdr["CRVAL1"] = self._last_x / 3600.
-        hdr["CRVAL2"] = self._last_y / 3600.
+        hdr["CRVAL1"] = self.x_last / 3600.
+        hdr["CRVAL2"] = self.y_last / 3600.
         hdr["CRPIX1"] = w / 2.
         hdr["CRPIX2"] = h / 2.
         hdr["CTYPE1"] = "RA---TAN"
@@ -356,10 +355,13 @@ class AnalyticalScaoPsf:
 
         dic = {key: self.__dict__[key] for key in self.kwarg_names}
         hdr.update(dic)
-        hdu_psf = fits.ImageHDU(data=self._last_psf, header=hdr)
+        hdu_psf = fits.ImageHDU(data=self.psf_latest, header=hdr)
 
         return hdu_psf
 
-    def plot_psf(self, which="_last_psf"):
+    def plot_psf(self, which="psf_latest"):
         plt.imshow(getattr(self, which).T, origin='l', norm=LogNorm())
-        print('Strehl ratio of {} is {}'.format(which, self.psf.max()))
+        print('Strehl ratio of {} is {}'.format(which, self.psf_latest.max()))
+
+
+AnalyticalScaoPsf().hdu.writeto()
