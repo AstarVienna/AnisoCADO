@@ -2,7 +2,9 @@ import warnings
 from matplotlib import pyplot as plt
 from matplotlib.colors import LogNorm
 
-from anisocado.utils import *
+from astropy.io import fits
+
+from .utils import *
 
 
 class AnalyticalScaoPsf:
@@ -42,6 +44,8 @@ class AnalyticalScaoPsf:
         Closed-loop gain default is 0.3
     dactu : float
         [m] Interactuator distance on M4. Default in 0.5403
+    _last_x, _last_y : float
+        [arcsec] shifts used to generate the _last_psf kernel
 
 
     Derived Attributes
@@ -75,9 +79,10 @@ class AnalyticalScaoPsf:
 
     def __init__(self, **kwargs):
         self.kwarg_names = ["N", "pixelSize", "wavelengthIR", "rotdegree",
-                            "seeing", "r0Vis", "r0IR", "nmRms", "L0", "offx",
-                            "offy", "profile_name", "zenDist", "deadSegments",
-                            "V", "Fe", "tret", "gain", "dactu"]
+                            "seeing", "r0Vis", "r0IR", "nmRms", "L0",
+                            "profile_name", "zenDist", "deadSegments",
+                            "V", "Fe", "tret", "gain", "dactu", "_last_x",
+                            "_last_y"]
 
         # Variable attributes
         self.N = 512
@@ -95,6 +100,8 @@ class AnalyticalScaoPsf:
         self.tret = 0.004           # delay in the loop is 4 ms
         self.gain = 0.3             # closed-loop gain is 0.3
         self.dactu = 0.5403         # [m] distance betweem actuators on M4
+        self._last_x = 0            # [arcsec] x shift used to make _last_psf
+        self._last_y = 0            # [arcsec] x shift used to make _last_psf
 
         # Derived attributes
         self.r0Vis = None           # meters
@@ -217,6 +224,9 @@ class AnalyticalScaoPsf:
             The PSF kernel
 
         """
+        self._last_x = dx
+        self._last_y = dy
+
         # Original setup starts in update()
 
         # and all this will be used to run the function below, that will
@@ -265,8 +275,9 @@ class AnalyticalScaoPsf:
         # The dirty one.
         # Let's try to simulate the fluctuations due to short exposures.
         Waniso = anisoplanaticSpectrum(self.Cn2h, self.layerAltitude, self.L0,
-                                       self.offx, self.offy, self.wavelengthIR,
-                                       self.kx, self.ky, self.W, self.M4)
+                                       self._last_x, self._last_x,
+                                       self.wavelengthIR, self.kx, self.ky,
+                                       self.W, self.M4)
         Wfit = fittingSpectrum(self.W, self.M4)
         Walias = aliasingSpectrum(self.kx, self.ky, self.r0IR, self.L0, self.M4)
         Wbp = computeBpSpectrum(self.kx, self.ky, self.V, self.Fe, self.tret,
@@ -318,6 +329,36 @@ class AnalyticalScaoPsf:
     @property
     def strehl_ratio(self):
         return np.max(self._last_psf)
+
+    @property
+    def kernel(self):
+        return self._last_psf
+
+    @property
+    def hdu(self):
+        return self.get_hdu()
+
+    def get_hdu(self):
+        w, h = self._last_psf.shape
+
+        hdr = fits.Header()
+        hdr["CDELT1"] = self.pixelSize / (3600. * 1000.)
+        hdr["CDELT2"] = self.pixelSize / (3600. * 1000.)   #because pixelSize is in mas
+        hdr["CRVAL1"] = self._last_x / 3600.
+        hdr["CRVAL2"] = self._last_y / 3600.
+        hdr["CRPIX1"] = w / 2.
+        hdr["CRPIX2"] = h / 2.
+        hdr["CTYPE1"] = "RA---TAN"
+        hdr["CTYPE2"] = "DEC--TAN"
+        hdr["CUNIT1"] = "degree"
+        hdr["CUNIT2"] = "degree"
+        hdr["WAVE0"] = (self.wavelengthIR * 1e6, "[um] Central wavelength")
+
+        dic = {key: self.__dict__[key] for key in self.kwarg_names}
+        hdr.update(dic)
+        hdu_psf = fits.ImageHDU(data=self._last_psf, header=hdr)
+
+        return hdu_psf
 
     def plot_psf(self, which="_last_psf"):
         plt.imshow(getattr(self, which).T, origin='l', norm=LogNorm())

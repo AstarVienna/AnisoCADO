@@ -4,6 +4,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.colors import LogNorm
 
+from astropy.io import fits
+
 from anisocado.scao_psf import AnalyticalScaoPsf
 
 PLOTS = False
@@ -56,5 +58,19 @@ class TestShiftPSF:
         psf = AnalyticalScaoPsf(N=512)
         psf.shift_psf_off_axis(0, 0)
         assert np.sum(psf._last_psf) == pytest.approx(1)
+
+
+class TestHDUProperty:
+    def test_returns_fits_imagehdu(self):
+        psf = AnalyticalScaoPsf(N=512)
+        hdu = psf.hdu
+        assert isinstance(hdu, fits.ImageHDU)
+        assert hdu.header["CDELT1"] == 4 / (3600 * 1000.)
+
+        if PLOTS:
+            plt.imshow(hdu.data, norm=LogNorm())
+            plt.show()
+        print(dict(hdu.header))
+
 
 

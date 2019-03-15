@@ -1,7 +1,7 @@
-"""Originally from file anisocado.py"""
+"""Originally from file _anisocado.py"""
 import numpy
 import numpy as np
-from anisocado import pupil
+from . import pupil_utils
 
 #  ____  _____    _    ____  __  __ _____
 # |  _ \| ____|  / \  |  _ \|  \/  | ____|
@@ -19,7 +19,7 @@ The functions are commented to help you understand what's going on, when
 you need to modify them.
 
 Don't read that code anyway.
-Go right now to [the file anisocado.py].
+Go right now to [the file _anisocado.py].
 It contains examples that will show you how to use the functions, what they do,
 etc.
 
@@ -388,7 +388,7 @@ def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength):
         pup = fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength)
 
     """
-    nseg = pupil.getEeltSegmentNumber()
+    nseg = pupil_utils.getEeltSegmentNumber()
     refl = np.ones(nseg)+np.random.randn(nseg)/20.
     if deadSegments:
         refl[(np.random.rand(deadSegments)*nseg).astype(int)] = 0.
@@ -402,9 +402,9 @@ def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength):
     pixscale = wavelength / FoV   # expressed in metres
     dspider = 0.53
     gap = 0.02
-    pup = pupil.generateEeltPupilReflectivity(refl, N, dspider, i0, j0,
-                                              pixscale, gap, rotdegree,
-                                              softGap=True)
+    pup = pupil_utils.generateEeltPupilReflectivity(refl, N, dspider, i0, j0,
+                                                    pixscale, gap, rotdegree,
+                                                    softGap=True)
     return pup
 
 

@@ -1,6 +1,10 @@
 Welcome to AnisoCADO's documentation!
 =======================================
 
+AnisoCADO is the package created around Eric Gendron's code for analytically
+generating field-varying SCAO PSFs for MICADO at the ELT.
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -9,8 +13,23 @@ Welcome to AnisoCADO's documentation!
    Reference API <reference/anisocado>
 
 
+Basic Usage
+-----------
+
+The most needed functionality is based around the ``AnalyticalScaoPsf`` class.
+Create one like this::
+
+    from anisocado import AnalyticalScaoPsf
+    scao =
+
+
+
+
+
+
 Installation
 ------------
+
 
 
 Dependencies
@@ -19,7 +38,6 @@ Dependencies
 The following packages are required for normal operation:
 
 * :mod:`numpy`
-* :mod:`astropy`
 
 The following packages are optional:
 
