@@ -33,6 +33,6 @@ class TestStrehlRatiosForDifferentSizedKernels:
 
         side_length = [64, 128, 256, 512, 1024]
         sr = on_axis_strehl_for_kernel_size(side_length, wavelengthIR=2.15e-6)
-        if not PLOTS:
+        if PLOTS:
             plt.plot(side_length, sr)
             plt.show()
