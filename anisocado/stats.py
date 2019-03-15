@@ -37,17 +37,17 @@ def make_psf_grid(r=14, dr=7, **kwargs):
     return psf_grid
 
 
-psf_grid = make_psf_grid(wavelengthIR=2.15e-6, N=128)
-print(psf_grid)
+def make_image_of_psf_grid():
+    psf_grid = make_psf_grid(wavelengthIR=2.15e-6, N=128)
 
-plt.figure(figsize=(10, 10))
-i = 0
-for y in range(5):
-    for x in range(5):
-        plt.subplot(5, 5, 1+x+5*(4-y))
-        plt.imshow(psf_grid[i], origin="l", norm=LogNorm())
-        plt.axis("off")
-        plt.title("({}, {})".format((7*x-14), (7*x-14)))
-        i += 1
-plt.suptitle("Ks-band (2.15um) SCAO PSFs")
-plt.show()
+    plt.figure(figsize=(10, 10))
+    i = 0
+    for y in range(5):
+        for x in range(5):
+            plt.subplot(5, 5, 1+x+5*(4-y))
+            plt.imshow(psf_grid[i], origin="l", norm=LogNorm())
+            plt.axis("off")
+            plt.title("({}, {})".format((7*x-14), (7*x-14)))
+            i += 1
+    plt.suptitle("Ks-band (2.15um) SCAO PSFs")
+    plt.show()
