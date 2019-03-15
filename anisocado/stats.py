@@ -22,3 +22,32 @@ def strehl_map(r=25, dr=3, **kwargs):
 def on_axis_strehl_for_kernel_size(Narr=(128, 512, 2048), **kwargs):
     """Only for the on-axis kernel"""
     return [AnalyticalScaoPsf(N=N, **kwargs).strehl_ratio for N in Narr]
+
+
+def make_psf_grid(r=14, dr=7, **kwargs):
+    psf = AnalyticalScaoPsf(**kwargs)
+    x, y = np.mgrid[-r:r+1:dr, -r:r+1:dr]
+
+    psf_grid = []
+    for i in range(len(x)):
+        for j in range(len(y)):
+            psf.shift_psf_off_axis(x[i, j], y[i, j])
+            psf_grid += [psf.kernel]
+
+    return psf_grid
+
+
+psf_grid = make_psf_grid(wavelengthIR=2.15e-6, N=128)
+print(psf_grid)
+
+plt.figure(figsize=(10, 10))
+i = 0
+for y in range(5):
+    for x in range(5):
+        plt.subplot(5, 5, 1+x+5*(4-y))
+        plt.imshow(psf_grid[i], origin="l", norm=LogNorm())
+        plt.axis("off")
+        plt.title("({}, {})".format((7*x-14), (7*x-14)))
+        i += 1
+plt.suptitle("Ks-band (2.15um) SCAO PSFs")
+plt.show()

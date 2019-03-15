@@ -5,6 +5,12 @@ AnisoCADO is the package created around Eric Gendron's code for analytically
 generating field-varying SCAO PSFs for MICADO at the ELT.
 
 
+.. figure:: ./_static/psf_grid_Ks_band.png
+    :align: center
+    :figwidth: 700px
+
+    A grid of SCAO PSFs at 2.15um covering 14 arcsec on the MICADO field of view
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
