@@ -4,21 +4,32 @@ from matplotlib.colors import LogNorm
 
 from astropy.io import fits
 
-from .utils import *
+from .psf_utils import *
 
 
 class AnalyticalScaoPsf:
     """
     A class to generate SCAO PSFs for MICADO at the ELT
 
+    It is important to note that original PSF is generated for an on-axis
+    guide star (``self.psf_on_axis``) at a specific wavelength. This PSF is
+    kept as a reference for all further operations.
+
+    When the guide star is shifted off axis, the new PSF kernel is returned by
+    the function ``self.shift_off_axis()``. The kernel is also kept in
+    ``self.psf_latest``.
+
+    The property ``self.strehl_ratio`` is always calculated from
+     ``self.psf_latest`` (or ``self.psf_on_axis`` if no shift has been applied).
+
     Parameters
     ----------
     N : int
         [pixel] Side-length of the kernel array
     pixelSize : float
-        [mas] On-sky pixel scale
-    wavelengthIR : float
-        [m] Wavelength for which the PSF should be generated
+        [arcsec] On-sky pixel scale
+    wavelength : float
+        [um] Wavelength for which the PSF should be generated
     rotdegree : float
         [deg] Rotation angle of the pupil w.r.t the plane of the optical axis
     seeing : float
@@ -39,12 +50,12 @@ class AnalyticalScaoPsf:
     Fe : float
         [Hz] AO sampling frequency of the system. Default is 500 Hz
     tret : float
-        [s] Delay in the AO loop. Default is 4 ms
+        [s] Delay in the AO loop. Default is 0.004s [4 ms]
     gain : float
         Closed-loop gain default is 0.3
     dactu : float
         [m] Interactuator distance on M4. Default in 0.5403
-    _last_x, _last_y : float
+    x_last, y_last : float
         [arcsec] shifts used to generate the psf_latest kernel
 
 
@@ -54,9 +65,9 @@ class AnalyticalScaoPsf:
         [m] Fried parameter at 500 nm.
     r0IR : float
         [m] Fried parameter at 500 nm.
-    _on_axis_psf : array
+    psf_on_axis : array
         The on-axis PSF kernel
-    _last_psf : array
+    psf_latest : array
         The last PSF generated or shifted is kept in memory
     pup : array
         An image of the telescope pupil, i.e. ELT M1
@@ -75,10 +86,19 @@ class AnalyticalScaoPsf:
         [rad2 m2] 2D spectrum of the turbulence with an outer scale L0.
         See ``utils.computeWiener``
 
+    Examples
+    --------
+    Make a PSF for a NGS 5 arcsec off axis and save it to disk::
+
+        from anisocado import AnalyticalScaoPsf
+        psf = AnalyticalScaoPsf(N=512, wavelength=2.15, seeing=0.8)
+        psf.shift_off_axis(5, 0)
+        psf.writeto("my_psf.fits")
+
     """
 
     def __init__(self, **psf_on_axis):
-        self.kwarg_names = ["N", "pixelSize", "wavelengthIR", "rotdegree",
+        self.kwarg_names = ["N", "pixelSize", "wavelength", "rotdegree",
                             "seeing", "r0Vis", "r0IR", "nmRms", "L0",
                             "profile_name", "zenDist", "deadSegments",
                             "V", "Fe", "tret", "gain", "dactu", "x_last",
@@ -86,8 +106,8 @@ class AnalyticalScaoPsf:
 
         # Variable attributes
         self.N = 512
-        self.pixelSize = 4          # mas
-        self.wavelengthIR = 2.15e-6 # metres
+        self.pixelSize = 0.004      # arcsec
+        self.wavelength = 2.15      # um
         self.rotdegree = 0.         # deg
         self.seeing = 0.8           # arcsec
         self.nmRms = 100.           # nm
@@ -97,11 +117,11 @@ class AnalyticalScaoPsf:
         self.deadSegments = 5       # there are some missing segments tonight !
         self.V = 10.                # wind is 10 m/s
         self.Fe = 500.              # sampling frequency of the system is 500 Hz
-        self.tret = 0.004           # delay in the loop is 4 ms
+        self.tret = 0.004           # [s] delay in the loop is 4 ms
         self.gain = 0.3             # closed-loop gain is 0.3
         self.dactu = 0.5403         # [m] distance betweem actuators on M4
-        self.x_last = 0            # [arcsec] x shift used to make psf_latest
-        self.y_last = 0            # [arcsec] x shift used to make psf_latest
+        self.x_last = 0             # [arcsec] x shift used to make psf_latest
+        self.y_last = 0             # [arcsec] x shift used to make psf_latest
 
         # Derived attributes
         self.r0Vis = None           # meters
@@ -116,7 +136,9 @@ class AnalyticalScaoPsf:
         self.uk = None
         self.M4 = None
         self.W = None
-
+        self._wave_m = None
+        self._kernel_sum = None
+        
         self.__dict__.update(psf_on_axis)
         self.update()
 
@@ -126,7 +148,15 @@ class AnalyticalScaoPsf:
 
         Valid parameter names can be found in ``self.kwarg_names``
 
+        Examples
+        --------
+
+
         """
+        self._wave_m = self.wavelength
+        if self.wavelength > 0.1:  # assume its in um
+            self._wave_m *= 1e-6
+        
         for key in kwargs:
             if key not in self.kwarg_names:
                 warnings.warn("{} not found in self.kwarg_names".format(key))
@@ -144,18 +174,18 @@ class AnalyticalScaoPsf:
         # convert r0 from 500nm to IR
         # apparent seeing degrades with airmass
         self.r0Vis = 0.103 / self.seeing
-        self.r0IR = r0Converter(self.r0Vis, 500e-9, self.wavelengthIR)
+        self.r0IR = r0Converter(self.r0Vis, 500e-9, self._wave_m)
         self.r0IR = airmassImpact(self.r0IR, self.zenDist)
 
         # generate the ELT pupil
         self.pup = fake_generatePupil(self.N, self.deadSegments, self.rotdegree,
-                                      self.pixelSize, self.wavelengthIR)
+                                      self.pixelSize, self._wave_m)
 
         # Let's go. Let's define some basic parameters
         # (arrays of spatial frequencies)
         self.kx, self.ky, self.uk = computeSpatialFreqArrays(self.N,
                                                              self.pixelSize,
-                                                             self.wavelengthIR)
+                                                             self._wave_m)
         self.M4 = defineDmFrequencyArea(self.kx, self.ky, self.rotdegree,
                                         self.dactu)
 
@@ -179,37 +209,45 @@ class AnalyticalScaoPsf:
         psf : array
             The PSF kernel
 
+        Examples
+        --------
+
+
         """
         # Initial setup happens in update()
 
         dx, dy = 0, 0
-        # And here are some of the PSF-destroyers - (English: Wavefront errors)
+        # And here are some of the PSF-destroyers  (Translation: Wavefront errs)
         Waniso = anisoplanaticSpectrum(self.Cn2h, self.layerAltitude, self.L0,
-                                       dx, dy, self.wavelengthIR,
+                                       dx, dy, self._wave_m,
                                        self.kx, self.ky, self.W, self.M4)
         Wfit = fittingSpectrum(self.W, self.M4)
         Walias = aliasingSpectrum(self.kx, self.ky, self.r0IR, self.L0, self.M4)
         Wbp = computeBpSpectrum(self.kx, self.ky, self.V, self.Fe, self.tret,
                                 self.gain, self.W, self.M4)
-        Wother = otherSpectrum(self.nmRms, self.M4, self.uk, self.wavelengthIR)
+        Wother = otherSpectrum(self.nmRms, self.M4, self.uk, self._wave_m)
         # Wnoise = noiseSpectrum(Rmag, .. kx, ky)  available one day ...
 
         # Now, you sum up every contributor, and produce a phase structure funcn
         Wtotal = Waniso + Wfit + Wother + Walias + Wbp  # + Wnoise
+        # Wtotal = np.zeros(np.shape(Wtotal))
         Dphi = convertSpectrum2Dphi(Wtotal, self.uk)
 
         # And you "blur" the nice Airy pattern using that phase structure funcn
         FTOtel = computeEeltOTF(self.pup)
         psf = core_generatePsf(Dphi, FTOtel)
-        psf /= np.sum(psf)
+        sum_kernel = np.sum(psf)
+        if self._kernel_sum is None:
+            self._kernel_sum = sum_kernel
+        psf /= sum_kernel
         # psf = clean_psf(psf, 1E-7)
         self.psf_latest = psf
 
         return psf
 
-    def shift_psf_off_axis(self, dx, dy):
+    def shift_off_axis(self, dx, dy):
         """
-        Shifts the on-axis PSF off axis by an amount ``(dx, dy)``
+        Shifts the on-axis PSF off axis by an amount ``(dx, dy)`` in arcsec
 
         Parameters
         ----------
@@ -222,7 +260,12 @@ class AnalyticalScaoPsf:
         psf : array
             The PSF kernel
 
+        Examples
+        --------
+
+
         """
+
         self.x_last = dx
         self.y_last = dy
 
@@ -231,7 +274,7 @@ class AnalyticalScaoPsf:
         # and all this will be used to run the function below, that will
         # compute the spatial spectrum of the phase due to anisoplanatism
         Waniso = anisoplanaticSpectrum(self.Cn2h, self.layerAltitude, self.L0,
-                                       dx, dy, self.wavelengthIR,
+                                       dx, dy, self._wave_m,
                                        self.kx, self.ky, self.W, self.M4)
 
         # Transforming this spectrum into a phase structure function
@@ -247,7 +290,7 @@ class AnalyticalScaoPsf:
 
         return psf
 
-    def make_short_exposure_psf(self, DIT=1.0, step=0.5):
+    def make_short_exposure_psf(self, dit=1.0, screen_step_length=0.5):
         """
         Returns a PSF for an 'short' exposure time of ``DIT``
 
@@ -258,10 +301,10 @@ class AnalyticalScaoPsf:
 
         Parameters
         ----------
-        DIT : float
+        dit : float
             [s] Default is 1.0 sec. Exposure time for the PSF
 
-        step : float
+        screen_step_length : float
             [m] Sample step length for atmospheric phase screen
             Default is 0.5m - the length of the M4 actuator pitch
 
@@ -269,19 +312,23 @@ class AnalyticalScaoPsf:
         -------
         psfLE : array
 
+        Examples
+        --------
+
+
         """
 
         # The dirty one.
         # Let's try to simulate the fluctuations due to short exposures.
         Waniso = anisoplanaticSpectrum(self.Cn2h, self.layerAltitude, self.L0,
                                        self.x_last, self.x_last,
-                                       self.wavelengthIR, self.kx, self.ky,
+                                       self._wave_m, self.kx, self.ky,
                                        self.W, self.M4)
         Wfit = fittingSpectrum(self.W, self.M4)
         Walias = aliasingSpectrum(self.kx, self.ky, self.r0IR, self.L0, self.M4)
         Wbp = computeBpSpectrum(self.kx, self.ky, self.V, self.Fe, self.tret,
                                 self.gain, self.W, self.M4)
-        Wother = otherSpectrum(self.nmRms, self.M4, self.uk, self.wavelengthIR)
+        Wother = otherSpectrum(self.nmRms, self.M4, self.uk, self._wave_m)
         # Wnoise = noiseSpectrum(Rmag, .. kx, ky)  available one day ...
 
         # I start from "use case 2", and I sum the contributors to the phase err
@@ -307,9 +354,9 @@ class AnalyticalScaoPsf:
 
         # With such a wide screen, and using a wind speed of V m/s, then I can
         # simulate an exposure time of  (widthScreen/V) seconds.
-        stepPix = int(np.round(step / ud))
+        stepPix = int(np.round(screen_step_length / ud))
         stepTime = (stepPix * ud) / self.V
-        niter = int(np.round(DIT / stepTime))
+        niter = int(np.round(dit / stepTime))
         psfLE = 0  # psf Long Exposure
         normFactor = np.sum(self.pup) ** 2
         for i in range(niter):
@@ -327,7 +374,7 @@ class AnalyticalScaoPsf:
 
     @property
     def strehl_ratio(self):
-        return np.max(self.psf_latest)
+        return np.max(self.psf_latest) * self._kernel_sum
 
     @property
     def kernel(self):
@@ -344,8 +391,8 @@ class AnalyticalScaoPsf:
         w, h = self.psf_latest.shape
 
         hdr = fits.Header()
-        hdr["CDELT1"] = self.pixelSize / (3600. * 1000.)
-        hdr["CDELT2"] = self.pixelSize / (3600. * 1000.)   #because pixelSize is in mas
+        hdr["CDELT1"] = self.pixelSize / 3600.  # because pixelSize is in arcsec
+        hdr["CDELT2"] = self.pixelSize / 3600.  
         hdr["CRVAL1"] = self.x_last / 3600.
         hdr["CRVAL2"] = self.y_last / 3600.
         hdr["CRPIX1"] = w / 2.
@@ -354,7 +401,9 @@ class AnalyticalScaoPsf:
         hdr["CTYPE2"] = "DEC--TAN"
         hdr["CUNIT1"] = "degree"
         hdr["CUNIT2"] = "degree"
-        hdr["WAVE0"] = (self.wavelengthIR * 1e6, "[um] Central wavelength")
+        hdr["WAVE0"] = (self.wavelength, "[um] Central wavelength")
+        hdr["STREHL"] = (self.strehl_ratio, "Strehl ratio")
+        hdr["PSF_SUM"] = self._kernel_sum, "Sum of on-axis kernel used for SR"
 
         dic = {key: self.__dict__[key] for key in self.kwarg_names}
         hdr.update(dic)
@@ -365,3 +414,7 @@ class AnalyticalScaoPsf:
     def plot_psf(self, which="psf_latest"):
         plt.imshow(getattr(self, which).T, origin='l', norm=LogNorm())
         print('Strehl ratio of {} is {}'.format(which, self.psf_latest.max()))
+
+
+
+

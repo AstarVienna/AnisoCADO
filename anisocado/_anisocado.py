@@ -7,19 +7,15 @@ Created on Tue Mar 12 18:48:47 2019
 Edited by Kieran Leschinski
 """
 
-# import matplotlib.pyplot as plt
-# plt.ion()
-from anisocado.utils import *
-from anisocado.utils import get_atmospheric_turbulence
+import matplotlib.pyplot as plt
+from anisocado.psf_utils import *
+from anisocado.psf_utils import get_atmospheric_turbulence
 
-"""
- _   _             ____                  _
-| | | |___  ___   / ___|__ _ ___  ___   / |
-| | | / __|/ _ \ | |   / _` / __|/ _ \  | |
-| |_| \__ \  __/ | |__| (_| \__ \  __/  | |
- \___/|___/\___|  \____\__,_|___/\___|  |_|
-
-"""
+#  _   _             ____                  _
+# | | | |___  ___   / ___|__ _ ___  ___   / |
+# | | | / __|/ _ \ | |   / _` / __|/ _ \  | |
+# | |_| \__ \  __/ | |__| (_| \__ \  __/  | |
+#  \___/|___/\___|  \____\__,_|___/\___|  |_|
 
 
 def shift_scao_psf(plots=False):
@@ -59,8 +55,8 @@ def shift_scao_psf(plots=False):
 
     # OK. That's the starting point.......................
 
-    # Now I need to know the atmospheric properties, in particular the Cn2h profile.
-    # Let me offer you a little selection of atmospheric profiles.
+    # Now I need to know the atmospheric properties, in particular the Cn2h
+    # profile. Let me offer you a little selection of atmospheric profiles.
     profile_name = "gendron"
     layerAltitude, Cn2h = get_atmospheric_turbulence(profile_name)
 
@@ -75,7 +71,9 @@ def shift_scao_psf(plots=False):
     r0Vis = 0.12  # I know, we know it already ...
 
     # I also need to know where's the off-axis star I want to simulate
-    offx, offy = (0, 0)   # in arcsecs (this one is for those who'd like to check nothing will change at the end)
+    # in arcsecs (this one is for those who'd like to check nothing will change
+    # at the end)
+    # offx, offy = (0, 0)
     offx, offy = (0., 16.)   # in arcsecs
 
     ####################
@@ -85,7 +83,7 @@ def shift_scao_psf(plots=False):
     kx, ky, uk = computeSpatialFreqArrays(N, pixelSize, wavelengthIR)
 
     # convert r0 in the infra-red
-    r0IR = r0Converter(r0Vis, 500e-9, wavelengthIR) # convert r0 from 500nm to IR
+    r0IR = r0Converter(r0Vis, 500e-9, wavelengthIR)
 
     # and create M4 working domain
     M4 = defineDmFrequencyArea(kx, ky, rotdegree)
@@ -93,8 +91,8 @@ def shift_scao_psf(plots=False):
     # and finally the turbulent spectrum ....
     W = computeWiener(kx, ky, L0, r0IR)
 
-    # and all this will be used to run that function below, that will compute the
-    # spatial spectrum of the phase due to anisoplanatism
+    # and all this will be used to run that function below, that will compute
+    #  the spatial spectrum of the phase due to anisoplanatism
     Waniso = anisoplanaticSpectrum(Cn2h, layerAltitude, L0, offx, offy,
                                    wavelengthIR, kx, ky, W, M4)
 
@@ -111,15 +109,11 @@ def shift_scao_psf(plots=False):
 
     return psf_aniso
 
-
-"""
- _   _             ____                 ____
-| | | |___  ___   / ___|__ _ ___  ___  |___ \
-| | | / __|/ _ \ | |   / _` / __|/ _ \   __) |
-| |_| \__ \  __/ | |__| (_| \__ \  __/  / __/
- \___/|___/\___|  \____\__,_|___/\___| |_____|
-
-"""
+#  _   _             ____                 ____
+# | | | |___  ___   / ___|__ _ ___  ___  |___ \
+# | | | / __|/ _ \ | |   / _` / __|/ _ \   __) |
+# | |_| \__ \  __/ | |__| (_| \__ \  __/  / __/
+#  \___/|___/\___|  \____\__,_|___/\___| |_____|
 
 
 def exnihilo_scao_psf():
@@ -128,7 +122,8 @@ def exnihilo_scao_psf():
     You want to generate SCAO PSFs ex-nihilo, using a simple, approximative
     simulation software.
     You are aware that the simulated PSFs will be perfectly smooth (infinitely
-    converged), they do not reflect the fluctuations associated to short exposures.
+    converged), they do not reflect the fluctuations associated to short
+    exposures.
 
     For this you need to know all the parameters of the simulation.
 
@@ -152,10 +147,11 @@ def exnihilo_scao_psf():
     # nobody knows about, and someone will tell you "ok it's very nice, but can
     # you please simplify this ?"
     layerAltitude = [47., 140, 281, 562, 1125, 2250, 4500, 9000, 18000.]
-    Cn2h = [0.5224, 0.026, 0.0444, 0.116, 0.0989, 0.0295, 0.0598, 0.043, 0.06] # from ref. E-SPE-ESO-276-0206_atmosphericparameters
+    # from ref. E-SPE-ESO-276-0206_atmosphericparameters
+    Cn2h = [0.5224, 0.026, 0.0444, 0.116, 0.0989, 0.0295, 0.0598, 0.043, 0.06]
     L0 = 25.   # 25 metres is the Armazones median value
     seeing = 0.8          # in arcseconds
-    r0Vis = 0.103 / seeing  # r0Vis is in metres here (0.103 is in metres.arcsec)
+    r0Vis = 0.103 / seeing  # r0Vis is in metres here, 0.103 is in metres.arcsec
     r0IR = r0Converter(r0Vis, 500e-9, wavelengthIR) # convert r0 at 500nm to IR
 
     # Just to use that wonderful function, i decide that the seeing given here
@@ -165,10 +161,10 @@ def exnihilo_scao_psf():
     # telescope, so that their apparent distance grows with airmass --> this is
     # very bad for anisoplanatism !..
     zenDist = 30.  # I observe at 30° from zenith
-    r0IR = airmassImpact(r0IR, zenDist)   # apparent seeing degrades with airmass
+    r0IR = airmassImpact(r0IR, zenDist)  # apparent seeing degrades with airmass
 
     layerAltitude = np.array(layerAltitude)
-    layerAltitude *= 1/np.cos(zenDist*np.pi/180) # and layers appear further away
+    layerAltitude *= 1/np.cos(zenDist*np.pi/180)  # layers appear further away
 
     # Also you may want to say something about how the pupil is rotated wrt
     # your image
@@ -176,7 +172,8 @@ def exnihilo_scao_psf():
 
     # And you also need to generate the EELT pupil properly
     deadSegments = 5  # there are some missing segments tonight !
-    pup = fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelengthIR)
+    pup = fake_generatePupil(N, deadSegments, rotdegree, pixelSize,
+                             wavelengthIR)
 
     # For temporal aspects you need to know the characteristics of your system
     V = 10.        # wind is 10 m/s
@@ -191,7 +188,8 @@ def exnihilo_scao_psf():
     #################
     # PSF generation
 
-    # Let's go. Let's define some basic parameters (arrays of spatial frequencies)
+    # Let's go. Let's define some basic parameters (arrays of spatial
+    # frequencies)
     kx, ky, uk = computeSpatialFreqArrays(N, pixelSize, wavelengthIR)
     M4 = defineDmFrequencyArea(kx, ky, rotdegree)
 
@@ -223,14 +221,11 @@ def exnihilo_scao_psf():
     return psf
 
 
-"""
- _   _             ____                 _____
-| | | |___  ___   / ___|__ _ ___  ___  |___ /
-| | | / __|/ _ \ | |   / _` / __|/ _ \   |_ \
-| |_| \__ \  __/ | |__| (_| \__ \  __/  ___) |
- \___/|___/\___|  \____\__,_|___/\___| |____/
-
-"""
+#  _   _             ____                 _____
+# | | | |___  ___   / ___|__ _ ___  ___  |___ /
+# | | | / __|/ _ \ | |   / _` / __|/ _ \   |_ \
+# | |_| \__ \  __/ | |__| (_| \__ \  __/  ___) |
+#  \___/|___/\___|  \____\__,_|___/\___| |____/
 
 
 def instantaneous_scao_psf():

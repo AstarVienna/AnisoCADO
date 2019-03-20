@@ -1,1 +1,1 @@
-from .scao_psf import AnalyticalScaoPsf
+from .psf import AnalyticalScaoPsf

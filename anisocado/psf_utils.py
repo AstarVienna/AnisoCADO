@@ -1,4 +1,5 @@
 """Originally from file _anisocado.py"""
+
 import numpy
 import numpy as np
 from . import pupil_utils
@@ -10,7 +11,6 @@ from . import pupil_utils
 # |_| \_\_____/_/   \_\____/|_|  |_|_____|
 
 """
-
 Hello.
 This files contains some useful functions related to psf generation.
 They are just raw, so that you can insert them into your own classes
@@ -22,7 +22,6 @@ Don't read that code anyway.
 Go right now to [the file _anisocado.py].
 It contains examples that will show you how to use the functions, what they do,
 etc.
-
 """
 
 
@@ -92,7 +91,9 @@ def computeSpatialFreqArrays(N, pixelSize, wavelength):
     k1d = np.fft.fftshift(np.arange(N) - (N//2))
 
     # Proper scaling to transform indices in spatial frequencies.
-    dX = pixelSize * 4.84813681109536e-09  # from mas to radians
+
+    # dX = pixelSize * 4.84813681109536e-09  # from mas to radians
+    dX = pixelSize * 4.84813681109536e-06  # from arcsec to radians
     uk = dX / wavelength
     k1d = k1d * uk  # now this is a spatial freq in metres^-1
 
@@ -174,7 +175,8 @@ def anisoplanaticSpectrum(Cn2h, layerAltitude, L0, offx, offy, wavelength,
         kx, ky, uk = computeSpatialFreqArrays(N, pixelSize, wavelength)
         M4 = defineDmFrequencyArea(kx, ky, 0)
         W = computeWiener(kx, ky, L0, 1.0)
-        f = anisoplanaticSpectrum(Cn2h, layerAltitude, L0, offx, offy, wavelength, kx, ky, W, M4)
+        f = anisoplanaticSpectrum(Cn2h, layerAltitude, L0, offx, offy,
+                                  wavelength, kx, ky, W, M4)
 
     """
 
@@ -385,7 +387,8 @@ def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength):
         rotdegree = 14.
         pixelSize = 4.2
         wavelength = 1.65e-6
-        pup = fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength)
+        pup = fake_generatePupil(N, deadSegments, rotdegree, pixelSize,
+                                 wavelength)
 
     """
     nseg = pupil_utils.getEeltSegmentNumber()
@@ -396,7 +399,9 @@ def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength):
     j0 = N/2+0.5
 
     # field of view of the psf image in rd
-    FoV = N * pixelSize * 4.84813681109536e-09  # from mas to radians
+    FoV = N * pixelSize * 4.84813681109536e-06  # from arcsec to radians
+    # original line used mas
+    # FoV = N * pixelSize * 4.84813681109536e-09  # from mas to radians
 
     # pixel scale of pupil image
     pixscale = wavelength / FoV   # expressed in metres
@@ -428,7 +433,9 @@ def core_generatePsf(Dphi, FTOtel):
 
         # atmospheric profile (old ESO profile before 2010)
         layerAltitude = [47., 140, 281, 562, 1125, 2250, 4500, 9000, 18000.]
-        Cn2h = [52.24, 2.6, 4.44, 11.60, 9.89, 2.95, 5.98, 4.30, 6] # from ref. E-SPE-ESO-276-0206_atmosphericparameters
+
+        # from ref. E-SPE-ESO-276-0206_atmosphericparameters
+        Cn2h = [52.24, 2.6, 4.44, 11.60, 9.89, 2.95, 5.98, 4.30, 6]
         Cn2h = np.array(Cn2h)
         Cn2h /= np.sum(Cn2h)
 
@@ -445,7 +452,8 @@ def core_generatePsf(Dphi, FTOtel):
         W = computeWiener(kx, ky, L0, r0)
 
         # And here are some of the PSF-destroyers
-        Waniso = anisoplanaticSpectrum(Cn2h, layerAltitude, L0, offx, offy, wavelength, kx, ky, W, M4)
+        Waniso = anisoplanaticSpectrum(Cn2h, layerAltitude, L0, offx, offy,
+                                       wavelength, kx, ky, W, M4)
         Wfit = fittingSpectrum(W, M4)
         nmRms = 100.
         Wother = otherSpectrum(nmRms, M4, uk, wavelength)
@@ -453,7 +461,8 @@ def core_generatePsf(Dphi, FTOtel):
 
         # Here, i need to generate a kind of PSF or telescope OTF
         deadSegments = 3
-        pup = fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength)
+        pup = fake_generatePupil(N, deadSegments, rotdegree, pixelSize,
+                                 wavelength)
         FTOtel = computeEeltOTF(pup)
 
         psf = core_generatePsf(Dphi, FTOtel)
@@ -524,7 +533,8 @@ def createAdHocScaoPsf(N, pixelSize, wavelengthIR, rotdegree, r0Vis, nmRms):
 
     # Here, i need to generate a kind of PSF or telescope OTF
     deadSegments = 3
-    pup = fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelengthIR)
+    pup = fake_generatePupil(N, deadSegments, rotdegree, pixelSize,
+                             wavelengthIR)
     FTOtel = computeEeltOTF(pup)
 
     psf = core_generatePsf(Dphi, FTOtel)

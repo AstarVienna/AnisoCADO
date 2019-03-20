@@ -13,7 +13,7 @@ def strehl_map(r=25, dr=3, **kwargs):
     strlmap = np.zeros(x.shape)
     for i in range(len(x)):
         for j in range(len(y)):
-            psf.shift_psf_off_axis(x[i, j], y[i, j])
+            psf.shift_off_axis(x[i, j], y[i, j])
             strlmap[i, j] = psf.strehl_ratio
 
     return strlmap
@@ -31,14 +31,14 @@ def make_psf_grid(r=14, dr=7, **kwargs):
     psf_grid = []
     for i in range(len(x)):
         for j in range(len(y)):
-            psf.shift_psf_off_axis(x[i, j], y[i, j])
+            psf.shift_off_axis(x[i, j], y[i, j])
             psf_grid += [psf.kernel]
 
     return psf_grid
 
 
 def make_image_of_psf_grid():
-    psf_grid = make_psf_grid(wavelengthIR=2.15e-6, N=128)
+    psf_grid = make_psf_grid(wavelength=2.15, N=128)
 
     plt.figure(figsize=(10, 10))
     i = 0

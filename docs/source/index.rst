@@ -39,10 +39,10 @@ simulate
 When we create an AnalyticalScaoPsf object, an initial PSF is created that is
 on-axis. This can be accessed with the ``.psf_on_axis`` attribute.
 
-To "move" the PSF off-axis, we call the ``.shift_psf_off_axis(dx, dy)`` method.
+To "move" the PSF off-axis, we call the ``.shift_off_axis(dx, dy)`` method.
 Here ``dx, dy`` are in arcseconds.::
 
-    psf.shift_psf_off_axis(10, -5)
+    psf.shift_off_axis(10, -5)
 
 We can access this PSF in two ways: as a numpy array with ``.kernel`` or as an
 astropy ``ImageHDU`` object with ``.hdu``. Here the kernel is kept in the
@@ -73,7 +73,7 @@ add the ``HDUs`` to an astropy ``HDUList`` object.::
     hdus = []
     for x in range(-25, 26, 5):
         for y in range(-25, 26, 5):
-            psf.shift_psf_off_axis(x, y)
+            psf.shift_off_axis(x, y)
             hdus += [psf.hdu]
 
     hdu_list = fits.HDUList(hdus)

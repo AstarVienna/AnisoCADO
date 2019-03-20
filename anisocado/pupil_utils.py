@@ -625,15 +625,15 @@ def generateSegmentProperties(attribute, hx, hy, i0, j0, scale, gap, N, D,
 
     :returns: pupil image (N, N), with the same type of input argument attribute
 
-    :param float/int/bool attribute: scalar value or 1D-array of the reflectivity of
-           the segments or 2D array of phase
-           If attribute is scalar, the value will be replicated for all segments.
+    :param float/int/bool attribute: scalar value or 1D-array of the
+        reflectivity of the segments or 2D array of phase
+           If attribute is scalar, the value will be replicated for all segments
            If attribute is a 1D array, then it shall contain the reflectivities
            of all segments.
            If attribute is a 2D array then it shall contain the piston, tip
            and tilt of the segments. The array shall be of dimension
            [3, 798] that contains [piston, tip, tilt]
-           On output, the data type of the pupil map will be the same as attribute.
+           On output, the data type of the pupil map will be the same as input
     :param float hx, hy: arrays [6,:] describing the segment shapes. They are
         generated using generateCoordSegments()
     :param float dspider: width of spiders in meters
@@ -681,13 +681,15 @@ def generateSegmentProperties(attribute, hx, hy, i0, j0, scale, gap, N, D,
         # or just piston.
         if softGap != 0:
             # Soft gaps
-            # The impact of gaps are modelled using a simple function: Lorentz, 1/(1+x**2)
+            # The impact of gaps are modelled using a simple function:
+            # Lorentz, 1/(1+x**2)
             # The fwhm is always equal to 2 pixels because the gap is supposed
             # to be "small/invisible/undersampled". The only visible thing is
             # the width of the impulse response, chosen 2-pixel wide to be
             # well sampled.
-            # The "depth" is related to the gap width. The integral of a Lorentzian
-            # of 2 pix wide is PI. Integral of a gap of width 'gap' in pixels is 'gap'.
+            # The "depth" is related to the gap width. The integral of a
+            # Lorentzian of 2 pix wide is PI. Integral of a gap of width 'gap'
+            # in pixels is 'gap'.
             # So the depth equals to gap/scale/np.pi.
             for i in range(nseg):
                 indx, indy, distedge = fillPolygon(hx[:, i], hy[:, i],
@@ -711,8 +713,7 @@ def generateSegmentProperties(attribute, hx, hy, i0, j0, scale, gap, N, D,
         xmap, ymap = np.meshgrid(xmap, xmap, indexing='ij')  # [x,y] convention
         pitch = 1.244683637214  # diameter of inscribed circle
         diamseg = pitch * 2 / np.sqrt(3)  # diameter of circumscribed circle
-        diamfrizou = (
-                                 pitch + diamseg) / 2 * D / 40.  # average diameter of the 2
+        diamfrizou = (pitch + diamseg) / 2 * D / 40.  # average diameter
         # Calcul du facteur de mise a l'echelle pour l'unite des tilts.
         # xmap et ymap sont calculees avec un increment de +1 pour deux pixels
         # voisins, donc le facteur a appliquer est tel que l'angle se conserve
@@ -844,7 +845,8 @@ def generateEeltPupilReflectivity(refl, npt, dspider, i0, j0, pixscale, gap,
     pixscale = 44./npt
     dspider = 0.53
     gap = 0.02
-    pup = generateEeltPupilReflectivity(refl, npt, dspider, i0, j0, pixscale, gap, rotdegree, softGap=True)
+    pup = generateEeltPupilReflectivity(refl, npt, dspider, i0, j0, pixscale,
+                                        gap, rotdegree, softGap=True)
 
     """
     rot = rotdegree * np.pi / 180
@@ -896,7 +898,8 @@ def generateEeltPupilPhase(phase, npt, dspider, i0, j0, pixscale, rotdegree,
     rotdegree = 90.0
     pixscale = 41./npt
     dspider = 0.51
-    pup = generateEeltPupilPhase(phase, npt, dspider, i0, j0, pixscale, rotdegree)
+    pup = generateEeltPupilPhase(phase, npt, dspider, i0, j0, pixscale,
+                                 rotdegree)
 
     """
     rot = rotdegree * np.pi / 180
@@ -930,11 +933,13 @@ p = generateEeltPupilMask(N, dspider, i0, j0+10, scale, rotdegree)
 plt.clf()
 plt.matshow(p, fignum=1)
 
-#p = generateEeltPupilReflectivity(refl, N, dspider, i0, j0, pixscale, rotdegree, D=40.0)
+#p = generateEeltPupilReflectivity(refl, N, dspider, i0, j0, pixscale, 
+                                   rotdegree, D=40.0)
 
 phase = np.zeros((3,798)); phase[1,:]=1.
 phase = np.random.randn(3,798)
-p = generateEeltPupilPhase(phase, N, dspider, i0, j0, pixscale, rotdegree, D=40.0)
+p = generateEeltPupilPhase(phase, N, dspider, i0, j0, pixscale, rotdegree, 
+                           D=40.0)
 
 plt.matshow(p, fignum=1)
 
