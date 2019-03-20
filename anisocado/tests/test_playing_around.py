@@ -7,7 +7,7 @@ from matplotlib.colors import LogNorm
 
 from anisocado import AnalyticalScaoPsf
 
-PLOTS = True
+PLOTS = False
 
 
 class TestMakeStrehlMap:
@@ -23,8 +23,8 @@ class TestMakeStrehlMap:
         print(np.max(sr))
 
         if PLOTS:
-            # plt.imshow(sr)#, norm=LogNorm())
-            # plt.contourf(x, y, sr, np.arange(0, 1, 0.05))
+            plt.imshow(sr)#, norm=LogNorm())
+            plt.contourf(x, y, sr, np.arange(0, 1, 0.05))
             plt.colorbar()
             plt.show()
 
