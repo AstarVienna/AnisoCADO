@@ -378,6 +378,7 @@ class AnalyticalScaoPsf:
 
     @property
     def kernel(self):
+        """Return"""
         return self.psf_latest
 
     @property
@@ -414,7 +415,3 @@ class AnalyticalScaoPsf:
     def plot_psf(self, which="psf_latest"):
         plt.imshow(getattr(self, which).T, origin='l', norm=LogNorm())
         print('Strehl ratio of {} is {}'.format(which, self.psf_latest.max()))
-
-
-
-

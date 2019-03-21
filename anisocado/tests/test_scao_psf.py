@@ -8,7 +8,7 @@ from astropy.io import fits
 
 from anisocado.psf import AnalyticalScaoPsf
 
-PLOTS = True
+PLOTS = False
 
 
 class TestInit:

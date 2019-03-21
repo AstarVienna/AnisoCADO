@@ -52,8 +52,9 @@ class TestPsfsAlongXaxis:
                     psf.shift_off_axis(x[i, j], y[i, j])
                     sr[i, j] = psf.strehl_ratio
 
-            print(wave, np.sum(psf._kernel_sum))
-            plt.plot(x.flatten(), sr, label="{} um".format(wave))
+            if PLOTS:
+                print(wave, np.sum(psf._kernel_sum))
+                plt.plot(x.flatten(), sr, label="{} um".format(wave))
 
         if PLOTS:
             # plt.semilogy()
