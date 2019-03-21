@@ -24,11 +24,11 @@ class TestInit:
         assert isinstance(psf, AnalyticalScaoPsf)
 
     def test_on_axis_psf_is_made(self):
-        psf = AnalyticalScaoPsf(N=128)
+        psf = AnalyticalScaoPsf(N=512)
         assert isinstance(psf.psf_on_axis, np.ndarray)
 
         if PLOTS:
-            plt.imshow(psf.psf_on_axis.T, origin="lower", norm=LogNorm())
+            plt.imshow(psf.psf_on_axis.T, origin="lower", norm=LogNorm(), vmin=1e-7)
             plt.show()
 
     def test_kernel_sums_to_one(self):
@@ -72,7 +72,7 @@ class TestHDUProperty:
         assert hdu.header["CRVAL1"] == 10 / 3600.
 
         if PLOTS:
-            plt.imshow(hdu.data, norm=LogNorm())
+            plt.imshow(hdu.data.T, origin="l", norm=LogNorm())
             plt.show()
 
 

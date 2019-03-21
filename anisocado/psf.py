@@ -58,7 +58,6 @@ class AnalyticalScaoPsf:
     x_last, y_last : float
         [arcsec] shifts used to generate the psf_latest kernel
 
-
     Derived Attributes
     ------------------
     r0Vis : float
@@ -112,7 +111,7 @@ class AnalyticalScaoPsf:
         self.seeing = 0.8           # arcsec
         self.nmRms = 100.           # nm
         self.L0 = 25.               # meters - from doc. ESO-258292.
-        self.profile_name = "gendron"
+        self.profile_name = "officialEsoMedian"  # "oldEso", "officialEsoMedian"
         self.zenDist = 30.          # degree
         self.deadSegments = 5       # there are some missing segments tonight !
         self.V = 10.                # wind is 10 m/s
@@ -166,7 +165,7 @@ class AnalyticalScaoPsf:
         # and layers appear further away with zenith distance
         if self.profile_name is not None:
             layerAltitude, Cn2h = get_atmospheric_turbulence(self.profile_name)
-            self.layerAltitude = np.array(layerAltitude)
+            self.layerAltitude = np.array(layerAltitude, dtype=float)
             self.Cn2h = Cn2h
         self.layerAltitude *= 1 / np.cos(self.zenDist * np.pi / 180.)
 
@@ -374,21 +373,34 @@ class AnalyticalScaoPsf:
 
     @property
     def strehl_ratio(self):
+        """Return an Strehl ratio of the kernel in ``self.psf_latest``"""
         return np.max(self.psf_latest) * self._kernel_sum
 
     @property
     def kernel(self):
-        """Return"""
+        """Return the kernel held in ``self.psf_latest``"""
         return self.psf_latest
 
     @property
     def hdu(self):
+        """Return the ``ImageHDU`` from ``get_hdu()``"""
         return self.get_hdu()
 
     def writeto(self, **kwargs):
+        """Calls the ``writeto`` method of the ImageHDU from ``self.hdu``"""
         self.hdu.writeto(**kwargs)
 
-    def get_hdu(self):
+    def get_hdu(self, **kwargs):
+        """
+        Makes an ``ImageHDU`` with the kernel and relevant header info
+
+        Additional keyword-value pairs can be passed to the header as kwargs
+
+        Returns
+        -------
+        hdu_psf : fits.ImageHDU
+
+        """
         w, h = self.psf_latest.shape
 
         hdr = fits.Header()
@@ -403,15 +415,20 @@ class AnalyticalScaoPsf:
         hdr["CUNIT1"] = "degree"
         hdr["CUNIT2"] = "degree"
         hdr["WAVE0"] = (self.wavelength, "[um] Central wavelength")
+        hdr["WAVEUNIT"] = "um"
         hdr["STREHL"] = (self.strehl_ratio, "Strehl ratio")
-        hdr["PSF_SUM"] = self._kernel_sum, "Sum of on-axis kernel used for SR"
+        hdr["PSFSUM"] = self._kernel_sum, "Sum of on-axis kernel used for SR"
 
         dic = {key: self.__dict__[key] for key in self.kwarg_names}
         hdr.update(dic)
+        hdr.update(kwargs)
         hdu_psf = fits.ImageHDU(data=self.psf_latest, header=hdr)
 
         return hdu_psf
 
     def plot_psf(self, which="psf_latest"):
+        """Plots a logscale PSF kernel: ["psf_latest", "psf_on_axis"]"""
         plt.imshow(getattr(self, which).T, origin='l', norm=LogNorm())
         print('Strehl ratio of {} is {}'.format(which, self.psf_latest.max()))
+
+

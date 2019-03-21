@@ -645,3 +645,18 @@ def clean_psf(psf, threshold):
     psf /= np.sum(psf)
 
     return psf
+
+
+def round_edges(kernel, edge_width=10):
+    n = edge_width
+    falloff = np.cos(1.5708 * np.arange(n) / (n-1)).reshape([1, n])
+
+    kernel[:n, :] *= falloff.T[::-1, :]
+    kernel[-n:, :] *= falloff.T
+    kernel[:, :n] *= falloff[:, ::-1]
+    kernel[:, -n:] *= falloff
+
+    return kernel
+
+
+

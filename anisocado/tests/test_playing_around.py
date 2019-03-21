@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib.colors import LogNorm
 
 from anisocado import AnalyticalScaoPsf
+from anisocado.misc import on_axis_strehl_for_kernel_size
 
 PLOTS = False
 
@@ -13,7 +14,7 @@ PLOTS = False
 class TestMakeStrehlMap:
     def test_make_a_strehl_map_over_a_grid_on_the_focal_plane(self):
         psf = AnalyticalScaoPsf(N=128, wavelength=2.15)
-        x, y = np.mgrid[-50:51:2, -50:51:2]
+        x, y = np.mgrid[-50:51:20, -50:51:20]
 
         sr = np.zeros(x.shape)
         for i in range(len(x)):
@@ -23,7 +24,7 @@ class TestMakeStrehlMap:
         print(np.max(sr))
 
         if PLOTS:
-            plt.imshow(sr)#, norm=LogNorm())
+            plt.imshow(sr)  # norm=LogNorm())
             plt.contourf(x, y, sr, np.arange(0, 1, 0.05))
             plt.colorbar()
             plt.show()
@@ -31,8 +32,6 @@ class TestMakeStrehlMap:
 
 class TestStrehlRatiosForDifferentSizedKernels:
     def test_how_much_does_the_SR_change_for_kernel_size_increase(self):
-        from anisocado.stats import on_axis_strehl_for_kernel_size
-
         side_length = [64, 128, 256, 512, 1024]
         sr = on_axis_strehl_for_kernel_size(side_length, wavelength=2.15)
         if PLOTS:
@@ -43,7 +42,7 @@ class TestStrehlRatiosForDifferentSizedKernels:
 class TestPsfsAlongXaxis:
     def test_strehl_ratio_along_x_axis(self):
         for wave in [0.8, 0.9, 1.1, 1.6, 2.15]:
-            psf = AnalyticalScaoPsf(N=512, wavelength=wave)
+            psf = AnalyticalScaoPsf(N=128, wavelength=wave)
             x, y = np.mgrid[0:41:1, 0:1:1]
 
             sr = np.zeros(x.shape)
