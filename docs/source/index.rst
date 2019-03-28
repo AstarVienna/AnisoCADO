@@ -32,11 +32,19 @@ The most needed functionality is based around the ``AnalyticalScaoPsf`` class.
 Create one like this::
 
     from anisocado import AnalyticalScaoPsf
-    psf = AnalyticalScaoPsf(N=512, wavelengthIR=2.15e-6)
+    psf = AnalyticalScaoPsf(N=512, wavelength=2.15)     # wavelength in um
 
 where (for the moment) ``N`` is the side length of the PSF kernel image and
-``wavelengthIR`` is the central wavelength [um] of the PSF that we wish to
+``wavelength`` is the central wavelength [um] of the PSF that we wish to
 simulate
+
+.. plot::
+
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import LogNorm
+    from anisocado import AnalyticalScaoPsf
+    psf = AnalyticalScaoPsf(N=512, wavelength=2.15)
+    plt.imshow(psf.psf_latest)
 
 When we create an AnalyticalScaoPsf object, an initial PSF is created that is
 on-axis. This can be accessed with the ``.psf_on_axis`` attribute.
@@ -71,7 +79,7 @@ add the ``HDUs`` to an astropy ``HDUList`` object.::
     from astropy.io import fits
     from anisocado import AnalyticalScaoPsf
 
-    psf = AnalyticalScaoPsf(N=256, wavelengthIR=1.2e-6)
+    psf = AnalyticalScaoPsf(N=256, wavelength=1.2)    # um
     hdus = []
     for x in range(-25, 26, 5):
         for y in range(-25, 26, 5):

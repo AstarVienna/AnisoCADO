@@ -153,8 +153,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'anisocado.tex', 'skycalc\\_cli Documentation',
-     'Kieran Leschinski', 'manual'),
+    (master_doc, 'anisocado.tex', 'AnisoCADO Documentation',
+     'Eric Gendron and Kieran Leschinski', 'manual'),
 ]
 
 
