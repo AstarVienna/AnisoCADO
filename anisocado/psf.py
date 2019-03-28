@@ -25,41 +25,44 @@ class AnalyticalScaoPsf:
     Parameters
     ----------
     N : int
-        [pixel] Side-length of the kernel array
+        [pixel] Default: 512 pixel. Side-length of the kernel array
     pixelSize : float
-        [arcsec] On-sky pixel scale
+        [arcsec] Default: 0.004 arcsec. On-sky pixel scale
     wavelength : float
-        [um] Wavelength for which the PSF should be generated
+        [um] Default: 2.15 um. Wavelength for which the PSF should be generated
     rotdegree : float
-        [deg] Rotation angle of the pupil w.r.t the plane of the optical axis
-    seeing : float
-        [arcsec]
+        [deg] Default: 0 deg. Rotation angle of the pupil w.r.t the plane of the optical axis
     nmRms : float
-        [nm] Residual wavefront error of the system
+        [nm] Default: 100 nm. Residual wavefront error of the system
     L0 : float
-        [m] Outer scale
+        [m] Default: 25 m. Outer scale
     profile_name : str
-        ["oldEso", "officialEsoMedian", "gendron"]. Names of specific turbulence
-        profiles for which presets exist
-    zenDist : float
-        [degree] Zenith distance
+        ['EsoQ1', 'EsoMedian', 'EsoQ4', 'oldEso', 'gendron']. Default: EsoMedian
+        Names of specific atmospheric conditions for which presets exist.
+        See ``psf_utils.get_atmospheric_turbulence``
     deadSegments : int
-        Number of segments missing from the ELT primary mirror
+        Default: 5. Number of segments missing from the ELT primary mirror
     V : float
-        [m/s] Wind speed
+        [m/s] Default: 10 m/s. Wind speed
     Fe : float
-        [Hz] AO sampling frequency of the system. Default is 500 Hz
+        [Hz] Default: 500 Hz. AO sampling frequency of the system
     tret : float
-        [s] Delay in the AO loop. Default is 0.004s [4 ms]
+        [s] Default: 0.004 s. Delay in the AO loop
     gain : float
-        Closed-loop gain default is 0.3
+        Default: 0.3. Closed-loop gain
     dactu : float
-        [m] Interactuator distance on M4. Default in 0.5403
+        [m] Default: 0.5403 m. Interactuator distance on M4
     x_last, y_last : float
-        [arcsec] shifts used to generate the psf_latest kernel
+        [arcsec] Default: 0 arcsec. Shifts used to generate the ``psf_latest``
+        kernel
 
     Derived Attributes
     ------------------
+    seeing : float
+        [arcsec] Default: 0.67 arcsec. Set by profile_name, if not set by user
+    zenDist : float
+        [degree] Default: 30 deg. Zenith distance. Set by profile_name, if not
+        set by user
     r0Vis : float
         [m] Fried parameter at 500 nm.
     r0IR : float
@@ -108,11 +111,9 @@ class AnalyticalScaoPsf:
         self.pixelSize = 0.004      # arcsec
         self.wavelength = 2.15      # um
         self.rotdegree = 0.         # deg
-        self.seeing = 0.8           # arcsec
         self.nmRms = 100.           # nm
         self.L0 = 25.               # meters - from doc. ESO-258292.
-        self.profile_name = "officialEsoMedian"  # "oldEso", "officialEsoMedian"
-        self.zenDist = 30.          # degree
+        self.profile_name = "EsoMedian"  # "oldEso", "EsoMedian, EsoQ1, EsoQ4"
         self.deadSegments = 5       # there are some missing segments tonight !
         self.V = 10.                # wind is 10 m/s
         self.Fe = 500.              # sampling frequency of the system is 500 Hz
@@ -123,6 +124,8 @@ class AnalyticalScaoPsf:
         self.y_last = 0             # [arcsec] x shift used to make psf_latest
 
         # Derived attributes
+        self.seeing = None          # arcsec - set by profile_name if None
+        self.zenDist = None         # degree - set by profile_name if None
         self.r0Vis = None           # meters
         self.r0IR = None            # meters
         self.psf_on_axis = None
@@ -147,10 +150,6 @@ class AnalyticalScaoPsf:
 
         Valid parameter names can be found in ``self.kwarg_names``
 
-        Examples
-        --------
-
-
         """
         self._wave_m = self.wavelength
         if self.wavelength > 0.1:  # assume its in um
@@ -164,9 +163,17 @@ class AnalyticalScaoPsf:
 
         # and layers appear further away with zenith distance
         if self.profile_name is not None:
+            seeing, zen_dist, wind_a = get_profile_defaults(self.profile_name)
+            self.V *= wind_a
+            if self.seeing is None:
+                self.seeing = seeing
+            if self.zenDist is None:
+                self.zenDist = zen_dist
+
             layerAltitude, Cn2h = get_atmospheric_turbulence(self.profile_name)
             self.layerAltitude = np.array(layerAltitude, dtype=float)
             self.Cn2h = Cn2h
+
         self.layerAltitude *= 1 / np.cos(self.zenDist * np.pi / 180.)
 
         # r0Vis is in metres here (0.103 is in metres.arcsec)

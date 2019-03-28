@@ -573,24 +573,37 @@ def airmassImpact(r0_at_zenith, zenith_distance):
     return r0
 
 
-def get_atmospheric_turbulence(myProfile='officialEsoMedian'):
+def get_atmospheric_turbulence(myProfile='EsoMedian'):
     """
     Returns the relative level of turbulence at a given height
 
     Note: The np.sum(Cn2h) = 1.0
+    Turbulence profile have been taken from ESO-258292: "Relevant Atmospheric
+    Parameters for E-ELT AO Analysis and Simulations".
 
-    The following 3 profile are currently available:
+    The following 3 turbulence profile are currently available:
+
+    * ``EsoQ1``
+
+        Best atmospheric conditions - First Quartile Armazones atmospheric
+        turbulence profile
+
+    * ``EsoMedian`` [also ``officialEsoMedian``]
+
+        Median atmospheric conditions - Median Armazones atmospheric turbulence
+        profile
+
+    * ``EsoQ4``
+
+        Worst atmospheric conditions - First Quartile Armazones atmospheric
+        turbulence profile
+
+    Additional turbulence profiles include:
 
     * ``oldEso``
 
         The old ESO profile from before 2010. Cn2h paramateres are taken from
         ref. E-SPE-ESO-276-0206_atmosphericparameters
-
-    * ``officialEsoMedian``
-
-        Median Armazones atmospheric profile directly copied from doc.
-        ESO-258292 "Relevant Atmospheric Parameters for E-ELT AO Analysis and
-        Simulations".
 
     * ``gendron``
 
@@ -601,7 +614,7 @@ def get_atmospheric_turbulence(myProfile='officialEsoMedian'):
     Parameters
     ----------
     myProfile : str, optional
-        Profile name: ['oldEso', 'officialEsoMedian', 'gendron']
+        Profile name: ['EsoQ1', 'EsoMedian', 'EsoQ4', 'oldEso', 'gendron']
 
     Returns
     -------
@@ -619,7 +632,7 @@ def get_atmospheric_turbulence(myProfile='officialEsoMedian'):
         Cn2h = [0.5224, 0.026, 0.0444, 0.116, 0.0989,
                 0.0295, 0.0598, 0.043, 0.06]
 
-    elif myProfile == 'officialEsoMedian':
+    elif myProfile == 'officialEsoMedian' or myProfile == 'EsoMedian' :
         layerAltitude = [30, 90, 150, 200, 245, 300, 390, 600, 1130, 1880, 2630,
                          3500, 4500, 5500, 6500, 7500, 8500, 9500, 10500, 11500,
                          12500, 13500, 14500, 15500, 16500, 17500, 18500, 19500,
@@ -631,11 +644,69 @@ def get_atmospheric_turbulence(myProfile='officialEsoMedian'):
         Cn2h = np.array(Cn2h)
         Cn2h /= np.sum(Cn2h)
 
+    elif myProfile == 'EsoQ1':
+        layerAltitude = [30, 90, 150, 200, 245, 300, 390, 600, 1130, 1880, 2630,
+                         3500, 4500, 5500, 6500, 7500, 8500, 9500, 10500, 11500,
+                         12500, 13500, 14500, 15500, 16500, 17500, 18500, 19500,
+                         20500, 21500, 22500, 23500, 24500, 25500, 26500]
+        Cn2h = [22.6, 11.2, 10.1, 6.4, 4.15, 4.15, 4.15, 4.15, 3.1, 2.26, 1.13,
+                2.21, 1.33, 0.88, 1.47, 1.77, 0.59, 2.06, 1.92, 1.03, 2.3, 3.75,
+                2.76, 1.43, 0.89, 0.58, 0.36, 0.31, 0.27, 0.2, 0.16, 0.09, 0.12,
+                0.07, 0.06]
+        Cn2h = np.array(Cn2h)
+        Cn2h /= np.sum(Cn2h)
+
+    elif myProfile == 'EsoQ4':
+        layerAltitude = [30, 90, 150, 200, 245, 300, 390, 600, 1130, 1880, 2630,
+                         3500, 4500, 5500, 6500, 7500, 8500, 9500, 10500, 11500,
+                         12500, 13500, 14500, 15500, 16500, 17500, 18500, 19500,
+                         20500, 21500, 22500, 23500, 24500, 25500, 26500]
+        Cn2h = [23.6, 13.1, 9.81, 5.77, 6.58, 6.58, 6.58, 6.58, 5.4, 3.2, 1.6,
+                2.18, 1.31, 0.87, 0.37, 0.45, 0.15, 0.52, 0.49, 0.26, 0.8, 1.29,
+                0.95, 0.49, 0.31, 0.2, 0.12, 0.1, 0.09, 0.07, 0.06, 0.03, 0.05,
+                0.02, 0.02]
+        Cn2h = np.array(Cn2h)
+        Cn2h /= np.sum(Cn2h)
+
     elif myProfile == 'gendron':
         Cn2h = [1.0]
         layerAltitude = [4414.]
 
     return layerAltitude, Cn2h
+
+
+def get_profile_defaults(myProfile="EsoMedian"):
+    """
+    Data taken from ESO-258292
+
+    Parameters
+    ----------
+    myProfile : str
+        [EsoMedian, EsoQ1, EsoQ4, OldEso, Gendron]
+
+    Returns
+    -------
+    seeing : float
+        [arcsec]
+    zen_dist : float
+        [deg] Zenith distance
+    wind_alpha : float
+        Multiplication factor for the wind profile
+
+    """
+    seeing = 0.67
+    zen_dist = 30
+    wind_alpha = 1.
+    if myProfile == 'EsoQ1':
+        seeing = 0.4
+        zen_dist = 0
+        wind_alpha = 0.88
+    elif myProfile == 'EsoQ4':
+        seeing = 1.0
+        zen_dist = 60
+        wind_alpha = 1.3
+
+    return seeing, zen_dist, wind_alpha
 
 
 def clean_psf(psf, threshold):

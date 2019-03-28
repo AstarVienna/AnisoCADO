@@ -26,6 +26,8 @@ analytically generating field-varying SCAO PSFs for MICADO at the ELT.
 Basic Usage
 -----------
 
+.. note:: See Getting Started for a more in-depth introduction
+
 The most needed functionality is based around the ``AnalyticalScaoPsf`` class.
 Create one like this::
 
@@ -82,8 +84,9 @@ add the ``HDUs`` to an astropy ``HDUList`` object.::
 
 Installation
 ------------
+::
 
-Soon to be available via pip
+    pip install anisocado
 
 
 Dependencies
@@ -91,7 +94,7 @@ Dependencies
 
 The following packages are required for normal operation:
 
-* ``numpy``
+* ``numpy (>=1.13)``
 * ``astropy``
 
 The following packages are optional:

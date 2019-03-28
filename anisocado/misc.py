@@ -81,7 +81,23 @@ def make_simcado_psf_file(coords, wavelengths, header_cards=None, **kwargs):
         A HDUList object which is formatted for use as a Field-Varying PSF in
         SimCADO
 
+    Examples
+    --------
+    ::
+
+        import anisocado
+
+        radii = [1, 3, 5, 10]   # arcsec
+        waves = [1.0, 1.2, 1.6, 2.15]   # um
+
+        coords = anisocado.field_positions_for_simcado_psf(radii, theta=60)
+        hdu = anisocado.make_simcado_psf_file(coords=coords, wavelengths=waves,
+                                              N=512, profile_name="EsoQ1")
+
+        hdu.writeto("new_scao_psf_cube.fits")
+
     """
+
     # accept list of coordinates
     # accept list of wavelengths
     # make ext0
@@ -131,11 +147,43 @@ def make_simcado_psf_file(coords, wavelengths, header_cards=None, **kwargs):
     return hdulist
 
 
-def field_positions_for_simcado_psf():
+def field_positions_for_simcado_psf(radii=None, theta=45):
+    """
+    Generates a list of field position where the PSF will be sampled
+
+    The PSF will be sampled at intervals of ``theta`` around concentric circles
+    placed at distances ``radii`` from the centre of the field of view.
+
+    Default radii are at [1, 2, 4, 8, 16, 32] arcsec
+
+    Parameters
+    ----------
+    radii : list of floats
+        [arcsec] Radii of concentric circles where the PSF will be sampled
+
+    theta : float
+        [deg] Spacing between PSF samples around each circle
+
+    Returns
+    -------
+    coords : list of tuples
+        [arcsec] List of sample positions relative to the centre of the field
+
+    Examples
+    --------
+    ::
+
+        import anisocado
+        cds = anisocado.field_positions_for_simcado_psf(radii=[5, 10], theta=60)
+        hdu = anisocado.make_simcado_psf_file(cds, wavelengths=[1.2, 1.6, 2.2])
+
+    """
+
     coords = [(0, 0)]
-    # for r in [7.5, 15, 22.5]:
-    for r in [1, 2, 3, 5, 7, 11, 15, 23, 31]:
-        for ang in np.arange(0, 360, 45):
+    if radii is None:
+        radii =  [1, 2, 4, 8, 16, 32]
+    for r in radii:
+        for ang in np.arange(0, 360, theta):
             coords += [(r * np.cos(np.deg2rad(ang)),
                         r * np.sin(np.deg2rad(ang)))]
 
@@ -152,3 +200,5 @@ def make_strehl_map_from_coords(coords):
                    method="nearest")
 
     return map
+
+
