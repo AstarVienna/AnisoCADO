@@ -39,12 +39,17 @@ where (for the moment) ``N`` is the side length of the PSF kernel image and
 simulate
 
 .. plot::
+    :context: True
+    :include-source: True
 
     import matplotlib.pyplot as plt
     from matplotlib.colors import LogNorm
+
     from anisocado import AnalyticalScaoPsf
+
     psf = AnalyticalScaoPsf(N=512, wavelength=2.15)
-    plt.imshow(psf.psf_latest)
+    plt.imshow(psf.psf_latest, norm=LogNorm())
+
 
 When we create an AnalyticalScaoPsf object, an initial PSF is created that is
 on-axis. This can be accessed with the ``.psf_on_axis`` attribute.
@@ -52,7 +57,12 @@ on-axis. This can be accessed with the ``.psf_on_axis`` attribute.
 To "move" the PSF off-axis, we call the ``.shift_off_axis(dx, dy)`` method.
 Here ``dx, dy`` are in arcseconds.::
 
+.. plot::
+    :context: True
+    :include-source: True
+
     psf.shift_off_axis(10, -5)
+    plt.imshow(psf.psf_latest, norm=LogNorm())
 
 We can access this PSF in two ways: as a numpy array with ``.kernel`` or as an
 astropy ``ImageHDU`` object with ``.hdu``. Here the kernel is kept in the
@@ -61,6 +71,7 @@ create the PSF kernel::
 
     psf.kernel
     psf.hdu.data
+
 
 
 Write PSF to a FITS file
@@ -92,7 +103,8 @@ add the ``HDUs`` to an astropy ``HDUList`` object.::
 
 Installation
 ------------
-::
+
+The usual::
 
     pip install anisocado
 
