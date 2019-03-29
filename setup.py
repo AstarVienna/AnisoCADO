@@ -9,7 +9,7 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     __license__ = f.read()
 
-__version__ = "0.1dev"
+__version__ = "0.1.rc1"
 
 setup(
     name='anisocado',
@@ -22,5 +22,5 @@ setup(
     license=__license__,
     include_package_data=True,
     packages=find_packages(exclude=('tests', 'docs')),
-    install_requires=['pyyaml', 'numpy', 'astropy', 'matplotlib']
+    install_requires=['numpy', 'astropy', 'matplotlib']
     )
