@@ -19,8 +19,11 @@ analytically generating field-varying SCAO PSFs for MICADO at the ELT.
    Reference API <reference/anisocado>
 
 
-.. warning:: While the code for this package exists, I haven't yet compiled it
-    into a ``pip install`` -able package. The should happen very soon.
+Installation
+------------
+::
+
+    pip install anisocado
 
 
 Basic Usage
@@ -39,14 +42,10 @@ where (for the moment) ``N`` is the side length of the PSF kernel image and
 simulate
 
 .. plot::
-    :context: True
-    :include-source: True
 
     import matplotlib.pyplot as plt
     from matplotlib.colors import LogNorm
-
     from anisocado import AnalyticalScaoPsf
-
     psf = AnalyticalScaoPsf(N=512, wavelength=2.15)
     plt.imshow(psf.psf_latest, norm=LogNorm())
 
@@ -55,7 +54,7 @@ When we create an AnalyticalScaoPsf object, an initial PSF is created that is
 on-axis. This can be accessed with the ``.psf_on_axis`` attribute.
 
 To "move" the PSF off-axis, we call the ``.shift_off_axis(dx, dy)`` method.
-Here ``dx, dy`` are in arcseconds.::
+Here ``dx, dy`` are in arcseconds.
 
 .. plot::
     :context: True
