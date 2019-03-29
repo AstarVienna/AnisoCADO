@@ -73,6 +73,9 @@ Here ``dx, dy`` are in arcseconds.
 
     psf.shift_off_axis(15, -10)
 
+.. plot::
+    :context:
+
     plt.imshow(psf.psf_latest[128:384, 128:384], norm=LogNorm())
 
 
@@ -116,7 +119,7 @@ add the ``HDUs`` to an astropy ``HDUList`` object.
     hdu_list.writeto(filename="My_bunch_of_SCAO_PSFs.fits")
 
 .. plot::
-    :context:
+    :context: close-figs
 
     plt.figure(figsize=(12,12))
     i = 0
