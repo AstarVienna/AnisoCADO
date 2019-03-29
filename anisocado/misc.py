@@ -200,3 +200,5 @@ def make_strehl_map_from_coords(coords):
                    method="nearest")
 
     return map
+
+

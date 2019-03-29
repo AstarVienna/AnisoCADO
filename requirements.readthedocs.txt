@@ -2,7 +2,6 @@ numpy
 astropy
 matplotlib
 sphinxcontrib-apidoc
-# sphinx-execute-code
 git+https://github.com/astronomyk/sphinx-execute-code.git
 numpydoc ==0.6.0
 sphinx ==1.6.7
