@@ -41,7 +41,6 @@ extensions = ['sphinx.ext.autodoc',
               'numpydoc',
               'sphinxcontrib.apidoc',
               'matplotlib.sphinxext.plot_directive',
-              'sphinx_execute_code',
               ]
 
 apidoc_module_dir = os.path.abspath('../../')
