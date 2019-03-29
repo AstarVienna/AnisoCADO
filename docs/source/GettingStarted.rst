@@ -24,7 +24,7 @@ be called up using ``.psf_on_axis``
 
     import matplotlib.pyplot as plt
     from matplotlib.colors import LogNorm
-    plt.imshow(kernel, origin="l", norm=LogNorm)
+    plt.imshow(kernel, origin="l", norm=LogNorm())
 
 
 The Strehl ratio of this kernel can be found by calling::
@@ -50,7 +50,7 @@ function, and stored internally in `.psf_latest`
 
     import matplotlib.pyplot as plt
     from matplotlib.colors import LogNorm
-    plt.imshow(kernel, origin="l", norm=LogNorm)
+    plt.imshow(kernel, origin="l", norm=LogNorm())
 
 
 The returned ``kernel`` object is a numpy array. However AnisoCADO also produces
