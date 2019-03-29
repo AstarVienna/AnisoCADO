@@ -200,17 +200,3 @@ def make_strehl_map_from_coords(coords):
                    method="nearest")
 
     return map
-
-
-
-import requests
-
-url = "www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/"
-summary = "summary.txt"
-
-response = requests.get("https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/summary.txt")
-response = response.text.split("\r\n")
-
-for line in response:
-    print(line.split(".fits")[0])
-    print("`{} <{}{}>.fits`_".format(line, url, line.split(".fits")[0]))
