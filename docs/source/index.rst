@@ -49,7 +49,7 @@ simulate.
 
 .. plot::
     :context:
-    :include-source: True
+    :include-source:
 
     import matplotlib.pyplot as plt
     from matplotlib.colors import LogNorm
@@ -68,7 +68,7 @@ Here ``dx, dy`` are in arcseconds.
 
 .. plot::
     :context:
-    :include-source: True
+    :include-source:
 
     psf.shift_off_axis(10, -5)
 
@@ -96,20 +96,38 @@ method of an astropy ``ImageHDU`` object::
 Obviously this will only work for single PSFs. We will normally want to create
 multiple SCAO PSFs for different wavelengths and different positions over the
 field of view. To do this we can simply loop over a series of coordinates and
-add the ``HDUs`` to an astropy ``HDUList`` object.::
+add the ``HDUs`` to an astropy ``HDUList`` object.
+
+.. plot::
+    :context:
+    :include-source:
 
     from astropy.io import fits
-    from anisocado import AnalyticalScaoPsf
 
-    psf = AnalyticalScaoPsf(N=256, wavelength=1.2)    # um
+    psf = AnalyticalScaoPsf(N=256, wavelength=2.15)    # um
     hdus = []
-    for x in range(-25, 26, 5):
-        for y in range(-25, 26, 5):
+    for x in np.arange(-25, 26, 12.5):
+        for y in np.arange(-25, 26, 12.5):
             psf.shift_off_axis(x, y)
             hdus += [psf.hdu]
 
     hdu_list = fits.HDUList(hdus)
     hdu_list.writeto(filename="My_bunch_of_SCAO_PSFs.fits)
+
+.. plot::
+    :context: close-figs
+
+    plt.figure(figsize=(12,12))
+    i = 0
+    for x in np.arange(-25, 26, 12.5):
+        for y in np.arange(-25, 26, 12.5):
+            m, c = divmod(i, 5)
+            plt.subplot(5, 5, 21 + c - 5 * m)
+            plt.imshow(hdus[i].data[64:192, 64:192], origin="lower",
+                       norm=LogNorm(), vmin=1E-6, vmax=1E-2,
+                       interpolation="none")
+            plt.title("({}, {})".format(y, x))
+            i += 1
 
 
 Installation
