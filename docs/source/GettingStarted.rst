@@ -49,7 +49,7 @@ function, and stored internally in `.psf_latest`
     :context:
 
     import matplotlib.pyplot as plt
-    from matplotlob.colors import LogNorm
+    from matplotlib.colors import LogNorm
     plt.imshow(kernel, origin="l", norm=LogNorm)
 
 

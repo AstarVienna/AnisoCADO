@@ -96,7 +96,7 @@ Given that the PSF can create an astropy ``ImageHDU`` object, we can take
 advantage of the astropy functionality and and override the ``.writeto()``
 method of an astropy ``ImageHDU`` object::
 
-    psf.writeto(filename="My_SCAO_PSF.fits")
+    psf.writeto("My_SCAO_PSF.fits")
 
 Obviously this will only work for single PSFs. We will normally want to create
 multiple SCAO PSFs for different wavelengths and different positions over the
@@ -117,7 +117,7 @@ add the ``HDUs`` to an astropy ``HDUList`` object.
             hdus += [psf.hdu]
 
     hdu_list = fits.HDUList(hdus)
-    hdu_list.writeto(filename="My_bunch_of_SCAO_PSFs.fits")
+    hdu_list.writeto("My_bunch_of_SCAO_PSFs.fits")
 
 .. plot::
     :context: close-figs
