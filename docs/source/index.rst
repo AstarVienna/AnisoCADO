@@ -31,6 +31,12 @@ Basic Usage
 
 .. note:: See Getting Started for a more in-depth introduction
 
+.. warning:: This is still the alpha release of AnisoCADO.
+
+    We will attempt to maintain backwards compatiblity, however we cannot
+    guarantee that the API will remain the same as the package evolves.
+
+
 The most needed functionality is based around the ``AnalyticalScaoPsf`` class.
 Create one like this::
 
@@ -39,13 +45,17 @@ Create one like this::
 
 where (for the moment) ``N`` is the side length of the PSF kernel image and
 ``wavelength`` is the central wavelength [um] of the PSF that we wish to
-simulate
+simulate.
 
 .. plot::
+    :context:
+    :include-source: True
 
     import matplotlib.pyplot as plt
     from matplotlib.colors import LogNorm
+
     from anisocado import AnalyticalScaoPsf
+
     psf = AnalyticalScaoPsf(N=512, wavelength=2.15)
     plt.imshow(psf.psf_latest, norm=LogNorm())
 
@@ -57,11 +67,13 @@ To "move" the PSF off-axis, we call the ``.shift_off_axis(dx, dy)`` method.
 Here ``dx, dy`` are in arcseconds.
 
 .. plot::
-    :context: True
+    :context:
     :include-source: True
 
     psf.shift_off_axis(10, -5)
+
     plt.imshow(psf.psf_latest, norm=LogNorm())
+
 
 We can access this PSF in two ways: as a numpy array with ``.kernel`` or as an
 astropy ``ImageHDU`` object with ``.hdu``. Here the kernel is kept in the
