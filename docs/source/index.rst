@@ -38,10 +38,15 @@ Basic Usage
 
 
 The most needed functionality is based around the ``AnalyticalScaoPsf`` class.
-Create one like this::
+Create one like this
+
+.. plot::
+    :context:
+    :include-source:
 
     from anisocado import AnalyticalScaoPsf
     psf = AnalyticalScaoPsf(N=512, wavelength=2.15)     # wavelength in um
+
 
 where (for the moment) ``N`` is the side length of the PSF kernel image and
 ``wavelength`` is the central wavelength [um] of the PSF that we wish to
@@ -49,15 +54,11 @@ simulate.
 
 .. plot::
     :context:
-    :include-source:
 
     import matplotlib.pyplot as plt
     from matplotlib.colors import LogNorm
 
-    from anisocado import AnalyticalScaoPsf
-
-    psf = AnalyticalScaoPsf(N=512, wavelength=2.15)
-    plt.imshow(psf.psf_latest, norm=LogNorm())
+    plt.imshow(psf.psf_latest[128:384, 128:384], norm=LogNorm())
 
 
 When we create an AnalyticalScaoPsf object, an initial PSF is created that is
@@ -70,9 +71,9 @@ Here ``dx, dy`` are in arcseconds.
     :context:
     :include-source:
 
-    psf.shift_off_axis(10, -5)
+    psf.shift_off_axis(15, -10)
 
-    plt.imshow(psf.psf_latest, norm=LogNorm())
+    plt.imshow(psf.psf_latest[128:384, 128:384], norm=LogNorm())
 
 
 We can access this PSF in two ways: as a numpy array with ``.kernel`` or as an
@@ -112,10 +113,10 @@ add the ``HDUs`` to an astropy ``HDUList`` object.
             hdus += [psf.hdu]
 
     hdu_list = fits.HDUList(hdus)
-    hdu_list.writeto(filename="My_bunch_of_SCAO_PSFs.fits)
+    hdu_list.writeto(filename="My_bunch_of_SCAO_PSFs.fits")
 
 .. plot::
-    :context: close-figs
+    :context:
 
     plt.figure(figsize=(12,12))
     i = 0

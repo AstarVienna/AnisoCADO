@@ -8,10 +8,24 @@ When created it runs a series of setup routines, including creating a PSF
 kernel based on the parameters it is passed during the initialisation. This
 original PSF kernel is valid for the on-sky coordinate of the natural guide star
 (NGS) used to drive the AO correction. It is the "optimal" PSF, and can always
-be called up using ``.psf_on_axis``::
+be called up using ``.psf_on_axis``
 
-    psf = AnalyticalScaoPsf(N=512, wavelength=wave)
+.. plot::
+    :context:
+    :include-source:
+
+    from anisocado import AnalyticalScaoPsf
+
+    psf = AnalyticalScaoPsf(N=512, wavelength=2.15)  # um
     kernel = psf.psf_on_axis
+
+.. plot::
+    :context:
+
+    import matplotlib.pyplot as plt
+    from matplotlob.colors import LogNorm
+    plt.imshow(kernel, norm=LogNorm)
+
 
 The Strehl ratio of this kernel can be found by calling::
 
