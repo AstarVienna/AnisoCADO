@@ -16,6 +16,7 @@ analytically generating field-varying SCAO PSFs for MICADO at the ELT.
    :caption: Contents:
 
    GettingStarted
+   PsfLibrary
    Reference API <reference/anisocado>
 
 
