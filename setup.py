@@ -14,7 +14,7 @@ __version__ = "0.1.rc1"
 setup(
     name='anisocado',
     version=__version__,
-    description='Generate off-axis SCAO PSFs for MICADO at the ELT',
+    description='Generate off-axis SCAO PSFs for the ELT',
     long_description=__readme__,
     author='Eric Gendron, Kieran Leschinski',
     author_email='kieran.leschinski@univie.ac.at',

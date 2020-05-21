@@ -9,7 +9,7 @@ from .psf_utils import *
 
 class AnalyticalScaoPsf:
     """
-    A class to generate SCAO PSFs for MICADO at the ELT
+    A class to generate SCAO PSFs for the ELT
 
     It is important to note that original PSF is generated for an on-axis
     guide star (``self.psf_on_axis``) at a specific wavelength. This PSF is

@@ -4,7 +4,7 @@
 
 Tested under Python: 2.7, 3.4, 3.5, 3.6, 3.7
 
-A python package to generate off-axis PSFs for the SCAO mode for MICADO at the ELT
+A python package to generate off-axis PSFs for the SCAO mode for the ELT
 
 Please note: this package is not yet finished yet! The code is fine, but the 
 documentation is lacking.

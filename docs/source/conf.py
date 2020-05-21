@@ -175,7 +175,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'anisocado', 'anisocado Documentation',
-     author, 'Eric Gendron', 'Off-axis SCAO PSFs for MICADO at the ELT',
+     author, 'Eric Gendron', 'Off-axis SCAO PSFs for the ELT',
      'Miscellaneous'),
 ]
 
