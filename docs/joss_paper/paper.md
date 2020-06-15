@@ -1,5 +1,5 @@
 ---
-title: 'AnisoCADO - a python package for analytically generating adaptive optics point spread functions for the Extremely Large Telescope'
+title: 'AnisoCADO: a python package for analytically generating adaptive optics point spread functions for the Extremely Large Telescope'
 tags:
   - Python
   - astronomy
@@ -17,7 +17,7 @@ affiliations:
    index: 1
  - name: Observatoire de Paris
    index: 2
-date: 19 May 2020
+date: 15 June 2020
 bibliography: paper.bib
 ---
 
@@ -59,43 +59,30 @@ This effect is taken into account by shifting the anisoplanatic phase screen rel
 Figure \autoref{fig:psf_grid} shows how the PSF changes with distance from an on-axis guide star.   
 For a more detailed discussion of the mathematics behind anisoplanatism in the context of the ELT, the reader is referred to @clenet2015.
 
-![Caption for example figure.\label{fig:psf_grid}](Ks-band_psf_grid.png)
+![A grid of Ks-band (2.15um) PSFs for a range of distances from the natural guide star. 
+The PSFs were generated using the ESO median turbulence profile. 
+\label{fig:psf_grid}](Ks-band_psf_grid.png)
 
 
 ### Inputs
 The final ELT PSF is the combination of many factors. The vast majority of these are irrelevant for the casual user. 
 AnisoCADO therefore provides three preset option, corresponding to the standard ESO Q1, Median and Q4 turbulence profiles.
 All other parameters are initialised with default values.
-The most important factor
+For the case of a SCAO system (for which AnisoCADO was originally conceived) PSFs can be generated for multiple guide star offsets without needing to re-make all phase screens by using the special class method ``.shift_off_axis(dx, dy)``  
 
+For more detailed use cases, the following parameters are available to the user:
 
+| Atmosphere                    | Observation                      | Telescope                    |
+|-------------------------------|----------------------------------|------------------------------|
+| * turbulence profile          | * natural guide star position    | * pupil image                |
+| * height of turbulent layers  | * central wavelength             | * 2D pupil transmissivity    |
+| * stregth of turbulent layers | * pupil rotation angle           | * dead/empty mirror segments |
+| * wind speed                  | * Zenith distance of observation | * plate scale                |
+| * Seeing FWHM @ 500nm         |                                  | * residual wavefront errors  |
+| * Fried parameter             |                                  | * AO sampling frequency      |
+| * outer scale                 |                                  | * AO loop delay              |
+|                               |                                  | * Interactuator distance     |
 
-
-
-Atmospheric
-* atmospheric turbulence profile
-* height and relative strength of each turbulent layer 
-* wind speed
-* outer scale
-* Seeing FWHM @ 500nm
-* Fried parameter
-
-
-Observational
-* natural guide star position
-* central wavelength
-* pupil rotation angle
-* Zenith distance of observation
-
-Technical
-* pupil image
-* spatially differing pupil transmissivity
-* dead/empty mirror segments
-* plate scale
-* residual wavefront error of the system
-* AO sampling frequency
-* AO loop delay
-* Interactuator distance
 
 
 ### Outputs
@@ -108,7 +95,20 @@ As AnisoCADO was written to support the development of the MICADO instrument sim
 Such files are also compatible with the generic instrument data simulator framework, ScopeSim [@scopesim].
 
 
+Basic Example
+-------------
+The AnisoCADO API is described in the online documentation, which can be found at: <https://anisocado.readthedocs.io/>. For the purpose of illustration, the following 5 lines were used to generate the grid of PSFs in figure \autoref{fig:psf_grid}.
 
+```
+import numpy as np
+from anisocado import AnalyticalScaoPsf
+
+psf = AnalyticalScaoPsf()
+psf_grid = []
+for x, y in np.mgrid[-14:15:7, -14:15:7].flatten().reshape((2, 25)).T:
+    psf.shift_off_axis(x, y)
+    psf_grid += [psf.kernel]
+```
 
 
 # Acknowledgments
