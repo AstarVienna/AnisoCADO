@@ -74,16 +74,16 @@ For the case of a SCAO system (for which AnisoCADO was originally conceived) PSF
 
 For more detailed use cases, the following parameters are available to the user:
 
-| Atmosphere                    | Observation                      | Telescope                    |
-|-------------------------------|----------------------------------|------------------------------|
-| * turbulence profile          | * natural guide star position    | * pupil image                |
-| * height of turbulent layers  | * central wavelength             | * 2D pupil transmissivity    |
-| * stregth of turbulent layers | * pupil rotation angle           | * dead/empty mirror segments |
-| * wind speed                  | * Zenith distance of observation | * plate scale                |
-| * Seeing FWHM @ 500nm         |                                  | * residual wavefront errors  |
-| * Fried parameter             |                                  | * AO sampling frequency      |
-| * outer scale                 |                                  | * AO loop delay              |
-|                               |                                  | * Interactuator distance     |
+| Atmosphere                  | Observation                    | Telescope                  |
+|-----------------------------|--------------------------------|----------------------------|
+| turbulence profile          | natural guide star position    | pupil image                |
+| height of turbulent layers  | central wavelength             | 2D pupil transmissivity    |
+| stregth of turbulent layers | pupil rotation angle           | dead/empty mirror segments |
+| wind speed                  | Zenith distance of observation | plate scale                |
+| Seeing FWHM @ 500nm         |                                | residual wavefront errors  |
+| Fried parameter             |                                | AO sampling frequency      |
+| outer scale                 |                                | AO loop delay              |
+|                             |                                | Interactuator distance     |
 
 
 
