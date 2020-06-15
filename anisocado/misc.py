@@ -61,9 +61,9 @@ def make_image_of_psf_grid(filt_name="Ks", wave=2.15, for_joss=True):
         plt.suptitle(f"{filt_name}-band ({wave}um) SCAO PSFs")
 
 
-make_image_of_psf_grid("Ks", 2.15)
-make_image_of_psf_grid("H", 1.6)
-make_image_of_psf_grid("J", 1.2)
+# make_image_of_psf_grid("Ks", 2.15)
+# make_image_of_psf_grid("H", 1.6)
+# make_image_of_psf_grid("J", 1.2)
 
 
 def make_simcado_psf_file(coords, wavelengths, header_cards=None, **kwargs):
