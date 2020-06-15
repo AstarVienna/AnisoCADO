@@ -39,8 +39,8 @@ def make_psf_grid(r=14, dr=7, **kwargs):
     return psf_grid
 
 
-def make_image_of_psf_grid():
-    psf_grid = make_psf_grid(wavelength=2.15, N=128)
+def make_image_of_psf_grid(filt_name="Ks", wave=2.15, for_joss=True):
+    psf_grid = make_psf_grid(wavelength=wave, N=128)
 
     plt.figure(figsize=(10, 10))
     i = 0
@@ -51,8 +51,19 @@ def make_image_of_psf_grid():
             plt.axis("off")
             plt.title("({}, {})".format((7*x-14), (7*x-14)))
             i += 1
-    plt.suptitle("Ks-band (2.15um) SCAO PSFs")
-    plt.show()
+
+    if for_joss:
+        plt.tight_layout()
+        path = f"../docs/joss_paper/{filt_name}-band_psf_grid"
+        plt.savefig(path+".png", format="png")
+        plt.savefig(path+".pdf", format="pdf")
+    else:
+        plt.suptitle(f"{filt_name}-band ({wave}um) SCAO PSFs")
+
+
+make_image_of_psf_grid("Ks", 2.15)
+make_image_of_psf_grid("H", 1.6)
+make_image_of_psf_grid("J", 1.2)
 
 
 def make_simcado_psf_file(coords, wavelengths, header_cards=None, **kwargs):
