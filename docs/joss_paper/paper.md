@@ -48,6 +48,11 @@ From an astronomers point of view, the consequences of a poor adaptive optics so
 Therfore it is imperative that the consequences of such large variations in the PSF are accounted for in advance by those proposing to observe with this next generation of billion-dollar telescopes.
 
 
+![A grid of Ks-band (2.15um) PSFs for a range of distances from the natural guide star. 
+The PSFs were generated using the ESO median turbulence profile. 
+\label{fig:psf_grid}](Ks-band_psf_grid.png)
+
+
 ## AnisoCADO - Anisoplanatism for MICADO
 
 AnisoCADO (Anisoplanatism for MICADO) is a package for generating images of the point spread function for a given set of atmospheric, observational, and technical conditions.
@@ -56,12 +61,9 @@ The final phase screen is applied to the optical transfer function for the teles
 The resulting image is the expected PSF for a long exposure (>10s) on-axis observation at the given wavelength.
 For single-conjugate adaptive optics modes, the field PSF degrades as distance from the guide star increases. 
 This effect is taken into account by shifting the anisoplanatic phase screen relative to the calculated phase screen correction for the deformable mirror. 
-Figure \autoref{fig:psf_grid} shows how the PSF changes with distance from an on-axis guide star.   
+\autoref{fig:psf_grid} shows how the PSF changes with distance from an on-axis guide star.   
 For a more detailed discussion of the mathematics behind anisoplanatism in the context of the ELT, the reader is referred to @clenet2015.
 
-![A grid of Ks-band (2.15um) PSFs for a range of distances from the natural guide star. 
-The PSFs were generated using the ESO median turbulence profile. 
-\label{fig:psf_grid}](Ks-band_psf_grid.png)
 
 
 ### Inputs
@@ -97,7 +99,7 @@ Such files are also compatible with the generic instrument data simulator framew
 
 Basic Example
 -------------
-The AnisoCADO API is described in the online documentation, which can be found at: <https://anisocado.readthedocs.io/>. For the purpose of illustration, the following 5 lines were used to generate the grid of PSFs in figure \autoref{fig:psf_grid}.
+The AnisoCADO API is described in the online documentation, which can be found at: <https://anisocado.readthedocs.io/>. For the purpose of illustration, the following 5 lines were used to generate the grid of PSFs in \autoref{fig:psf_grid}.
 
 ```
 import numpy as np
