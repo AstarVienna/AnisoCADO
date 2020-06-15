@@ -23,7 +23,7 @@ bibliography: paper.bib
 
 # Summary
 
-AnisoCADO is a Python package for generating images of the point spread function (PSF) for the european extremely large telescope. 
+AnisoCADO is a Python package for generating images of the point spread function (PSF) for the european extremely large telescope (ELT). 
 The code allows the user to set a large range of the most important atmospheric and observational parameters that influence the shape and strehl ratio of the resulting PSF, including but not limited to: the atmospheric turbulence profile, the guide star position for a single conjugate adaptive optics (SCAO) solution, differential telescope pupil transmission, etc.
 Documentation can be found at https://anisocado.readthedocs.io/en/latest/
 
@@ -35,9 +35,9 @@ The larger the telescope aperture, the smaller the diffraction limit of the obse
 For space-based telescope this statement is always true. 
 However the resolution of ground based telescopes is limited by the blur caused by turbulence in the atmosphere - known as atmospheric Seeing. 
 This blurring can be (mostly) removed by measuring the deformation of the wavefront of the incoming light, and applying an equal and opposite deformation to the surface of one or more of the mirrors along a telescope's optical path.
-The current fleet of large (8-10m) telescopes were built to primarily operate at the edge of the natural seeing limit (FWHM~0.5 arcseconds @ 1um). 
+The current fleet of large (8 - 10m) telescopes were built to primarily operate at the edge of the natural seeing limit (FWHM~0.5 arcseconds @ 1um). 
 Over the last two decades some have received upgrades in the form of active and adaptive mirrors in order to achieve up to 20x increase in resolution afforded by the physical diffraction limit of a ~10m primary mirror (FWHM~0.03 arcseconds @ 1um).
-The next generation of "extremely large" telescopes will have primary mirrors on the order of 30-40m, with theoretical diffraciton limits on the order of 50x smaller than the natural Seeing limit.
+The next generation of "extremely large" telescopes will have primary mirrors on the order of 30 - 40m, with theoretical diffraciton limits on the order of 50x smaller than the natural Seeing limit.
 In order for these telescopes to resolve structures at scales of the diffraction limit, they must, by design, include adaptive optics systems.
 
 ## Diffraction limited point-spread-functions are complex beasts
