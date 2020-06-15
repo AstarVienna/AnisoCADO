@@ -1,30 +1,24 @@
 ---
 title: 'AnisoCADO - a python package for analytically generating adaptive optics point spread functions for the Extremely Large Telescope'
-
 tags:
   - Python
   - astronomy
   - simulations
   - point spread functions
   - Extreme Large Telescope
-  
 authors:
   - name: Kieran Leschinski
     orcid: 0000-0003-0441-9784
     affiliation: 1
   - name: Eric Gendron
-    affiliation: 2
-    
+    affiliation: 2 
 affiliations:
  - name: Department of Astrophysics, University of Vienna
    index: 1
  - name: Observatoire de Paris
    index: 2
-   
 date: 19 May 2020
-
 bibliography: paper.bib
-
 ---
 
 # Summary
@@ -69,10 +63,13 @@ For a more detailed discussion of the mathematics behind anisoplanatism in the c
 
 
 ### Inputs
-The final ELT PSF is the combination of many factors  
+The final ELT PSF is the combination of many factors. The vast majority of these are irrelevant for the casual user. 
+AnisoCADO therefore provides three preset option, corresponding to the standard ESO Q1, Median and Q4 turbulence profiles.
+All other parameters are initialised with default values.
+The most important factor
 
-AnisoCADO provides multiple presets for the casual user. 
-These correspond to the standard ESO turbulence profiles  
+
+
 
 
 Atmospheric
