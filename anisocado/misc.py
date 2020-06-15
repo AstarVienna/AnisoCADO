@@ -54,11 +54,11 @@ def make_image_of_psf_grid(filt_name="Ks", wave=2.15, for_joss=True):
 
     if for_joss:
         plt.tight_layout()
-        path = f"../docs/joss_paper/{filt_name}-band_psf_grid"
+        path = "../docs/joss_paper/{}-band_psf_grid".format(filt_name)
         plt.savefig(path+".png", format="png")
         plt.savefig(path+".pdf", format="pdf")
     else:
-        plt.suptitle(f"{filt_name}-band ({wave}um) SCAO PSFs")
+        plt.suptitle("{}-band ({}um) SCAO PSFs".format(filt_name, wave))
 
 
 # make_image_of_psf_grid("Ks", 2.15)
