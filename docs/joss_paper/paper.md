@@ -47,7 +47,7 @@ The PSF of a diffraction limited telescope system using an adaptive-optics corre
 From an astronomers point of view, the consequences of a poor adaptive optics solution means the difference between a successful and a failed observation run.
 Therefore it is imperative that the consequences of such large variations in the PSF are accounted for in advance, in order to guarantee the feasibility of the proposed programs.
  
-![A grid of Ks-band (~2.15$mu$m) PSFs for a range of distances from the natural guide star. 
+![A grid of Ks-band (~2.15$\mu$m) PSFs for a range of distances from the natural guide star. 
 The PSFs were generated using the ESO median turbulence profile. 
 \label{fig:psf_grid}](Ks-band_psf_grid.png)
 
