@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+AnisoCADO: A python package to simulate ELT SCAO PSFs
+
+How to compile and put these on pip::
+
+    $ python setup.py sdist bdist_wheel
+    $ twine upload dist/*
+
+"""
 from setuptools import setup, find_packages
 
 with open('README.md') as f:
