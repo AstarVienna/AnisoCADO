@@ -206,7 +206,7 @@ class AnalyticalScaoPsf:
         """
         Generates a analytical SCAO PSF for a long (>10 sec) exposure
 
-        Parameters need to be set be setting the attibute directly, or by
+        Parameters need to be set be setting the attribute directly, or by
         calling ``self.update()`` with the desired keyword-value pair passed as
          a kwarg. Valid keywords can be found in ``self.kwarg_names``.
 

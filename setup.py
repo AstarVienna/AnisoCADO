@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# Learn more: https://github.com/kennethreitz/setup.py
-
 from setuptools import setup, find_packages
 
 with open('README.md') as f:
@@ -9,7 +7,8 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     __license__ = f.read()
 
-__version__ = "0.1.rc1"
+with open('anisocado/version.py') as f:
+    __version__ = f.readline().split("'")[1]
 
 setup(
     name='anisocado',
