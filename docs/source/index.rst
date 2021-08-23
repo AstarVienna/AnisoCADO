@@ -5,7 +5,7 @@
 
 |
 
-|logo] Another tool from the `A* Vienna software team <https://astarvienna.github.io/>`_
+|logo| Another tool from the `A* Vienna software team <https://astarvienna.github.io/>`_
 
 .. |logo| image:: https://raw.githubusercontent.com/AstarVienna/astarvienna.github.io/main/logos/star_small_t.png
    :height: 30px
@@ -143,15 +143,6 @@ add the ``HDUs`` to an astropy ``HDUList`` object.
                        interpolation="none")
             plt.title("({}, {})".format(y, x))
             i += 1
-
-
-Installation
-------------
-
-The usual::
-
-    pip install anisocado
-
 
 Dependencies
 ------------
