@@ -1,8 +1,18 @@
-Welcome to AnisoCADO's documentation!
-=======================================
+.. image:: _static/logos/anisocado_t.png
+    :width: 600 px
+    :alt: Welcome to the AnisoCADO Documentation!
+    :align: center
 
-AnisoCADO is the python package created around Eric Gendron's code for
-analytically generating field-varying SCAO PSFs for the ELT.
+
+Another tool from the `A* Vienna software team <https://astarvienna.github.io/>`_
+
+.. |logo| image:: https://raw.githubusercontent.com/AstarVienna/astarvienna.github.io/main/logos/star_small_t.png
+   :height: 30px
+   :align: middle
+
+
+**AnisoCADO is the python package created around Eric Gendron's code for
+analytically generating field-varying SCAO PSFs for the ELT.**
 
 
 .. figure:: ./_static/psf_grid_Ks_band.png
