@@ -104,7 +104,7 @@ class AnalyticalScaoPsf:
                             "seeing", "r0Vis", "r0IR", "nmRms", "L0",
                             "profile_name", "zenDist", "deadSegments",
                             "V", "Fe", "tret", "gain", "dactu", "x_last",
-                            "y_last"]
+                            "y_last", "seed"]
 
         # Variable attributes
         self.N = 512
@@ -140,6 +140,8 @@ class AnalyticalScaoPsf:
         self.W = None
         self._wave_m = None
         self._kernel_sum = None
+        self.seed = None
+        self.rng = None
         
         self.__dict__.update(psf_on_axis)
         self.update()
@@ -160,6 +162,10 @@ class AnalyticalScaoPsf:
                 warnings.warn("{} not found in self.kwarg_names".format(key))
 
         self.__dict__.update(kwargs)
+        if self.seed is not None:
+            self.rng = np.random.default_rng(seed=self.seed)
+        else:
+            self.rng = np.random.default_rng()
 
         # and layers appear further away with zenith distance
         if self.profile_name is not None:
@@ -185,7 +191,7 @@ class AnalyticalScaoPsf:
 
         # generate the ELT pupil
         self.pup = fake_generatePupil(self.N, self.deadSegments, self.rotdegree,
-                                      self.pixelSize, self._wave_m)
+                                      self.pixelSize, self._wave_m, rng=self.rng)
 
         # Let's go. Let's define some basic parameters
         # (arrays of spatial frequencies)
@@ -348,7 +354,7 @@ class AnalyticalScaoPsf:
         # order to get the phase.
         Wtotal[0, 0] = 0  # because i don't care about piston mode
         Wtotal = np.sqrt(Wtotal)
-        rand_phase = np.random.rand(self.N, self.N)
+        rand_phase = self.rng.rand(self.N, self.N)
         tmp = np.fft.fft2(Wtotal * np.exp(2j * np.pi * rand_phase)) * self.uk
         ph1 = tmp.real * np.sqrt(2)
         ph2 = tmp.imag * np.sqrt(2)

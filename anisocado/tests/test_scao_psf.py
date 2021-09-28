@@ -77,3 +77,9 @@ class TestHDUProperty:
 
 
 
+class TestRNG:
+    def test_predictable(self):
+        psf_a = AnalyticalScaoPsf(N=512, seed=9999999)
+        psf_b = AnalyticalScaoPsf(N=512, seed=9999999)
+
+        assert np.all(psf_a.psf_on_axis == psf_b.psf_on_axis)

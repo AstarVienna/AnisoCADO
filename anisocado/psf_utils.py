@@ -1,6 +1,5 @@
 """Originally from file _anisocado.py"""
 
-import numpy
 import numpy as np
 from . import pupil_utils
 
@@ -370,7 +369,7 @@ def convertSpectrum2Dphi(W, uk):
     return Dphi
 
 
-def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength):
+def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength, rng=np.random.default_rng()):
     """
     <N>            : size of the output image, that is made to match the size
                      of the (square) psf image to be processed. In other
@@ -379,6 +378,7 @@ def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength):
     <rotdegree>    : pupil rotation in degrees
     <pixelSize>    : size of the pixels of the psf image (mas)
     <wavelength>   : wavelength (metres)
+    <rng>          : optional random number generator for reproducible results
 
     Examples::
 
@@ -392,9 +392,9 @@ def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength):
 
     """
     nseg = pupil_utils.getEeltSegmentNumber()
-    refl = np.ones(nseg)+np.random.randn(nseg)/20.
+    refl = np.ones(nseg)+rng.standard_normal(nseg)/20.
     if deadSegments:
-        refl[(np.random.rand(deadSegments)*nseg).astype(int)] = 0.
+        refl[(rng.random(deadSegments)*nseg).astype(int)] = 0.
     i0 = N/2+0.5
     j0 = N/2+0.5
 
