@@ -1,0 +1,71 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "license": "https://spdx.org/licenses/GPL-3.0",
+    "codeRepository": "https://github.com/AstarVienna/AnisoCADO.git",
+    "dateCreated": "2019-03-14",
+    "datePublished": "2019-03-25",
+    "dateModified": "2020-06-26",
+    "downloadUrl": "https://pypi.org/project/anisocado/",
+    "issueTracker": "https://github.com/AstarVienna/AnisoCADO/issues",
+    "name": "AnisoCADO",
+    "version": "0.2",
+    "description": "A python package created around Eric Gendron’s code for analytically (and quickly) generating field-varying SCAO PSFs for the ELT.",
+    "applicationCategory": "Astronomy",
+    "funding": "IS538004",
+    "developmentStatus": "active",
+    "isPartOf": "https://astarvienna.github.io/",
+    "referencePublication": "https://arxiv.org/abs/2006.14572",
+    "funder": {
+        "@type": "Organization",
+        "name": "Austrian Government, University of Vienna"
+    },
+    "keywords": [
+        "Instruments",
+        "Telescopes",
+        "Simulators",
+        "ELT",
+        "Visual",
+        "Infrared"
+    ],
+    "programmingLanguage": [
+        "Python 3"
+    ],
+    "operatingSystem": [
+        "Linux",
+        "Windows",
+        "macOS"
+    ],
+    "softwareRequirements": [
+        "Python 3.4+"
+    ],
+    "relatedLink": [
+        "https://anisocado.readthedocs.io/en/latest/",
+        "https://github.com/AstarVienna/ScopeSim",
+        "https://astarvienna.github.io/"
+    ],
+    "author": [
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0003-0441-9784",
+            "givenName": "Kieran",
+            "familyName": "Leschinski",
+            "email": "kieran.leschinski@univie.ac.at",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Department of Astrophysics, University of Vienna"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0003-0021-6568",
+            "givenName": "Eric",
+            "familyName": "Gendron",
+            "email": "eric.gendron@obspm.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "LESIA, Observatoire de Paris, Université PSL, CNRS, Sorbonne Université, Université de Paris"
+            }
+        }
+    ]
+}

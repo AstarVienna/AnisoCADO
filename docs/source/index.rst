@@ -16,7 +16,7 @@
 analytically generating field-varying SCAO PSFs for the ELT.**
 
 
-.. figure:: ./_static/psf_grid_Ks_band.png
+.. figure:: _static/psf_grid_Ks_band.png
     :align: center
     :figwidth: 700px
 
