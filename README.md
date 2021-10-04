@@ -1,10 +1,12 @@
 # AnisoCADO
 
-[![Build Status](https://travis-ci.org/astronomyk/AnisoCADO.svg?branch=master)](https://travis-ci.org/astronomyk/AnisoCADO)
+
 [![Documentation Status](https://readthedocs.org/projects/anisocado/badge/?version=latest)](https://anisocado.readthedocs.io/en/latest/?badge=latest)
 
-[![Python 2.7](https://img.shields.io/badge/Python-2.7-green.svg)]()
-[![Python >=3.4](https://img.shields.io/badge/Python->=3.4-brightgreen.svg)]()
+[![Build Status](http://github-actions.40ants.com/AstarVienna/AnisoCADO/matrix.svg)](https://github.com/AstarVienna/AnisoCADO)
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 
 A python package to generate off-axis PSFs for the SCAO mode for the ELT
 
