@@ -1,6 +1,6 @@
 # AnisoCADO
 
-
+[![Tests](https://github.com/AstarVienna/AnisoCADO/actions/workflows/tests.yml/badge.svg)](https://github.com/AstarVienna/AnisoCADO/actions/workflows/tests.yml)
 [![Documentation Status](https://readthedocs.org/projects/anisocado/badge/?version=latest)](https://anisocado.readthedocs.io/en/latest/?badge=latest)
 
 [![Build Status](http://github-actions.40ants.com/AstarVienna/AnisoCADO/matrix.svg)](https://github.com/AstarVienna/AnisoCADO)
