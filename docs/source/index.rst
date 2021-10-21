@@ -149,7 +149,7 @@ Dependencies
 
 The following packages are required for normal operation:
 
-* ``numpy (>=1.13)``
+* ``numpy (>=1.17)``
 * ``astropy``
 
 The following packages are optional:
