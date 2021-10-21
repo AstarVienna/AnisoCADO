@@ -157,6 +157,14 @@ The following packages are optional:
 * ``matplotlib``
 
 
+Change Log
+----------
+
+- 2021.10.21 :
+    - Upgraded Numpy dependency to v1.17 to use ``numpy.random.default_rng``
+    - Removed support for Python 2.7
+
+
 Indices and tables
 ==================
 

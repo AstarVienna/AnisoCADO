@@ -36,7 +36,7 @@ def setup_package():
           include_package_data=True,
           packages=find_packages(exclude=('tests', 'docs')),
           package_dir={'anisocado': 'anisocado'},
-          install_requires=['numpy', 'astropy', 'matplotlib'],
+          install_requires=['numpy>=1.17', 'astropy', 'matplotlib'],
           classifiers=["Programming Language :: Python :: 3",
                        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
                        "Operating System :: OS Independent",
