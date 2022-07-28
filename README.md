@@ -17,4 +17,3 @@ documentation is lacking.
 
 Apropos documentation. It can be found here:
 [https://anisocado.readthedocs.io/en/latest/index.html](https://anisocado.readthedocs.io/en/latest/index.html)
-
