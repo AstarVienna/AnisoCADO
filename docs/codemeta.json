@@ -9,7 +9,7 @@
     "downloadUrl": "https://pypi.org/project/anisocado/",
     "issueTracker": "https://github.com/AstarVienna/AnisoCADO/issues",
     "name": "AnisoCADO",
-    "version": "0.2",
+    "version": "0.2.2",
     "description": "A python package created around Eric Gendron’s code for analytically (and quickly) generating field-varying SCAO PSFs for the ELT.",
     "applicationCategory": "Astronomy",
     "funding": "IS538004",

@@ -160,6 +160,9 @@ The following packages are optional:
 Change Log
 ----------
 
+- 2023.02.01 :
+    - Fix bugs to support numpy 2.24
+    - Release 0.2.2
 - 2021.10.21 :
     - Upgraded Numpy dependency to v1.17 to use ``numpy.random.default_rng``
     - Removed support for Python 2.7
