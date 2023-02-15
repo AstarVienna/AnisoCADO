@@ -224,8 +224,8 @@ def fillPolygon(x, y, i0, j0, scale, gap, N, index=0):
     # Last triangle has a special treatment because it crosses the axis
     # with theta=0=2pi
     n = x.shape[0]  # number of corners of polygon
-    indx, indy = (np.array([], dtype=np.int), np.array([], dtype=np.int))
-    distedge = np.array([], dtype=np.float)
+    indx, indy = (np.array([], dtype=np.int64), np.array([], dtype=np.int64))
+    distedge = np.array([], dtype=np.float64)
     for i in range(n):
         j = i + 1  # j=element next i except when i==n : then j=0 (cycling)
         if j == n:
@@ -255,7 +255,7 @@ def fillPolygon(x, y, i0, j0, scale, gap, N, index=0):
         a[indx, indy] = distedge
         return a
     else:
-        a = np.zeros((N, N), dtype=np.bool)
+        a = np.zeros((N, N), dtype=np.bool_)
         a[indx, indy] = True  # convention [x,y]
 
     return a
@@ -296,7 +296,7 @@ def fillSpider(N, nspider, dspider, i0, j0, scale, rot):
     :param float rot: rotation angle in radians
 
     """
-    a = np.ones((N, N), dtype=np.bool)
+    a = np.ones((N, N), dtype=np.bool_)
     X = (np.arange(N) - i0) * scale
     Y = (np.arange(N) - j0) * scale
     X, Y = np.meshgrid(X, Y, indexing='ij')  # convention d'appel [x,y]
