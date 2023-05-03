@@ -1,0 +1,53 @@
+[project]
+name = "AnisoCADO"
+version = "0.2.3"
+# When updating the version, also
+# - update the date in anisocado/version.py
+# - update the release notese in docs/source/index.rst
+description = "Generate off-axis SCAO PSFs for the ELT"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"}
+authors = [
+    {name = "Eric Gendron"},
+    {name = "Kieran Leschinski", email="kieran.leschinski@unive.ac.at"},
+]
+maintainers = [
+    {name = "Kieran Leschinski", email="kieran.leschinski@unive.ac.at"},
+    {name = "Hugo Buddelmeijer", email="hugo@buddelmeijer.nl"},
+]
+classifiers=[
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Astronomy",
+]
+dependencies = [
+    "numpy>=1.17",
+    "astropy",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+dev = [
+    "scipy",
+]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+docs = [
+    "sphinx>=4.3.0",
+    "sphinx-rtd-theme>=0.5.1",
+    "sphinxcontrib-apidoc",
+    "numpydoc",
+]
+
+[project.urls]
+"Homepage" = "https://anisocado.readthedocs.io/en/latest/"
+"Source" = "https://github.com/AstarVienna/AnisoCADO/"
+"Bug Reports" = "https://github.com/AstarVienna/AnisoCADO/issues"
+
+[tool.setuptools]
+packages = ["anisocado"]

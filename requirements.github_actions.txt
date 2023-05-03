@@ -1,4 +1,0 @@
-pytest
-numpy>=1.17
-astropy
-matplotlib

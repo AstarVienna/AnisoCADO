@@ -160,6 +160,10 @@ The following packages are optional:
 Change Log
 ----------
 
+- 2023.05.03 :
+    - Release 0.2.3
+    - Switch to ``pyproject.toml``
+    - Support Python 3.7 to 3.11
 - 2023.02.01 :
     - Fix bugs to support numpy 2.24
     - Release 0.2.2
