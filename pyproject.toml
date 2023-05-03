@@ -4,7 +4,7 @@ version = "0.2.3-alpha"
 # When updating the version, also update the date in anisocado/version.py
 description = "Generate off-axis SCAO PSFs for the ELT"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.78"
 license = {text = "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"}
 authors = [
     {name = "Eric Gendron"},
@@ -31,7 +31,17 @@ dependencies = [
 dev = [
     "scipy",
 ]
-
+test = [
+    "pytest",
+    "pytest-cov",
+]
+docs = [
+    "sphinx>=4.3.0",
+    "sphinx-rtd-theme>=0.5.1",
+    "sphinxcontrib-apidoc",
+    "numpydoc",
+]
+f
 [project.urls]
 "Homepage" = "https://anisocado.readthedocs.io/en/latest/"
 "Source" = "https://github.com/AstarVienna/AnisoCADO/"
