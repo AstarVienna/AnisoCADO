@@ -1,0 +1,39 @@
+name: Minimum Dependencies
+# Installs the minimum versions of the dependencies and runs the tests.
+# This test will lower the chance that users botch their installation by
+# only upgrading this project but not the dependencies.
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  schedule:
+    - # Run every day at 5:00 UTC
+    - cron: "0 5 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          # Keep python-version on the lowest supported version.
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          # Hardcode the minimum version of the dependencies.
+          sed -i s/<=/==/g pyproject.toml
+          python -m pip install --upgrade pip
+          pip install .[test]
+      - name: Run Pytest
+        run: pytest
