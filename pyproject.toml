@@ -7,6 +7,7 @@ version = "0.2.4-alpha"
 description = "Generate off-axis SCAO PSFs for the ELT"
 readme = "README.md"
 requires-python = ">=3.8"
+# When updating the version, also update the versions in .github/workflows/*
 license = {text = "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"}
 authors = [
     {name = "Eric Gendron"},
@@ -24,9 +25,11 @@ classifiers=[
     "Topic :: Scientific/Engineering :: Astronomy",
 ]
 dependencies = [
-    "numpy>=1.17.0",
+    # Try to keep the dependencies on lower versions that have a wheel
+    # package on PyPI, for minimumdependencies.yml
+    "numpy>=1.18.0",
     "astropy>=4.0",
-    "matplotlib>=3.0.0",
+    "matplotlib>=3.2.0",
 ]
 
 [project.optional-dependencies]
