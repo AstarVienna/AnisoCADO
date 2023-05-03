@@ -32,7 +32,10 @@ jobs:
       - name: Install dependencies
         run: |
           # Hardcode the minimum version of the dependencies.
+          # E.g. '"astropy>=4.0"' to '"astropy==4.0"'
           sed -i "s/>=/==/g" pyproject.toml
+          # E.g. 'requires-python = "==3.8"' to 'requires-python = "==3.8.*"'
+          sed -E -i "s/(requires-python\s*=\s*\"[>=0-9.]*)\"/\1.*\"/g" pyproject.toml
           python -m pip install --upgrade pip
           pip install .[test]
       - name: Run Pytest
