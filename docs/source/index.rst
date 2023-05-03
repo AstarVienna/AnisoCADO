@@ -160,6 +160,9 @@ The following packages are optional:
 Change Log
 ----------
 
+- 2023.xx.xx :
+    - Release 0.2.x
+    - Fix Read The Docs
 - 2023.05.03 :
     - Release 0.2.3
     - Switch to ``pyproject.toml``
