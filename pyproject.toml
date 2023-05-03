@@ -41,7 +41,7 @@ docs = [
     "sphinxcontrib-apidoc",
     "numpydoc",
 ]
-f
+
 [project.urls]
 "Homepage" = "https://anisocado.readthedocs.io/en/latest/"
 "Source" = "https://github.com/AstarVienna/AnisoCADO/"
