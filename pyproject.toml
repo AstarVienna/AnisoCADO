@@ -1,6 +1,6 @@
 [project]
 name = "AnisoCADO"
-version = "0.2.3"
+version = "0.2.4-alpha"
 # When updating the version, also
 # - update the date in anisocado/version.py
 # - update the release notese in docs/source/index.rst
