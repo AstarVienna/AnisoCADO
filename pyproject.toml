@@ -24,9 +24,9 @@ classifiers=[
     "Topic :: Scientific/Engineering :: Astronomy",
 ]
 dependencies = [
-    "numpy>=1.17",
-    "astropy",
-    "matplotlib",
+    "numpy>=1.17.0",
+    "astropy>=4.0",
+    "matplotlib>=3.0.0",
 ]
 
 [project.optional-dependencies]
@@ -34,7 +34,7 @@ dev = [
     "scipy",
 ]
 test = [
-    "pytest",
+    "pytest>=5.0.0",
     "pytest-cov",
 ]
 docs = [
