@@ -1,7 +1,9 @@
 [project]
 name = "AnisoCADO"
-version = "0.2.3-alpha"
-# When updating the version, also update the date in anisocado/version.py
+version = "0.2.3"
+# When updating the version, also
+# - update the date in anisocado/version.py
+# - update the release notese in docs/source/index.rst
 description = "Generate off-axis SCAO PSFs for the ELT"
 readme = "README.md"
 requires-python = ">=3.8"
