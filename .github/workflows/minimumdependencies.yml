@@ -31,7 +31,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          # Keep python-version on the lowest supported version.
+          # Keep python-version on the lowest version from pyproject.toml.
+          # Also update the regexp below.
           python-version: 3.8
       - name: Install dependencies
         run: |
@@ -39,10 +40,9 @@ jobs:
           # E.g. '"astropy>=4.0"' to '"astropy==4.0"'
           # .bak is necessary for MacOS compatibility.
           sed -i.bak "s/>=/==/g" pyproject.toml
-          # E.g. 'requires-python = "==3.8"' to 'requires-python = "==3.8.*"'
-          # Single quotes must be used to prevent Powershell from
-          # interpreting the string.
-          sed -E -i.bak 's/(requires-python\s*=\s*"=+.*)"/\1.*"/g' pyproject.toml
+          # It is difficult to make a regexp that generalizes the Python
+          # version and also works Linux, Windows, and MacOS.
+          sed -i.bak 's/requires-python = "==3.8"/requires-python = "==3.8.*"/g' pyproject.toml
           python -m pip install --upgrade pip
           pip install .[test]
       - name: Run Pytest
