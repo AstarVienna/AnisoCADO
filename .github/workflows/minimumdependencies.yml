@@ -39,9 +39,9 @@ jobs:
           # .bak is necessary for MacOS compatibility.
           sed -i.bak "s/>=/==/g" pyproject.toml
           # E.g. 'requires-python = "==3.8"' to 'requires-python = "==3.8.*"'
-          # It is difficult to use [ in the regular expression as this is seen
-          # by Powershell as indexing an array.
-          sed -E -i.bak "s/(requires-python\s*=\s*\"=+.*)\"/\1.*\"/g" pyproject.toml
+          # Single quotes must be used to prevent Powershell from
+          # interpreting the string.
+          sed -E -i.bak 's/(requires-python\s*=\s*\"=+.*)\"/\1.*\"/g' pyproject.toml
           python -m pip install --upgrade pip
           pip install .[test]
       - name: Run Pytest
