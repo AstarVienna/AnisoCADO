@@ -48,7 +48,7 @@ jobs:
           cp pyproject.toml.new pyproject.toml
           # It is difficult to make a regexp that generalizes the Python
           # version and also works Linux, Windows, and MacOS.
-          sed 's/requires-python = "==3.8"/requires-python = "==3.8.*"/g' pyproject.toml > pyproject.toml.new2
+          sed 's/==3.8/==3.8.*/g' pyproject.toml > pyproject.toml.new2
           cp pyproject.toml.new2 pyproject.toml
           python -m pip install --upgrade pip
           pip install .[test]
