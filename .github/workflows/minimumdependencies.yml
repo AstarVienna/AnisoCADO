@@ -45,11 +45,11 @@ jobs:
           # Linux, MacOS, and Windows.
           # Single quotes are necessary for Windows compatibility.
           sed 's/>=/==/g' pyproject.toml > pyproject.toml.new
-          mv pyproject.toml.new pyproject.toml
+          cp pyproject.toml.new pyproject.toml
           # It is difficult to make a regexp that generalizes the Python
           # version and also works Linux, Windows, and MacOS.
           sed 's/requires-python = "==3.8"/requires-python = "==3.8.*"/g' pyproject.toml > pyproject.toml.new
-          mv pyproject.toml.new pyproject.toml
+          cp pyproject.toml.new pyproject.toml
           python -m pip install --upgrade pip
           pip install .[test]
       - name: Run Pytest
