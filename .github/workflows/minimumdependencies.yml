@@ -14,43 +14,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:
 
-  # Allow this workflow to be called from other repositories.
-  workflow_call:
-
   schedule:
     - # Run every day at 5:00 UTC.
     - cron: "0 5 * * *"
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          # Keep python-version on the lowest version from pyproject.toml.
-          # Also update the regexp below.
-          python-version: 3.8
-      - name: Install dependencies
-        run: |
-          # Hardcode the minimum version of the dependencies.
-          # E.g. '"astropy>=4.0"' to '"astropy==4.0"'
-          # -i cannot be used because that is hard to get compatible with
-          # Linux, MacOS, and Windows.
-          # Single quotes are necessary for Windows compatibility.
-          sed 's/>=/==/g' pyproject.toml > pyproject.toml.new
-          cp pyproject.toml.new pyproject.toml
-          # It is difficult to make a regexp that generalizes the Python
-          # version and also works Linux, Windows, and MacOS.
-          sed 's/==3.8/==3.8.*/g' pyproject.toml > pyproject.toml.new2
-          cp pyproject.toml.new2 pyproject.toml
-          python -m pip install --upgrade pip
-          pip install .[test]
-      - name: Run Pytest
-        run: pytest
+  call-minimum-dependencies:
+    uses: AstarVienna/DevOps/.github/workflows/minimumdependencies.yml@master
