@@ -148,8 +148,10 @@ add the ``HDUs`` to an astropy ``HDUList`` object.
 Change Log
 ----------
 
-- 2023.xx.xx :
-    - Release 0.2.x
+- 2023.07.10 :
+    - Release 0.3.0
+    - Rename MAORY to MORFEO
+    - Support Python 3.8 to 3.11
     - Fix Read The Docs
 - 2023.05.03 :
     - Release 0.2.3
