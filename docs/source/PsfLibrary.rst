@@ -16,9 +16,9 @@ Median  0.67    30          10      ESO Median      AnisoCADO_Median_
 Bad     1.0     60          13      ESO Quartile 4  AnisoCADO_Q4_
 ======= ======= =========== ======= =============== ============================
 
-.. _AnisoCADO_Q1: https://www.univie.ac.at/simcado/InstPkgSvr/psfs/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits
-.. _AnisoCADO_Median: https://www.univie.ac.at/simcado/InstPkgSvr/psfs/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits
-.. _AnisoCADO_Q4: https://www.univie.ac.at/simcado/InstPkgSvr/psfs/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits
+.. _AnisoCADO_Q1: https://scopesim.univie.ac.at/InstPkgSvr/psfs/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits
+.. _AnisoCADO_Median: https://scopesim.univie.ac.at/InstPkgSvr/psfs/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits
+.. _AnisoCADO_Q4: https://scopesim.univie.ac.at/InstPkgSvr/psfs/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits
 
 
 PSF radial profiles and images
@@ -34,7 +34,7 @@ to the files which are not listed above.
 
                 import requests
 
-                url = "https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/"
+                url = "https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/"
                 file = "summary.txt"
 
                 response = requests.get(url + file)
@@ -45,83 +45,83 @@ to the files which are not listed above.
                     print("`{} <{}{}>.fits`_".format(line, url, line.split(".fits")[0]))
 
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[2](0)-0.87um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[2](0)-0.87um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[2](0)-0.87um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[2](0)-0.87um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[3](0)-1.05um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[3](0)-1.05um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[3](0)-1.05um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[3](0)-1.05um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[4](0)-1.25um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[4](0)-1.25um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[4](0)-1.25um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[4](0)-1.25um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[5](0)-1.65um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[5](0)-1.65um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[5](0)-1.65um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[5](0)-1.65um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[6](0)-2.15um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[6](0)-2.15um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[6](0)-2.15um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoMedian_20190328.fits[6](0)-2.15um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[2](0)-0.87um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[2](0)-0.87um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[2](0)-0.87um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[2](0)-0.87um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[3](0)-1.05um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[3](0)-1.05um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[3](0)-1.05um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[3](0)-1.05um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[4](0)-1.25um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[4](0)-1.25um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[4](0)-1.25um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[4](0)-1.25um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[5](0)-1.65um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[5](0)-1.65um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[5](0)-1.65um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[5](0)-1.65um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[6](0)-2.15um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[6](0)-2.15um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[6](0)-2.15um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ1_20190328.fits[6](0)-2.15um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[2](0)-0.87um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[2](0)-0.87um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[2](0)-0.87um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[2](0)-0.87um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[3](0)-1.05um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[3](0)-1.05um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[3](0)-1.05um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[3](0)-1.05um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[4](0)-1.25um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[4](0)-1.25um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[4](0)-1.25um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[4](0)-1.25um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[5](0)-1.65um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[5](0)-1.65um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[5](0)-1.65um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[5](0)-1.65um.png>`_
 
-`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[6](0)-2.15um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[6](0)-2.15um.png>`_
+`AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[6](0)-2.15um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/AnisoCADO_SCAO_FVPSF_4mas_EsoQ4_20190328.fits[6](0)-2.15um.png>`_
 
-`Default_PSF_SCAO.fits[0](0)-1.65um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/Default_PSF_SCAO.fits[0](0)-1.65um.png>`_
+`Default_PSF_SCAO.fits[0](0)-1.65um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/Default_PSF_SCAO.fits[0](0)-1.65um.png>`_
 
-`Default_PSF_SCAO.fits[1](0)-0.9um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/Default_PSF_SCAO.fits[1](0)-0.9um.png>`_
+`Default_PSF_SCAO.fits[1](0)-0.9um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/Default_PSF_SCAO.fits[1](0)-0.9um.png>`_
 
-`Default_PSF_SCAO.fits[2](0)-1.2um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/Default_PSF_SCAO.fits[2](0)-1.2um.png>`_
+`Default_PSF_SCAO.fits[2](0)-1.2um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/Default_PSF_SCAO.fits[2](0)-1.2um.png>`_
 
-`Default_PSF_SCAO.fits[3](0)-2.2um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/Default_PSF_SCAO.fits[3](0)-2.2um.png>`_
+`Default_PSF_SCAO.fits[3](0)-2.2um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/Default_PSF_SCAO.fits[3](0)-2.2um.png>`_
 
-`MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[2](0)-1.635um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[2](0)-1.635um.png>`_
+`MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[2](0)-1.635um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[2](0)-1.635um.png>`_
 
-`MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[3](0)-0.86um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[3](0)-0.86um.png>`_
+`MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[3](0)-0.86um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[3](0)-0.86um.png>`_
 
-`MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[4](0)-1.245um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[4](0)-1.245um.png>`_
+`MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[4](0)-1.245um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[4](0)-1.245um.png>`_
 
-`MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[5](0)-2.145um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[5](0)-2.145um.png>`_
+`MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[5](0)-2.145um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_1.5mas_20181203.fits[5](0)-2.145um.png>`_
 
-`MORFEO_MCAO_FVPSF_4mas_20181203.fits[2](0)-1.635um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_4mas_20181203.fits[2](0)-1.635um.png>`_
+`MORFEO_MCAO_FVPSF_4mas_20181203.fits[2](0)-1.635um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_4mas_20181203.fits[2](0)-1.635um.png>`_
 
-`MORFEO_MCAO_FVPSF_4mas_20181203.fits[3](0)-0.86um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_4mas_20181203.fits[3](0)-0.86um.png>`_
+`MORFEO_MCAO_FVPSF_4mas_20181203.fits[3](0)-0.86um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_4mas_20181203.fits[3](0)-0.86um.png>`_
 
-`MORFEO_MCAO_FVPSF_4mas_20181203.fits[4](0)-1.245um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_4mas_20181203.fits[4](0)-1.245um.png>`_
+`MORFEO_MCAO_FVPSF_4mas_20181203.fits[4](0)-1.245um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_4mas_20181203.fits[4](0)-1.245um.png>`_
 
-`MORFEO_MCAO_FVPSF_4mas_20181203.fits[5](0)-2.145um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_4mas_20181203.fits[5](0)-2.145um.png>`_
+`MORFEO_MCAO_FVPSF_4mas_20181203.fits[5](0)-2.145um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_MCAO_FVPSF_4mas_20181203.fits[5](0)-2.145um.png>`_
 
-`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[2](4)-1.635um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[2](4)-1.635um.png>`_
+`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[2](4)-1.635um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[2](4)-1.635um.png>`_
 
-`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[3](4)-0.86um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[3](4)-0.86um.png>`_
+`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[3](4)-0.86um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[3](4)-0.86um.png>`_
 
-`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[4](4)-1.245um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[4](4)-1.245um.png>`_
+`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[4](4)-1.245um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[4](4)-1.245um.png>`_
 
-`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[5](4)-2.145um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[5](4)-2.145um.png>`_
+`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[5](4)-2.145um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[5](4)-2.145um.png>`_
 
-`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[6](4)-1.02um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[6](4)-1.02um.png>`_
+`MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[6](4)-1.02um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_1.5mas_20181203.fits[6](4)-1.02um.png>`_
 
-`MORFEO_SCAO_FVPSF_4mas_20181203.fits[2](24)-1.635um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[2](24)-1.635um.png>`_
+`MORFEO_SCAO_FVPSF_4mas_20181203.fits[2](24)-1.635um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[2](24)-1.635um.png>`_
 
-`MORFEO_SCAO_FVPSF_4mas_20181203.fits[3](24)-0.86um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[3](24)-0.86um.png>`_
+`MORFEO_SCAO_FVPSF_4mas_20181203.fits[3](24)-0.86um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[3](24)-0.86um.png>`_
 
-`MORFEO_SCAO_FVPSF_4mas_20181203.fits[4](24)-1.245um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[4](24)-1.245um.png>`_
+`MORFEO_SCAO_FVPSF_4mas_20181203.fits[4](24)-1.245um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[4](24)-1.245um.png>`_
 
-`MORFEO_SCAO_FVPSF_4mas_20181203.fits[5](24)-2.145um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[5](24)-2.145um.png>`_
+`MORFEO_SCAO_FVPSF_4mas_20181203.fits[5](24)-2.145um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[5](24)-2.145um.png>`_
 
-`MORFEO_SCAO_FVPSF_4mas_20181203.fits[6](24)-1.02um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[6](24)-1.02um.png>`_
+`MORFEO_SCAO_FVPSF_4mas_20181203.fits[6](24)-1.02um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/MORFEO_SCAO_FVPSF_4mas_20181203.fits[6](24)-1.02um.png>`_
 
-`POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[0](0)-1.2um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[0](0)-1.2um.png>`_
+`POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[0](0)-1.2um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[0](0)-1.2um.png>`_
 
-`POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[1](0)-1.6um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[1](0)-1.6um.png>`_
+`POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[1](0)-1.6um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[1](0)-1.6um.png>`_
 
-`POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[2](0)-2.2um.png <https://www.univie.ac.at/simcado/InstPkgSvr/psfs/psf_summary/POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[2](0)-2.2um.png>`_
+`POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[2](0)-2.2um.png <https://scopesim.univie.ac.at/InstPkgSvr/psfs/psf_summary/POPPY_NIR_Diff_limited_CONST_PSF_1mas_20181210.fits[2](0)-2.2um.png>`_
 

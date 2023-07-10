@@ -144,18 +144,6 @@ add the ``HDUs`` to an astropy ``HDUList`` object.
             plt.title("({}, {})".format(y, x))
             i += 1
 
-Dependencies
-------------
-
-The following packages are required for normal operation:
-
-* ``numpy (>=1.17)``
-* ``astropy``
-
-The following packages are optional:
-
-* ``matplotlib``
-
 
 Change Log
 ----------
