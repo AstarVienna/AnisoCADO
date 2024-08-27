@@ -3,14 +3,22 @@ name: Tests
 on:
   push:
     branches:
+      - main
       - master
+      - dev_master
   pull_request:
     branches:
+      - main
       - master
+      - dev_master
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   call-tests:
-    uses: AstarVienna/DevOps/.github/workflows/tests.yml@master
+    name: Offline tests
+    uses: AstarVienna/DevOps/.github/workflows/tests.yml@main
+    with:
+      poetry: False
+    secrets: inherit
