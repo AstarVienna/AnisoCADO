@@ -1,15 +1,23 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Main module.
+
 Created on Tue Mar 12 18:48:47 2019
 
 @author: Eric Gendron
 Edited by Kieran Leschinski
 """
 
+import numpy as np
 import matplotlib.pyplot as plt
-from anisocado.psf_utils import *
-from anisocado.psf_utils import get_atmospheric_turbulence
+
+from anisocado.psf_utils import (get_atmospheric_turbulence, computeEeltOTF,
+                                 computeSpatialFreqArrays, createAdHocScaoPsf,
+                                 anisoplanaticSpectrum, convertSpectrum2Dphi,
+                                 defineDmFrequencyArea, computeBpSpectrum,
+                                 otherSpectrum, airmassImpact, fittingSpectrum,
+                                 aliasingSpectrum, computeWiener, r0Converter,
+                                 fake_generatePupil, core_generatePsf)
 
 #  _   _             ____                  _
 # | | | |___  ___   / ___|__ _ ___  ___   / |

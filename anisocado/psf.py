@@ -1,10 +1,18 @@
 import warnings
+
+import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.colors import LogNorm
 
 from astropy.io import fits
 
-from .psf_utils import *
+from .psf_utils import (get_atmospheric_turbulence, computeEeltOTF,
+                        computeSpatialFreqArrays, get_profile_defaults,
+                        anisoplanaticSpectrum, convertSpectrum2Dphi,
+                        defineDmFrequencyArea, computeBpSpectrum,
+                        otherSpectrum, airmassImpact, fittingSpectrum,
+                        aliasingSpectrum, computeWiener, r0Converter,
+                        fake_generatePupil, core_generatePsf)
 
 
 class AnalyticalScaoPsf:
@@ -443,5 +451,3 @@ class AnalyticalScaoPsf:
         """Plots a logscale PSF kernel: ["psf_latest", "psf_on_axis"]"""
         plt.imshow(getattr(self, which).T, origin='l', norm=LogNorm())
         print('Strehl ratio of {} is {}'.format(which, self.psf_latest.max()))
-
-
