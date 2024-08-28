@@ -5,7 +5,7 @@ Main module.
 Created on Tue Mar 12 18:48:47 2019
 
 @author: Eric Gendron
-Edited by Kieran Leschinski
+Edited by Kieran Leschinski and Fabian Haberhauer
 """
 
 import numpy as np
@@ -283,10 +283,3 @@ def instantaneous_scao_psf():
     # Here, possibilities are infinite ..
     # You can add some static aberrations, etc etc,
     # and generate all the PSFs you want.
-
-
-
-
-
-
-
