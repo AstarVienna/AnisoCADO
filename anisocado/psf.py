@@ -1,10 +1,19 @@
+# -*- coding: utf-8 -*-
 import warnings
+
+import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.colors import LogNorm
 
 from astropy.io import fits
 
-from .psf_utils import *
+from .psf_utils import (get_atmospheric_turbulence, computeEeltOTF,
+                        computeSpatialFreqArrays, get_profile_defaults,
+                        anisoplanaticSpectrum, convertSpectrum2Dphi,
+                        defineDmFrequencyArea, computeBpSpectrum,
+                        otherSpectrum, airmassImpact, fittingSpectrum,
+                        aliasingSpectrum, computeWiener, r0Converter,
+                        fake_generatePupil, core_generatePsf)
 
 
 class AnalyticalScaoPsf:
@@ -142,13 +151,13 @@ class AnalyticalScaoPsf:
         self._kernel_sum = None
         self.seed = None
         self.rng = None
-        
+
         self.__dict__.update(psf_on_axis)
         self.update()
 
     def update(self, **kwargs):
         """
-        Updates the parameter needed to generate a PSF and/or shift if off-axis
+        Update the parameter needed to generate a PSF and/or shift if off-axis.
 
         Valid parameter names can be found in ``self.kwarg_names``
 
@@ -156,10 +165,10 @@ class AnalyticalScaoPsf:
         self._wave_m = self.wavelength
         if self.wavelength > 0.1:  # assume its in um
             self._wave_m *= 1e-6
-        
+
         for key in kwargs:
             if key not in self.kwarg_names:
-                warnings.warn("{} not found in self.kwarg_names".format(key))
+                warnings.warn(f"{key} not found in self.kwarg_names")
 
         self.__dict__.update(kwargs)
         if self.seed is not None:
@@ -405,7 +414,7 @@ class AnalyticalScaoPsf:
 
     def get_hdu(self, **kwargs):
         """
-        Makes an ``ImageHDU`` with the kernel and relevant header info
+        Make an ``ImageHDU`` with the kernel and relevant header info.
 
         Additional keyword-value pairs can be passed to the header as kwargs
 
@@ -418,7 +427,7 @@ class AnalyticalScaoPsf:
 
         hdr = fits.Header()
         hdr["CDELT1"] = self.pixelSize / 3600.  # because pixelSize is in arcsec
-        hdr["CDELT2"] = self.pixelSize / 3600.  
+        hdr["CDELT2"] = self.pixelSize / 3600.
         hdr["CRVAL1"] = self.x_last / 3600.
         hdr["CRVAL2"] = self.y_last / 3600.
         hdr["CRPIX1"] = w / 2.
@@ -442,6 +451,4 @@ class AnalyticalScaoPsf:
     def plot_psf(self, which="psf_latest"):
         """Plots a logscale PSF kernel: ["psf_latest", "psf_on_axis"]"""
         plt.imshow(getattr(self, which).T, origin='l', norm=LogNorm())
-        print('Strehl ratio of {} is {}'.format(which, self.psf_latest.max()))
-
-
+        print(f"Strehl ratio of {which} is {self.psf_latest.max()}")

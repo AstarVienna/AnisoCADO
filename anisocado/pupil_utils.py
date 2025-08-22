@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jun  8 15:38:32 2018
@@ -10,8 +9,6 @@ Original Title : make_ricoPupil.py
 """
 
 import numpy as np
-# import matplotlib.pyplot as plt
-# plt.ion()
 
 """
 CONVENTIONS : Ce fichier est ecrit en convention X,Y
@@ -526,7 +523,7 @@ def generateCoordSegments(D, rot):
     # Elimination des segments non valides grace a 2 nombres parfaitement
     # empiriques ajustes a-la-mano.
     inner_rad, outer_rad = 4.1, 15.4  # nominal, 798 segments
-    nn = (ll > inner_rad * pitch) & (ll < outer_rad * pitch);
+    nn = (ll > inner_rad * pitch) & (ll < outer_rad * pitch)
     lx = lx[nn]
     ly = ly[nn]
     lx, ly = reorganizeSegmentsOrderESO(lx, ly)

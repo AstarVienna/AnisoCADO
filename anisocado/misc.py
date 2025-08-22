@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 from astropy.io import fits
 from astropy.table import Table
@@ -54,11 +55,11 @@ def make_image_of_psf_grid(filt_name="Ks", wave=2.15, for_joss=True):
 
     if for_joss:
         plt.tight_layout()
-        path = "../docs/joss_paper/{}-band_psf_grid".format(filt_name)
+        path = f"../docs/joss_paper/{filt_name}-band_psf_grid"
         plt.savefig(path+".png", format="png")
         plt.savefig(path+".pdf", format="pdf")
     else:
-        plt.suptitle("{}-band ({}um) SCAO PSFs".format(filt_name, wave))
+        plt.suptitle(f"{filt_name}-band ({wave}um) SCAO PSFs")
 
 
 # make_image_of_psf_grid("Ks", 2.15)
@@ -142,7 +143,7 @@ def make_simcado_psf_file(coords, wavelengths, header_cards=None, **kwargs):
 
     psf_hdus = []
     for wave in wavelengths:
-        print("Making psf cube for {} um".format(wave))
+        print(f"Making psf cube for {wave} um")
         psf = AnalyticalScaoPsf(wavelength=wave, **kwargs)
         kernel_cube = [psf.shift_off_axis(dx, dy) for dx, dy in coords]
 
@@ -192,7 +193,7 @@ def field_positions_for_simcado_psf(radii=None, theta=45):
 
     coords = [(0, 0)]
     if radii is None:
-        radii =  [1, 2, 4, 8, 16, 32]
+        radii = [1, 2, 4, 8, 16, 32]
     for r in radii:
         for ang in np.arange(0, 360, theta):
             coords += [(r * np.cos(np.deg2rad(ang)),
@@ -205,11 +206,9 @@ def make_strehl_map_from_coords(coords):
     x, y = np.array(coords).T
 
     from scipy.interpolate import griddata
-    map = griddata((x, y), np.arange(len(x)),
-                   np.array(np.meshgrid(np.arange(-25, 26),
-                                        np.arange(-25, 26))).T,
-                   method="nearest")
+    smap = griddata((x, y), np.arange(len(x)),
+                    np.array(np.meshgrid(np.arange(-25, 26),
+                                         np.arange(-25, 26))).T,
+                    method="nearest")
 
-    return map
-
-
+    return smap

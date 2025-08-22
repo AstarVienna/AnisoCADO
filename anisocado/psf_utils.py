@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Originally from file _anisocado.py"""
 
 import numpy as np
@@ -369,7 +370,8 @@ def convertSpectrum2Dphi(W, uk):
     return Dphi
 
 
-def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength, rng=np.random.default_rng()):
+def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength,
+                       rng=np.random.default_rng()):
     """
     <N>            : size of the output image, that is made to match the size
                      of the (square) psf image to be processed. In other
@@ -728,6 +730,3 @@ def round_edges(kernel, edge_width=10):
     kernel[:, -n:] *= falloff
 
     return kernel
-
-
-
