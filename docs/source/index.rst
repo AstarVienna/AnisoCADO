@@ -145,26 +145,6 @@ add the ``HDUs`` to an astropy ``HDUList`` object.
             i += 1
 
 
-Change Log
-----------
-
-- 2023.07.10 :
-    - Release 0.3.0
-    - Rename MAORY to MORFEO
-    - Support Python 3.8 to 3.11
-    - Fix Read The Docs
-- 2023.05.03 :
-    - Release 0.2.3
-    - Switch to ``pyproject.toml``
-    - Support Python 3.7 to 3.11
-- 2023.02.01 :
-    - Fix bugs to support numpy 2.24
-    - Release 0.2.2
-- 2021.10.21 :
-    - Upgraded Numpy dependency to v1.17 to use ``numpy.random.default_rng``
-    - Removed support for Python 2.7
-
-
 Indices and tables
 ==================
 
