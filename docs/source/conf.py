@@ -31,30 +31,46 @@ sys.path.insert(0, os.path.abspath('../../'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.doctest',
-              'sphinx.ext.intersphinx',
-              'sphinx.ext.todo',
-              'sphinx.ext.coverage',
-              'sphinx.ext.mathjax',
-              'sphinx.ext.viewcode',
-              'numpydoc',
-              'sphinxcontrib.apidoc',
-              'matplotlib.sphinxext.plot_directive',
-              ]
+extensions = [
+    'sphinx.ext.todo',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.extlinks',
+    'sphinx.ext.doctest',
+    'sphinx.ext.napoleon',
+    'sphinx_copybutton',
+    'myst_nb',
+    ]
 
-apidoc_module_dir = os.path.abspath('../../')
-apidoc_output_dir = 'reference'
-apidoc_separate_modules = True
+# apidoc settings
+autosummary_generate = True
+autoclass_content = "class"
+autodoc_default_flags = ["members", "inherited-members"]
+autodoc_docstring_signature = False
+napoleon_numpy_docstring = True
+napoleon_use_admonition_for_references = True
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".ipynb": "myst-nb",
+    ".myst": "myst-nb",
+    ".md": "myst-nb",
+}
+source_encoding = 'utf-8'
+
+# MyST NB stuff
+nb_execution_timeout = 3600  # [s]
+nb_execution_mode = "auto"
+# nb_execution_excludepatterns = []
 
 # The master toctree document.
 master_doc = 'index'
@@ -94,10 +110,13 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-# html_theme = 'classic'
+html_theme = "sphinx_book_theme"
+html_theme_options = {
+    "repository_url": "https://github.com/AstarVienna/AnisoCADO",
+    "use_repository_button": True,
+    "use_download_button": True,
+    "home_page_in_toc": True,
+}
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -182,4 +201,3 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'python': ('https://docs.python.org/3/',  None)}
-
