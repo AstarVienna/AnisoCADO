@@ -20,5 +20,5 @@ jobs:
     name: Offline tests
     uses: AstarVienna/DevOps/.github/workflows/tests.yml@main
     with:
-      poetry: False
+      poetry: True
     secrets: inherit
