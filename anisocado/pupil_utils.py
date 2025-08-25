@@ -6,16 +6,14 @@ Created on Fri Jun  8 15:38:32 2018
 
 Original Title : make_ricoPupil.py
 
-"""
+=====================================================
+CONVENTIONS : Ce fichier est ecrit en convention X, Y
+=====================================================
 
-import numpy as np
+1.0 Convention X, Y
+-------------------
 
-"""
-CONVENTIONS : Ce fichier est ecrit en convention X,Y
-
-...................................................... 1.0 Convention X,Y 
-
-Dans la convention d'axes (x,y), tous les tableaux representant des images
+Dans la convention d'axes (x, y), tous les tableaux representant des images
 s'adressent par
     tab[ix, iy]
 Les indices s'utilisent alors classiquement
@@ -27,18 +25,18 @@ où ind[0] porte X. On fera donc appel a
     tab[ix, iy]
 
 La fonction meshgrid fait chier, et doit s'appeler par
-    X,Y = meshgrid(x,y, indexing='ij')
+    X, Y = meshgrid(x, y, indexing="ij")
 pour creer des tableaux conformes a un appel en X[ix, iy].
 
 Dans les tableaux qui stockent des coord en x,y on utilise
-x = tab[:,0]
-y = tab[:,1]
+x = tab[:, 0]
+y = tab[:, 1]
 pour que l'utilisation de flatten() mette X en premier. Cette facon de proceder
 est logique/compatible avec les indices.
 
 Dans les fonctions on place x d'abord, y ensuite, dans les arguments comme
 dans le retour de fonction
-    def toto(...,x,y,...)
+    def toto(..., x, y, ...)
         return x, y
 et
     x, y = toto(...)
@@ -46,24 +44,26 @@ et
 Graphisme: Pour afficher un tel tableau et avoir une representation
 'naturelle' avec x "a droite" et y "en haut" il faut par contre
 utiliser une transposition et retournement d'axe
-    plt.imshow(tab.T, origin='lower')
+    plt.imshow(tab.T, origin="lower")
 et qui offre une utilisation classique de
     plt.plot(x, y, ...)
 qui placera un overlay d'un plot de façon coherente sur l'image affichee.
 
 
-Une sortie FITS d'un tableau tab[x,y] va generer un fichier qui contient des
+Une sortie FITS d'un tableau tab[x, y] va generer un fichier qui contient des
 data avec un axe rapide NAXIS1 dirige selon Y. Attention car de nombreux
-logiciels considerent axe rapide = axe x (par exemple ds9), ou representent 
+logiciels considerent axe rapide = axe x (par exemple ds9), ou representent
 l'axe rapide souvent horizontal en natif (ds9, python, yorick, idl, ...)
 Donc, pour les entrees/sorties on transposera les data
-    pf.writeto('monfichier.fits', tab.T)
+    pf.writeto("monfichier.fits", tab.T)
 et
-    tab = pf.getdata('monfichier.fits').T
+    tab = pf.getdata("monfichier.fits").T
 
 
-...................................................... 2.0 Convention Y,X 
-Dans la convention d'axe (y,x), tous les tableaux d'images sont
+2.0 Convention Y, X
+-------------------
+
+Dans la convention d'axe (y, x), tous les tableaux d'images sont
 adresses par
     tab[iy, ix]
 
@@ -87,67 +87,68 @@ et a l'appel de la fonction et recup des coordonnees on garde
     x, y = toto(args, ax, ay, ..)
 
 La fonction meshgrid doit s'appeler par
-    X,Y = meshgrid(x,y)
+    X, Y = meshgrid(x, y)
 pour creer des tableaux conformes a un appel en X[iy, ix].
 
-Dans les tableaux qui stockent des coord en x,y on utilise
-x = tab[:,0]
-y = tab[:,1]
+Dans les tableaux qui stockent des coord en x, y on utilise
+x = tab[:, 0]
+y = tab[:, 1]
 pour que l'utilisation de flatten() mette X en premier. Cependant cette
 notation est en conflit avec le traitement des indices (fonction where()) qui
 placent Y d'abord.
 
 Graphisme: Pour afficher un tel tableau et avoir une representation
-'naturelle' avec x "a droite" et y "en haut" il faut juste utiliser le
+"naturelle" avec x "a droite" et y "en haut" il faut juste utiliser le
 retournement d'axe
-    plt.imshow(tab, origin='lower')
+    plt.imshow(tab, origin="lower")
 suivi d'une utilisation classique de
     plt.plot(x, y, ...)
 qui placera un overlay d'un plot de façon coherente sur l'image affichee.
 
 
-Une sortie FITS d'un tableau tab[x,y] cree un fichier qui aura un axe
+Une sortie FITS d'un tableau tab[x, y] cree un fichier qui aura un axe
 rapide NAXIS1 selon X, coherent avec la plupart des logiciels (ds9, python,
 yorick, idl, ...)
 
 
-............................................................ 3.0 Meshgrid
+3.0 Meshgrid
+------------
 
 Quand on definit
 x = ...
 y = ...
-et qu'on utilise np.meshgrid(), on a 
+et qu'on utilise np.meshgrid(), on a
 
-   code                            convention d'appel        mat/imshow      
-X,Y = meshgrid(x,y)                     [y,x]               X horizontal
-X,Y = meshgrid(x,y,indexing='ij')       [x,y]               X vertical  :-(
-Y,X = meshgrid(y,x)                     [x,y]               X vertical  :-(
-Y,X = meshgrid(y,x,indexing='ij')       [y,x]               X horizontal
-X,Y = meshgrid(y,x)                   incoherent
+   code                               convention d'appel  mat/imshow
+X, Y = meshgrid(x, y)                 [y, x]              X horizontal
+X, Y = meshgrid(x, y, indexing="ij")  [x, y]              X vertical
+Y, X = meshgrid(y, x)                 [x, y]              X vertical
+Y, X = meshgrid(y, x, indexing="ij")  [y, x]              X horizontal
+X, Y = meshgrid(y, x)                 incoherent
 
-meshgrid(x,y) equivaut a indexing='xy' (default).
-Indexing 'ij' ou 'xy' affecte la transposition des X,Y de sortie.
+meshgrid(x, y) equivaut a indexing="xy" (default).
+Indexing "ij" ou "xy" affecte la transposition des X,Y de sortie.
 L'interversion x/y dans les parametres d'appel et de sortie affecte la
 transposition des X/Y.
 
 
-Donc 
-- soit on utilise meshgrid(x,y) sans option d'indexing, ce qui donne des
+Donc
+- soit on utilise meshgrid(x, y) sans option d'indexing, ce qui donne des
 plot 2D plutot user-friendly sans pencher la tete et sans transposee, mais
 la notation d'appel dans les tableaux doit etre [iy,ix]
-- soit on utilise meshgrid(..,indexing='ij'), on aura avec imshow() sans
-option des plots a regarder avec la tete 90° a droite, et une notation [x,y]
+- soit on utilise meshgrid(..,indexing="ij"), on aura avec imshow() sans
+option des plots a regarder avec la tete 90° a droite, et une notation [x, y]
 partout dans le code.
-Pour avoir les plots python "dans le bon sens" avec une notation [x,y] il faut
-plt.imshow(p.T,origin='lower').
+Pour avoir les plots python "dans le bon sens" avec une notation [x, y] il faut
+plt.imshow(p.T, origin="lower").
 
 
 L'utilisation
-    X,Y = meshgrid(y,x)
+    X, Y = meshgrid(y, x)
 ou
-    Y,X = meshgrid(x,y)
-n'a de sens que si x==y (par exemple x=y=np.linspace(-1,1,n) ...) et permet
-le meme rendu que indexing='ij'. Mais c'est un joli hasard. Des que les
+    Y, X = meshgrid(x, y)
+n'a de sens que si x==y (par exemple x=y=np.linspace(-1, 1, n) ...) et permet
+le meme rendu que indexing="ij". Mais c'est un joli hasard. Des que les
 axes x et y se distinguent, soit par le nbre de points, soit par les
 valeurs (soit le range, le step, l'offset, etc.) alors inverser x et y est
 juste purement incoherent.
@@ -156,7 +157,19 @@ juste purement incoherent.
 """
 
 
-def fillPolygon(x, y, i0, j0, scale, gap, N, index=0):
+import numpy as np
+
+
+def fillPolygon(
+    x: float,
+    y: float,
+    i0: float,
+    j0: float,
+    scale: float,
+    gap: float,
+    N: int,
+    index: int = 0,
+) -> np.ndarray:
     """
     From a list of points defined by their 2 coordinates list
     x and y, creates a filled polygon with sides joining the points.
@@ -166,28 +179,43 @@ def fillPolygon(x, y, i0, j0, scale, gap, N, index=0):
     Arrays x and y are supposed to be in unit U, and scale is the
     pixel size in U units.
 
-    :returns: filled polygon (N, N), boolean
-    :param float x, y: list of points defining the polygon
-    :param float i0, j0: index of pixels where the pupil should be centred.
-                         Can be floating-point indexes.
-    :param float scale: size of a pixel of the image, in same unit as x and y.
-    :param float N: size of output image.
+    Parameters
+    ----------
+    x, y : float
+        List of points defining the polygon.
+    i0, j0 : float
+        Indices of pixels where the pupil should be centred.
+        May be floating-point indices.
+    scale : float
+        Size of a pixel of the image, in same unit as x and y.
+    gap : float
+        Half-space between segments in meters.
+    N : int
+        Size of output image.
+    index : int, optional
+        DESCRIPTION. The default is 0.
 
-    :Example:
-    x = np.array([1,-1,-1.5,0,1.1])
-    y = np.array([1,1.5,-0.2,-2,0])
-    N = 200
-    i0 = N/2
-    j0 = N/2
-    gap = 0.
-    scale = 0.03
-    pol = fillPolygon(x, y, i0, j0, scale, gap, N, index=2)
+    Returns
+    -------
+    np.ndarray
+        Filled polygon (N, N), boolean.
+
+    Examples
+    --------
+    >>> x = np.array([1,-1,-1.5,0,1.1])
+    >>> y = np.array([1,1.5,-0.2,-2,0])
+    >>> N = 200
+    >>> i0 = N/2
+    >>> j0 = N/2
+    >>> gap = 0.
+    >>> scale = 0.03
+    >>> pol = fillPolygon(x, y, i0, j0, scale, gap, N, index=2)
 
     """
     # define coordinates map centred on (i0,j0) with same units as x,y.
     X = (np.arange(N) - i0) * scale
     Y = (np.arange(N) - j0) * scale
-    X, Y = np.meshgrid(X, Y, indexing='ij')  # indexage [x,y]
+    X, Y = np.meshgrid(X, Y, indexing="ij")  # indexage [x,y]
 
     # define centre of polygon x0, y0
     x0 = np.mean(x)
@@ -270,7 +298,7 @@ def centrePourVidal(N, i0, j0, centerMark):
     res = 0
     X = (np.arange(N) - i0) * scale
     Y = (np.arange(N) - j0) * scale
-    X, Y = np.meshgrid(X, Y, indexing='ij')  # convention d'appel [x,y]
+    X, Y = np.meshgrid(X, Y, indexing="ij")  # convention d'appel [x,y]
     if centerMark == 1:
         res = (X ** 2 + Y ** 2) < 1
     if centerMark == 2:
@@ -296,7 +324,7 @@ def fillSpider(N, nspider, dspider, i0, j0, scale, rot):
     a = np.ones((N, N), dtype=np.bool_)
     X = (np.arange(N) - i0) * scale
     Y = (np.arange(N) - j0) * scale
-    X, Y = np.meshgrid(X, Y, indexing='ij')  # convention d'appel [x,y]
+    X, Y = np.meshgrid(X, Y, indexing="ij")  # convention d'appel [x,y]
     w = 2 * np.pi / nspider
     # rot += np.pi/2  # parce que c'est comme ca !!
     for i in range(nspider):
@@ -308,7 +336,7 @@ def fillSpider(N, nspider, dspider, i0, j0, scale, rot):
 
 def generateEeltPupil_slow(npt, dspider, i0, j0, pixscale, rotdegree):
     """
-    Computes the binary EELT pupil on a map of size (npt, npt).
+    Computes the binary ELT pupil on a map of size (npt, npt).
     This is the original function, that builds the pupil shape according to
     hardcoded contours.
     This function is now obsolete, because it's been replaced by the faster
@@ -321,7 +349,8 @@ def generateEeltPupil_slow(npt, dspider, i0, j0, pixscale, rotdegree):
     :param float pixscale: size of a pixel of the image, in meters.
     :param float rotdegree: rotation angle of the pupil, in degrees.
 
-    :Example:
+    Examples
+    --------
     >>> pup = generateEeltPupil_slow(800, 0.6, 400, 400, 0.1, 3.0)
 
     """
@@ -492,7 +521,7 @@ def createHexaPattern(pitch, supportSize):
     x = pitch * (np.arange(2 * nx + 1) - nx)
     ny = int(np.ceil((supportSize / 2.0) / pitch / V3) + 1)
     y = (V3 * pitch) * (np.arange(2 * ny + 1) - ny)
-    x, y = np.meshgrid(x, y, indexing='ij')
+    x, y = np.meshgrid(x, y, indexing="ij")
     x = x.flatten()
     y = y.flatten()
     peak_axis = np.append(x, x + pitch / 2.)  # axe dirige selon sommet
@@ -507,7 +536,7 @@ def generateCoordSegments(D, rot):
     Result is a tuple of arrays(6, 798).
 
     :param float D: D is the pupil diameter in meters, it must be set to 40.0 m
-    for the nominal EELT.
+    for the nominal ELT.
     :param float rot: pupil rotation angle in radians
 
     """
@@ -589,7 +618,7 @@ def reorganizeSegmentsOrderESO(x, y):
         sector = (t > k * pi_3) & (t < (k + 1) * pi_3)
         u = k * pi_3
         distance = (A * np.cos(u) - np.sin(u)) * x[sector] + (
-                    np.cos(u) + A * np.sin(u)) * y[sector]
+            np.cos(u) + A * np.sin(u)) * y[sector]
         indsort = np.argsort(distance)
         X = np.append(X, x[sector][indsort])
         Y = np.append(Y, y[sector][indsort])
@@ -639,7 +668,7 @@ def generateSegmentProperties(attribute, hx, hy, i0, j0, scale, gap, N, D,
     :param float scale: size of a pixel of the image, in meters.
     :param float gap: half-space between segments in meters
     :param int N: size of the output array (N,N)
-    :param float D: diameter of the pupil. For the nominal EELT, D shall
+    :param float D: diameter of the pupil. For the nominal ELT, D shall
                     be set to 40.0
     :param bool softGap: if False, the gap between segments is binary 0/1
           depending if the pixel is within the gap or not. If True, the gap
@@ -685,8 +714,8 @@ def generateSegmentProperties(attribute, hx, hy, i0, j0, scale, gap, N, D,
             # the width of the impulse response, chosen 2-pixel wide to be
             # well sampled.
             # The "depth" is related to the gap width. The integral of a
-            # Lorentzian of 2 pix wide is PI. Integral of a gap of width 'gap'
-            # in pixels is 'gap'.
+            # Lorentzian of 2 pix wide is PI. Integral of a gap of width "gap"
+            # in pixels is "gap".
             # So the depth equals to gap/scale/np.pi.
             for i in range(nseg):
                 indx, indy, distedge = fillPolygon(hx[:, i], hy[:, i],
@@ -694,8 +723,8 @@ def generateSegmentProperties(attribute, hx, hy, i0, j0, scale, gap, N, D,
                                                    scale, gap * 0., segdiam,
                                                    index=1)
                 pupil[indx + ix0[i], indy + iy0[i]] = attribute[i] * (
-                            1. - (gap / scale / np.pi) / (
-                                1 + (distedge / scale) ** 2))
+                    1. - (gap / scale / np.pi) / (
+                        1 + (distedge / scale) ** 2))
         else:
             # Hard gaps
             for i in range(nseg):
@@ -707,7 +736,7 @@ def generateSegmentProperties(attribute, hx, hy, i0, j0, scale, gap, N, D,
         # attribute is [piston, tip, tilt]
         minimap = np.zeros((segdiam, segdiam))
         xmap = np.arange(segdiam) - segdiam / 2
-        xmap, ymap = np.meshgrid(xmap, xmap, indexing='ij')  # [x,y] convention
+        xmap, ymap = np.meshgrid(xmap, xmap, indexing="ij")  # [x,y] convention
         pitch = 1.244683637214  # diameter of inscribed circle
         diamseg = pitch * 2 / np.sqrt(3)  # diameter of circumscribed circle
         diamfrizou = (pitch + diamseg) / 2 * D / 40.  # average diameter
@@ -721,61 +750,82 @@ def generateSegmentProperties(attribute, hx, hy, i0, j0, scale, gap, N, D,
                                         j0 - iy0[i], scale, 0., segdiam,
                                         index=1)
             minimap = attribute[0, i] + (factunit * attribute[1, i]) * xmap + (
-                        factunit * attribute[2, i]) * ymap
+                factunit * attribute[2, i]) * ymap
             pupil[indx + ix0[i], indy + iy0[i]] = minimap[indx, indy]
 
     return pupil
 
 
-#  _   _ ___ ____ _   _       _     _______     _______ _
-# | | | |_ _/ ___| | | |     | |   | ____\ \   / / ____| |
-# | |_| || | |  _| |_| |_____| |   |  _|  \ \ / /|  _| | |
-# |  _  || | |_| |  _  |_____| |___| |___  \ V / | |___| |___
-# |_| |_|___\____|_| |_|     |_____|_____|  \_/  |_____|_____|
-
+# High-level functions (whatever that's supposed to mean here...)
 
 def getEeltSegmentNumber():
     """
-    Just returns the number of segments of the EELT nominal pupil, in order
-    to be able to generate either reflectivities, or phase errors, or else.
+    Return the number of segments of the ELT nominal pupil.
 
+    In order to be able to generate either reflectivities, or phase errors,
+    or else.
     """
     hx, hy = generateCoordSegments(40., 0.)
     n = hx.shape[-1]
     return n
 
 
-def generateEeltPupilMask(npt, dspider, i0, j0, pixscale, gap, rotdegree,
-                          D=40.0, centerMark=0):
+def generateEeltPupilMask(
+    npt: int,
+    dspider: float,
+    i0: float,
+    j0: float,
+    pixscale: float,
+    gap: float,
+    rotdegree: float,
+    D: float = 40.0,
+    centerMark: int = 0,
+) -> np.ndarray:
     """
-    Generates a boolean pupil mask of the binary EELT pupil
-    on a map of size (npt, npt).
+    Generate a boolean pupil mask of the binary ELT pupil.
 
+    On a map of size (npt, npt).
 
-    :returns: pupil image (npt, npt), boolean
-    :param int npt: size of the output array
-    :param float dspider: width of spiders in meters
-    :param float i0, j0: index of pixels where the pupil should be centred.
-                         Can be floating-point indexes.
-    :param float pixscale: size of a pixel of the image, in meters.
-    :param float gap: half-space between segments in meters
-    :param float rotdegree: rotation angle of the pupil, in degrees.
-    :param float D: diameter of the pupil. For the nominal EELT, D shall
-                    be set to 40.0
-    :param int centerMark: when centerMark!=0, a pixel is added at the centre of
-        symmetry of the pupil in order to debug things using compass.
-        centerMark==1 draws a point
-        centerMark==2 draws 2 lines
+    Parameters
+    ----------
+    npt : int
+        Size of the output array.
+    dspider : float
+        Width of spiders in meters.
+    i0, j0 : float
+        Indices of pixels where the pupil should be centred
+        Can be floating-point indicess.
+    pixscale : float
+        Size of a pixel of the image, in meters.
+    gap : float
+        Half-space between segments in meters.
+    rotdegree : float
+        Rotation angle of the pupil, in degrees.
+    D : float, optional
+        Diameter of the pupil in meter. The default is 40.0 (ELT).
+    centerMark : int, optional
+        when centerMark!=0, a pixel is added at the centre of
+            symmetry of the pupil in order to debug things using compass.
+            centerMark==1 draws a point
+            centerMark==2 draws 2 lines.
+        The default is 0.
 
-    :Example:
-    npt = 752
-    i0 = npt/2+0.5
-    j0 = npt/2+0.5
-    rotdegree = 90.0
-    pixscale = 40./npt
-    dspider = 0.53
-    gap = 0.02
-    pup = generateEeltPupilMask(npt, dspider, i0, j0, pixscale, gap, rotdegree)
+    Returns
+    -------
+    pup : np.ndarray
+        Pupil image (npt, npt), boolean.
+
+    Examples
+    --------
+    >>> npt = 752
+    >>> i0 = npt/2+0.5
+    >>> j0 = npt/2+0.5
+    >>> rotdegree = 90.0
+    >>> pixscale = 40./npt
+    >>> dspider = 0.53
+    >>> gap = 0.02
+    >>> pup = generateEeltPupilMask(
+    ...     npt, dspider, i0, j0, pixscale, gap, rotdegree)
 
     """
     rot = rotdegree * np.pi / 180
@@ -787,10 +837,11 @@ def generateEeltPupilMask(npt, dspider, i0, j0, pixscale, gap, rotdegree,
 
     # From the data of hex mirrors, we build the pupil image using
     # boolean
-    pup = generateSegmentProperties(True, hx, hy, i0, j0, pixscale, gap, npt, D)
+    pup = generateSegmentProperties(
+        True, hx, hy, i0, j0, pixscale, gap, npt, D)
 
-    # SPIDERS ............................................
-    nspider = 3  # for the day where we have more/less spiders ;-)
+    # SPIDERS
+    nspider = 3  # for the day where we have more/less spiders
     if (dspider > 0 and nspider > 0):
         pup = pup & fillSpider(npt, nspider, dspider, i0, j0, pixscale, rot)
 
@@ -805,7 +856,7 @@ def generateEeltPupilMask(npt, dspider, i0, j0, pixscale, gap, rotdegree,
 def generateEeltPupilReflectivity(refl, npt, dspider, i0, j0, pixscale, gap,
                                   rotdegree, D=40.0, softGap=False):
     """
-    Generates a map of the reflectivity of the EELT pupil, on an array
+    Generates a map of the reflectivity of the ELT pupil, on an array
     of size (npt, npt).
 
     :returns: pupil image (npt, npt), with the same type of input argument refl
@@ -822,7 +873,7 @@ def generateEeltPupilReflectivity(refl, npt, dspider, i0, j0, pixscale, gap,
     :param float pixscale: size of a pixel of the image, in meters.
     :param float gap: half-space between segments in meters
     :param float rotdegree: rotation angle of the pupil, in degrees.
-    :param float D: diameter of the pupil. For the nominal EELT, D shall
+    :param float D: diameter of the pupil. For the nominal ELT, D shall
                     be set to 40.0
     :param bool softGap: if False, the gap between segments is binary 0/1
           depending if the pixel is within the gap or not. If True, the gap
@@ -830,20 +881,21 @@ def generateEeltPupilReflectivity(refl, npt, dspider, i0, j0, pixscale, gap,
           gap width.
 
 
-    :Example:
-
-    refl = np.ones(798)+np.random.randn(798)/20.
-    dead = 3
-    refl[(np.random.rand(dead)*797).astype(int)] = 0.
-    npt = 1200
-    i0 = npt/2+0.5
-    j0 = npt/2+0.5
-    rotdegree = 14.0
-    pixscale = 44./npt
-    dspider = 0.53
-    gap = 0.02
-    pup = generateEeltPupilReflectivity(refl, npt, dspider, i0, j0, pixscale,
-                                        gap, rotdegree, softGap=True)
+    Examples
+    --------
+    >>> refl = np.ones(798)+np.random.randn(798)/20.
+    >>> dead = 3
+    >>> refl[(np.random.rand(dead)*797).astype(int)] = 0.
+    >>> npt = 1200
+    >>> i0 = npt/2+0.5
+    >>> j0 = npt/2+0.5
+    >>> rotdegree = 14.0
+    >>> pixscale = 44./npt
+    >>> dspider = 0.53
+    >>> gap = 0.02
+    >>> pup = generateEeltPupilReflectivity(
+    ...     refl, npt, dspider, i0, j0,
+    ...     pixscale, gap, rotdegree, softGap=True)
 
     """
     rot = rotdegree * np.pi / 180
@@ -855,8 +907,8 @@ def generateEeltPupilReflectivity(refl, npt, dspider, i0, j0, pixscale, gap,
 
     # From the data of hex mirrors, we build the pupil image according
     # to the properties defined by input argument <refl>
-    pup = generateSegmentProperties(refl, hx, hy, i0, j0, pixscale, gap, npt, D,
-                                    softGap=softGap)
+    pup = generateSegmentProperties(
+        refl, hx, hy, i0, j0, pixscale, gap, npt, D, softGap=softGap)
 
     # SPIDERS ............................................
     nspider = 3  # for the day where we have more/less spiders ;-)
@@ -869,7 +921,7 @@ def generateEeltPupilReflectivity(refl, npt, dspider, i0, j0, pixscale, gap,
 def generateEeltPupilPhase(phase, npt, dspider, i0, j0, pixscale, rotdegree,
                            D=40.0):
     """
-    Generates a map of the segments phase errors of the EELT pupil, on an array
+    Generates a map of the segments phase errors of the ELT pupil, on an array
     of size (npt, npt).
 
     :returns: phase image (npt, npt), with the same type of input argument phase
@@ -882,21 +934,21 @@ def generateEeltPupilPhase(phase, npt, dspider, i0, j0, pixscale, rotdegree,
                          Can be floating-point indexes.
     :param float pixscale: size of a pixel of the image, in meters.
     :param float rotdegree: rotation angle of the pupil, in degrees.
-    :param float D: diameter of the pupil. For the nominal EELT, D shall
+    :param float D: diameter of the pupil. For the nominal ELT, D shall
                     be set to 40.0
 
-    :Example:
-
-    phase = np.random.randn(3,798)
-    phase = np.zeros((3,798)); phase[1,:]=1.
-    npt = 752
-    i0 = npt/2+0.5
-    j0 = npt/2+0.5
-    rotdegree = 90.0
-    pixscale = 41./npt
-    dspider = 0.51
-    pup = generateEeltPupilPhase(phase, npt, dspider, i0, j0, pixscale,
-                                 rotdegree)
+    Examples
+    --------
+    >>> phase = np.random.randn(3,798)
+    >>> phase = np.zeros((3,798)); phase[1,:]=1.
+    >>> npt = 752
+    >>> i0 = npt/2+0.5
+    >>> j0 = npt/2+0.5
+    >>> rotdegree = 90.0
+    >>> pixscale = 41./npt
+    >>> dspider = 0.51
+    >>> pup = generateEeltPupilPhase(
+    ...     phase, npt, dspider, i0, j0, pixscale, rotdegree)
 
     """
     rot = rotdegree * np.pi / 180
@@ -908,12 +960,14 @@ def generateEeltPupilPhase(phase, npt, dspider, i0, j0, pixscale, rotdegree,
 
     # From the data of hex mirrors, we build the pupil phase image according
     # to the properties defined by input argument <phase>
-    pup = generateSegmentProperties(phase, hx, hy, i0, j0, pixscale, 0.0, npt,
-                                    D)
+    pup = generateSegmentProperties(
+        phase, hx, hy, i0, j0, pixscale, 0.0, npt, D)
 
     return pup
 
 
+# TODO: What's this? Module-level example? Test case? Anyway, figure out where
+#       it belongs an put it there!
 """
 refl = np.ones(798)+np.random.randn(798)/10.
 N = npt = 800
@@ -930,12 +984,12 @@ p = generateEeltPupilMask(N, dspider, i0, j0+10, scale, rotdegree)
 plt.clf()
 plt.matshow(p, fignum=1)
 
-#p = generateEeltPupilReflectivity(refl, N, dspider, i0, j0, pixscale, 
+#p = generateEeltPupilReflectivity(refl, N, dspider, i0, j0, pixscale,
                                    rotdegree, D=40.0)
 
 phase = np.zeros((3,798)); phase[1,:]=1.
 phase = np.random.randn(3,798)
-p = generateEeltPupilPhase(phase, N, dspider, i0, j0, pixscale, rotdegree, 
+p = generateEeltPupilPhase(phase, N, dspider, i0, j0, pixscale, rotdegree,
                            D=40.0)
 
 plt.matshow(p, fignum=1)

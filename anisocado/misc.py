@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
+
 import numpy as np
 from astropy.io import fits
 from astropy.table import Table
 
 from matplotlib import pyplot as plt
-from matplotlib.colors import LogNorm
 
 from anisocado import AnalyticalScaoPsf
 
 
-def strehl_map(r=25, dr=3, **kwargs):
+def strehl_map(r: int = 25, dr: int = 3, **kwargs):
     psf = AnalyticalScaoPsf(**kwargs)
     x, y = np.mgrid[-r:r+dr:dr, -r:dr+r:dr]
 
-    strlmap = np.zeros(x.shape)
+    strlmap = np.zeros_like(x)
     for i in range(len(x)):
         for j in range(len(y)):
             psf.shift_off_axis(x[i, j], y[i, j])
@@ -23,11 +23,11 @@ def strehl_map(r=25, dr=3, **kwargs):
 
 
 def on_axis_strehl_for_kernel_size(Narr=(128, 512, 2048), **kwargs):
-    """Only for the on-axis kernel"""
+    """Only for the on-axis kernel."""
     return [AnalyticalScaoPsf(N=N, **kwargs).strehl_ratio for N in Narr]
 
 
-def make_psf_grid(r=14, dr=7, **kwargs):
+def make_psf_grid(r: int = 14, dr: int = 7, **kwargs):
     psf = AnalyticalScaoPsf(**kwargs)
     x, y = np.mgrid[-r:r+1:dr, -r:r+1:dr]
 
@@ -40,17 +40,21 @@ def make_psf_grid(r=14, dr=7, **kwargs):
     return psf_grid
 
 
-def make_image_of_psf_grid(filt_name="Ks", wave=2.15, for_joss=True):
+def make_image_of_psf_grid(
+    filt_name: str = "Ks",
+    wave: float = 2.15,
+    for_joss: bool = True
+) -> None:
     psf_grid = make_psf_grid(wavelength=wave, N=128)
 
     plt.figure(figsize=(10, 10))
     i = 0
     for y in range(5):
         for x in range(5):
-            plt.subplot(5, 5, 1+x+5*(4-y))
-            plt.imshow(psf_grid[i], origin="l", norm=LogNorm())
+            plt.subplot(5, 5, 1 + x + 5 * (4 - y))
+            plt.imshow(psf_grid[i], origin="lower", norm="log")
             plt.axis("off")
-            plt.title("({}, {})".format((7*x-14), (7*x-14)))
+            plt.title(f"({7*x - 14}, {7*x - 14})")
             i += 1
 
     if for_joss:
@@ -59,7 +63,7 @@ def make_image_of_psf_grid(filt_name="Ks", wave=2.15, for_joss=True):
         plt.savefig(path+".png", format="png")
         plt.savefig(path+".pdf", format="pdf")
     else:
-        plt.suptitle(f"{filt_name}-band ({wave}um) SCAO PSFs")
+        plt.suptitle(f"{filt_name}-band ({wave} um) SCAO PSFs")
 
 
 # make_image_of_psf_grid("Ks", 2.15)
@@ -67,7 +71,12 @@ def make_image_of_psf_grid(filt_name="Ks", wave=2.15, for_joss=True):
 # make_image_of_psf_grid("J", 1.2)
 
 
-def make_simcado_psf_file(coords, wavelengths, header_cards=None, **kwargs):
+def make_simcado_psf_file(
+    coords,
+    wavelengths,
+    header_cards=None,
+    **kwargs,
+) -> fits.HDUList:
     """
     Generate a set of Field-Varying PSF cubes for use with SimCADO
 
@@ -159,9 +168,12 @@ def make_simcado_psf_file(coords, wavelengths, header_cards=None, **kwargs):
     return hdulist
 
 
-def field_positions_for_simcado_psf(radii=None, theta=45):
+def field_positions_for_simcado_psf(
+    radii: list[float] | None = None,
+    theta: float = 45.,
+) -> list[tuple[float, float]]:
     """
-    Generates a list of field position where the PSF will be sampled
+    Generate a list of field position where the PSF will be sampled.
 
     The PSF will be sampled at intervals of ``theta`` around concentric circles
     placed at distances ``radii`` from the centre of the field of view.
@@ -190,7 +202,6 @@ def field_positions_for_simcado_psf(radii=None, theta=45):
         hdu = anisocado.make_simcado_psf_file(cds, wavelengths=[1.2, 1.6, 2.2])
 
     """
-
     coords = [(0, 0)]
     if radii is None:
         radii = [1, 2, 4, 8, 16, 32]

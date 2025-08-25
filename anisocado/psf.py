@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Contains AnalyticalScaoPsf, the main product of this package."""
+
 import warnings
 
 import numpy as np
@@ -7,18 +9,29 @@ from matplotlib.colors import LogNorm
 
 from astropy.io import fits
 
-from .psf_utils import (get_atmospheric_turbulence, computeEeltOTF,
-                        computeSpatialFreqArrays, get_profile_defaults,
-                        anisoplanaticSpectrum, convertSpectrum2Dphi,
-                        defineDmFrequencyArea, computeBpSpectrum,
-                        otherSpectrum, airmassImpact, fittingSpectrum,
-                        aliasingSpectrum, computeWiener, r0Converter,
-                        fake_generatePupil, core_generatePsf)
+from .psf_utils import (
+    get_atmospheric_turbulence,
+    computeEeltOTF,
+    computeSpatialFreqArrays,
+    get_profile_defaults,
+    anisoplanaticSpectrum,
+    convertSpectrum2Dphi,
+    defineDmFrequencyArea,
+    computeBpSpectrum,
+    otherSpectrum,
+    airmassImpact,
+    fittingSpectrum,
+    aliasingSpectrum,
+    computeWiener,
+    r0Converter,
+    fake_generatePupil,
+    core_generatePsf,
+)
 
 
 class AnalyticalScaoPsf:
     """
-    A class to generate SCAO PSFs for the ELT
+    A class to generate SCAO PSFs for the ELT.
 
     It is important to note that original PSF is generated for an on-axis
     guide star (``self.psf_on_axis``) at a specific wavelength. This PSF is
@@ -40,7 +53,8 @@ class AnalyticalScaoPsf:
     wavelength : float
         [um] Default: 2.15 um. Wavelength for which the PSF should be generated
     rotdegree : float
-        [deg] Default: 0 deg. Rotation angle of the pupil w.r.t the plane of the optical axis
+        [deg] Default: 0 deg. Rotation angle of the pupil w.r.t the plane of
+        the optical axis.
     nmRms : float
         [nm] Default: 100 nm. Residual wavefront error of the system
     L0 : float
@@ -155,7 +169,7 @@ class AnalyticalScaoPsf:
         self.__dict__.update(psf_on_axis)
         self.update()
 
-    def update(self, **kwargs):
+    def update(self, **kwargs) -> None:
         """
         Update the parameter needed to generate a PSF and/or shift if off-axis.
 
@@ -217,7 +231,7 @@ class AnalyticalScaoPsf:
             self.psf_on_axis = self.make_psf()
             self.psf_latest = self.psf_on_axis
 
-    def make_psf(self):
+    def make_psf(self) -> np.ndarray:
         """
         Generates a analytical SCAO PSF for a long (>10 sec) exposure
 
@@ -227,7 +241,7 @@ class AnalyticalScaoPsf:
 
         Returns
         -------
-        psf : array
+        psf : np.ndarray
             The PSF kernel
 
         Examples
@@ -243,7 +257,8 @@ class AnalyticalScaoPsf:
                                        dx, dy, self._wave_m,
                                        self.kx, self.ky, self.W, self.M4)
         Wfit = fittingSpectrum(self.W, self.M4)
-        Walias = aliasingSpectrum(self.kx, self.ky, self.r0IR, self.L0, self.M4)
+        Walias = aliasingSpectrum(
+            self.kx, self.ky, self.r0IR, self.L0, self.M4)
         Wbp = computeBpSpectrum(self.kx, self.ky, self.V, self.Fe, self.tret,
                                 self.gain, self.W, self.M4)
         Wother = otherSpectrum(self.nmRms, self.M4, self.uk, self._wave_m)
@@ -266,27 +281,22 @@ class AnalyticalScaoPsf:
 
         return psf
 
-    def shift_off_axis(self, dx, dy):
+    def shift_off_axis(self, dx: float, dy: float) -> np.ndarray:
         """
-        Shifts the on-axis PSF off axis by an amount ``(dx, dy)`` in arcsec
+        Shift the on-axis PSF off axis by an amount ``(dx, dy)`` in arcsec.
 
         Parameters
         ----------
         dx, dy : float
             [arcsec] Offset in each of the dimensions relative to the plane of
-            the optical axis
+            the optical axis.
 
         Returns
         -------
-        psf : array
-            The PSF kernel
-
-        Examples
-        --------
-
+        psf : np.ndarray
+            The PSF kernel.
 
         """
-
         self.x_last = dx
         self.y_last = dy
 
@@ -311,9 +321,13 @@ class AnalyticalScaoPsf:
 
         return psf
 
-    def make_short_exposure_psf(self, dit=1.0, screen_step_length=0.5):
+    def make_short_exposure_psf(
+        self,
+        dit: float = 1.0,
+        screen_step_length: float = 0.5,
+    ) -> np.ndarray:
         """
-        Returns a PSF for an 'short' exposure time of ``DIT``
+        Return a PSF for an 'short' exposure time of ``DIT``.
 
         The PSF kernel will be a single 2D array made from N stacked
         instantaneous PSFs, where the instantaneous PSFs are generated at time
@@ -322,23 +336,18 @@ class AnalyticalScaoPsf:
 
         Parameters
         ----------
-        dit : float
-            [s] Default is 1.0 sec. Exposure time for the PSF
-
-        screen_step_length : float
+        dit : float, optional
+            Exposure time for the PSF in seconds. The default is 1.0 s.
+        screen_step_length : float, optional
             [m] Sample step length for atmospheric phase screen
             Default is 0.5m - the length of the M4 actuator pitch
 
         Returns
         -------
-        psfLE : array
-
-        Examples
-        --------
-
+        psfLE : np.ndarray
+            DESCRIPTION.
 
         """
-
         # The dirty one.
         # Let's try to simulate the fluctuations due to short exposures.
         Waniso = anisoplanaticSpectrum(self.Cn2h, self.layerAltitude, self.L0,
@@ -346,7 +355,8 @@ class AnalyticalScaoPsf:
                                        self._wave_m, self.kx, self.ky,
                                        self.W, self.M4)
         Wfit = fittingSpectrum(self.W, self.M4)
-        Walias = aliasingSpectrum(self.kx, self.ky, self.r0IR, self.L0, self.M4)
+        Walias = aliasingSpectrum(
+            self.kx, self.ky, self.r0IR, self.L0, self.M4)
         Wbp = computeBpSpectrum(self.kx, self.ky, self.V, self.Fe, self.tret,
                                 self.gain, self.W, self.M4)
         Wother = otherSpectrum(self.nmRms, self.M4, self.uk, self._wave_m)
@@ -395,24 +405,24 @@ class AnalyticalScaoPsf:
 
     @property
     def strehl_ratio(self):
-        """Return an Strehl ratio of the kernel in ``self.psf_latest``"""
+        """Return a Strehl ratio of the kernel in ``self.psf_latest``."""
         return np.max(self.psf_latest) * self._kernel_sum
 
     @property
     def kernel(self):
-        """Return the kernel held in ``self.psf_latest``"""
+        """Return the kernel held in ``self.psf_latest``."""
         return self.psf_latest
 
     @property
     def hdu(self):
-        """Return the ``ImageHDU`` from ``get_hdu()``"""
+        """Return the ``ImageHDU`` from ``get_hdu()``."""
         return self.get_hdu()
 
-    def writeto(self, **kwargs):
-        """Calls the ``writeto`` method of the ImageHDU from ``self.hdu``"""
+    def writeto(self, **kwargs) -> None:
+        """Call the ``writeto`` method of the ImageHDU from ``self.hdu``."""
         self.hdu.writeto(**kwargs)
 
-    def get_hdu(self, **kwargs):
+    def get_hdu(self, **kwargs) -> fits.ImageHDU:
         """
         Make an ``ImageHDU`` with the kernel and relevant header info.
 
@@ -448,7 +458,7 @@ class AnalyticalScaoPsf:
 
         return hdu_psf
 
-    def plot_psf(self, which="psf_latest"):
-        """Plots a logscale PSF kernel: ["psf_latest", "psf_on_axis"]"""
-        plt.imshow(getattr(self, which).T, origin='l', norm=LogNorm())
+    def plot_psf(self, which="psf_latest") -> None:
+        """Plot a logscale PSF kernel: ["psf_latest", "psf_on_axis"]."""
+        plt.imshow(getattr(self, which).T, origin='l', norm="log")
         print(f"Strehl ratio of {which} is {self.psf_latest.max()}")
