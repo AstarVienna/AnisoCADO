@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
+"""Unit tests for AnalyticalScaoPsf."""
+
 import pytest
 
 import numpy as np
 from matplotlib import pyplot as plt
-from matplotlib.colors import LogNorm
-
 from astropy.io import fits
 
 from anisocado.psf import AnalyticalScaoPsf
+
 
 PLOTS = False
 
@@ -28,12 +30,13 @@ class TestInit:
         assert isinstance(psf.psf_on_axis, np.ndarray)
 
         if PLOTS:
-            plt.imshow(psf.psf_on_axis.T, origin="lower", norm=LogNorm(), vmin=1e-7)
+            plt.imshow(psf.psf_on_axis.T,
+                       origin="lower", norm="log", vmin=1e-7)
             plt.show()
 
     def test_kernel_sums_to_one(self):
         psf = AnalyticalScaoPsf(N=256)
-        assert np.sum(psf.psf_latest) == pytest.approx(1)
+        assert psf.psf_latest.sum() == pytest.approx(1)
 
 
 class TestShiftPSF:
@@ -48,18 +51,20 @@ class TestShiftPSF:
 
         if PLOTS:
             plt.subplot(121)
-            plt.imshow(psf.psf_on_axis.T, origin="lower", norm=LogNorm(), vmin=3e-6)
+            plt.imshow(psf.psf_on_axis.T,
+                       origin="lower", norm="log", vmin=3e-6)
             plt.colorbar()
 
             plt.subplot(122)
-            plt.imshow(psf.psf_latest.T, origin="lower", norm=LogNorm(), vmin=3e-6)
+            plt.imshow(psf.psf_latest.T,
+                       origin="lower", norm="log", vmin=3e-6)
             plt.colorbar()
             plt.show()
 
     def test_kernel_sums_to_one(self):
         psf = AnalyticalScaoPsf(N=512)
         psf.shift_off_axis(0, 0)
-        assert np.sum(psf.psf_latest) == pytest.approx(1)
+        assert psf.psf_latest.sum() == pytest.approx(1)
 
 
 class TestHDUProperty:
@@ -72,9 +77,8 @@ class TestHDUProperty:
         assert hdu.header["CRVAL1"] == 10 / 3600.
 
         if PLOTS:
-            plt.imshow(hdu.data.T, origin="l", norm=LogNorm())
+            plt.imshow(hdu.data.T, origin="l", norm="log")
             plt.show()
-
 
 
 class TestRNG:
@@ -82,4 +86,4 @@ class TestRNG:
         psf_a = AnalyticalScaoPsf(N=512, seed=9999999)
         psf_b = AnalyticalScaoPsf(N=512, seed=9999999)
 
-        assert np.all(psf_a.psf_on_axis == psf_b.psf_on_axis)
+        np.testing.assert_array_equal(psf_a.psf_on_axis, psf_b.psf_on_axis)

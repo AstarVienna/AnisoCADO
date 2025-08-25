@@ -1,12 +1,13 @@
+# -*- coding: utf-8 -*-
+"""Unit tests for misc functions."""
+
 import pytest
 
 import numpy as np
+import matplotlib.pyplot as plt
 from astropy.io import fits
 
 from anisocado import misc
-
-import matplotlib.pyplot as plt
-from matplotlib.colors import LogNorm
 
 
 @pytest.fixture(scope="class")
@@ -17,7 +18,6 @@ def basic_fv_psf():
               (-n, -n), (0, -n), (n, -n)]
     waves = [0.9, 1.1, 1.6, 2.15]
     hdu = misc.make_simcado_psf_file(coords=coords, wavelengths=waves, N=128)
-
     return hdu
 
 
@@ -27,8 +27,11 @@ class TestSimcadoPsfFile:
             misc.make_simcado_psf_file()
 
     def test_returns_hdulist_for_basic_input(self):
-        hdu = misc.make_simcado_psf_file(coords=[(0, 0)], wavelengths=[2.15],
-                                                   N=128)
+        hdu = misc.make_simcado_psf_file(
+            coords=[(0, 0)],
+            wavelengths=[2.15],
+            N=128,
+        )
         assert isinstance(hdu, fits.HDUList)
         assert isinstance(hdu[1], fits.BinTableHDU)
         assert len(hdu) == 3
@@ -82,17 +85,16 @@ class TestFvpsfFileConsistencyChecks:
         for psf_hdu in basic_fv_psf[2:]:
             for i in range(len(psf_hdu.data)):
                 plt.subplot(3, 3, i + 1)
-                plt.imshow(psf_hdu.data[i, :, :].T, origin="l", norm=LogNorm())
+                plt.imshow(psf_hdu.data[i, :, :].T, origin="l", norm="log")
 
             plt.show()
 
     def print_coords(self):
-        #coords = psf.field_positions_for_simcado_psf()
-        #waves = [0.8, 0.9, 1.05, 1.2, 1.5, 1.7, 2.0, 2.2]
-        #hdu = psf.make_simcado_psf_file()
+        # coords = psf.field_positions_for_simcado_psf()
+        # waves = [0.8, 0.9, 1.05, 1.2, 1.5, 1.7, 2.0, 2.2]
+        # hdu = psf.make_simcado_psf_file()
 
         map = misc.make_strehl_map_from_table([(0, 0)])
         plt.imshow(map)
         plt.show()
         print(np.unique(map))
-
