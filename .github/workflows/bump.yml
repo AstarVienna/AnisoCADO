@@ -1,0 +1,30 @@
+name: Bump package version
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        type: boolean
+        description: Only output new version number, no actual change.
+        required: false
+      rule:
+        type: choice
+        description: Version bump level
+        required: true
+        options:
+        - prerelease
+        - "prerelease --next-phase"
+        - prepatch
+        - preminor
+        - premajor
+        - patch
+        - minor
+        - major
+
+jobs:
+  Bump:
+    name: Bump version number
+    uses: AstarVienna/DevOps/.github/workflows/bump.yml@main
+    secrets: inherit
+    with:
+      dry-run: ${{ inputs.dry-run }}
+      rule: ${{ inputs.rule }}
