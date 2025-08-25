@@ -21,3 +21,8 @@ jobs:
     with:
       poetry: True
     secrets: inherit
+
+  call-updated-tests:
+    name: Tests with updated dependencies
+    uses: AstarVienna/DevOps/.github/workflows/updated_tests.yml@main
+    secrets: inherit
