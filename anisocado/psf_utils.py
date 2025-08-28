@@ -1,17 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Originally from file _anisocado.py"""
+"""Originally from file _anisocado.py.
 
-import numpy as np
-from . import pupil_utils
-
-#  ____  _____    _    ____  __  __ _____
-# |  _ \| ____|  / \  |  _ \|  \/  | ____|
-# | |_) |  _|   / _ \ | | | | |\/| |  _|
-# |  _ <| |___ / ___ \| |_| | |  | | |___
-# |_| \_\_____/_/   \_\____/|_|  |_|_____|
-
-"""
-Hello.
 This files contains some useful functions related to psf generation.
 They are just raw, so that you can insert them into your own classes
 as desired.
@@ -23,6 +12,9 @@ Go right now to [the file _anisocado.py].
 It contains examples that will show you how to use the functions, what they do,
 etc.
 """
+
+import numpy as np
+from . import pupil_utils
 
 
 def defineDmFrequencyArea(kx, ky, rotdegree, dactu=0.5403):
@@ -47,19 +39,18 @@ def defineDmFrequencyArea(kx, ky, rotdegree, dactu=0.5403):
         wavelength = 1.65e-6  # metres
         kx, ky = computeSpatialFreqArrays(N, pixelSize, wavelength)
         M4 = defineDmFrequencyArea(kx, ky, 0)
-        plt.imshow(np.fft.fftshift(M4).T, origin='l')
+        plt.imshow(np.fft.fftshift(M4).T, origin="l")
 
     """
-
     # cut-off frequency
     fc = (1./np.sqrt(3)) / dactu
 
     # mask frequency definition
     A = np.pi/3  # 60 degrees
     A0 = rotdegree * np.pi / 180
-    msk = np.abs(np.cos(A0)*ky+np.sin(A0)*kx)<fc
-    msk = np.logical_and(msk, np.abs(np.cos(A+A0)*ky+np.sin(A+A0)*kx)<fc)
-    msk = np.logical_and(msk, np.abs(np.cos(2*A+A0)*ky+np.sin(2*A+A0)*kx)<fc)
+    msk = np.abs(np.cos(A0)*ky+np.sin(A0)*kx) < fc
+    msk = np.logical_and(msk, np.abs(np.cos(A+A0)*ky+np.sin(A+A0)*kx) < fc)
+    msk = np.logical_and(msk, np.abs(np.cos(2*A+A0)*ky+np.sin(2*A+A0)*kx) < fc)
     k = np.sqrt(kx**2 + ky**2)
     msk = np.logical_and(msk, k < (fc*1.115))
 
@@ -86,7 +77,6 @@ def computeSpatialFreqArrays(N, pixelSize, wavelength):
         kx, ky, uk = computeSpatialFreqArrays(N, pixelSize, wavelength)
 
     """
-
     # array of indices centred 'as expected' by Fourier frequencies, in 1D
     k1d = np.fft.fftshift(np.arange(N) - (N//2))
 
@@ -98,7 +88,7 @@ def computeSpatialFreqArrays(N, pixelSize, wavelength):
     k1d = k1d * uk  # now this is a spatial freq in metres^-1
 
     # now creating 2D arrays of spatial frequency
-    kx, ky = np.meshgrid(k1d, k1d, indexing='ij') # for convention [x,y]
+    kx, ky = np.meshgrid(k1d, k1d, indexing="ij")  # for convention [x,y]
 
     return kx, ky, uk
 
@@ -127,7 +117,6 @@ def computeWiener(kx, ky, L0, r0):
         W = computeWiener(kx, ky, L0, r0)
 
     """
-
     # computation of Wiener spectrum expressed in radians^2 (at the wavelength
     # where r0(lambda) is expressed !)
     Wiener = (kx**2 + ky**2 + 1./L0**2.)**(-11./6)
@@ -179,7 +168,6 @@ def anisoplanaticSpectrum(Cn2h, layerAltitude, L0, offx, offy, wavelength,
                                   wavelength, kx, ky, W, M4)
 
     """
-
     # number of turbulent layers involved in that computation
     nlayers = len(Cn2h)
 
@@ -191,10 +179,11 @@ def anisoplanaticSpectrum(Cn2h, layerAltitude, L0, offx, offy, wavelength,
 
     # loop over turbulent layers, summing transfer function of each layer
     for i in range(nlayers):
-        dx = layerAltitude[i] * offx / RASC # shift in metres on the layer in X
-        dy = layerAltitude[i] * offy / RASC # idem, in Y
+        # shift in metres on the layer in X
+        dx = layerAltitude[i] * offx / RASC
+        dy = layerAltitude[i] * offy / RASC  # idem, in Y
         tmp = (2j*np.pi*dx)*kx + (2j*np.pi*dy)*ky
-        Haniso += Cn2h[i] * np.abs(1 - np.exp( tmp ))**2
+        Haniso += Cn2h[i] * np.abs(1 - np.exp(tmp))**2
 
     # now applying the transfer function on the Wiener spectrum, only in the
     # spatial frequency range of M4
@@ -229,9 +218,8 @@ def fittingSpectrum(Wiener, M4):
         f = fittingSpectrum(W, M4)
 
     """
-
     Wfit = Wiener.copy()
-    Wfit[M4] = 0.0 # M4 cancels whatever is in its compensation domain
+    Wfit[M4] = 0.0  # M4 cancels whatever is in its compensation domain
     return Wfit
 
 
@@ -256,7 +244,6 @@ def otherSpectrum(nmRms, M4, uk, wavelength):
         f = otherSpectrum(nmRms, M4, uk, wavelength)
 
     """
-
     fact = 2 * np.pi * nmRms * 1e-9 / uk / wavelength
     fact = fact**2
     tot = np.sum(M4)
@@ -281,12 +268,11 @@ def aliasingSpectrum(kx, ky, r0, L0, M4, dssp=0.4015):
         W = aliasingSpectrum(kx, ky, r0, L0, M4)
 
     """
-
     ke = 1.0 / dssp  # computes the sampling spatial-frequency of the WFS
 
     kxt = kx[M4]
     kyt = ky[M4]
-    Wt  = ((kxt-ke)**2 + kyt**2 + 1./L0**2.)**(-11./6)
+    Wt = ((kxt-ke)**2 + kyt**2 + 1./L0**2.)**(-11./6)
     Wt += ((kxt+ke)**2 + kyt**2 + 1./L0**2.)**(-11./6)
     Wt += (kxt**2 + (kyt-ke)**2 + 1./L0**2.)**(-11./6)
     Wt += (kxt**2 + (kyt+ke)**2 + 1./L0**2.)**(-11./6)
@@ -318,9 +304,9 @@ def computeBpSpectrum(kx, ky, V, Fe, tret, gain, Wiener, M4):
         f = computeBpSpectrum(kx, ky, V, Fe, tret, gain, W, M4)
 
     """
-
     k = np.sqrt(kx*kx + ky*ky)
-    nu = k * V / np.sqrt(2)    # pourquoi un sqrt(2) ? je ne saurais dire ...!!!
+    # pourquoi un sqrt(2) ? je ne saurais dire ...!!!
+    nu = k * V / np.sqrt(2)
     Wbp = hcor(nu, Fe, tret, gain, 500) * Wiener
     Wbp[np.logical_not(M4)] = 0.
     return Wbp
@@ -338,17 +324,16 @@ def hcor(freq, Fe, tret, G, BP, an=True):
     end of the integration and the start of the command.
 
     """
-
     Te = 1. / Fe
     p = 1j * 2 * np.pi * freq + 1e-12
 
-    Hint = 1./(1-np.exp(-p*Te)) # numeric integrator
+    Hint = 1./(1-np.exp(-p*Te))  # numeric integrator
     Hccd = (1.-np.exp(-p*Te))/(p*Te)  # echant bloqueur avec retard 1/2 trame
     Hdac = Hccd                    # echant bloqueur avec retard 1/2 trame
     Hret = np.exp(-p*tret)
     Hmir = 1./(1. + 1j*freq/BP)
     Hbo = Hint * Hccd * Hdac * Hret * Hmir
-    Hcor   = 1./abs(1 + Hbo*G)**2
+    Hcor = 1./abs(1 + Hbo*G)**2
 
     return Hcor
 
@@ -363,10 +348,9 @@ def convertSpectrum2Dphi(W, uk):
     Uses Dphi(r) = $ $ (1-cos(2.pi.k.r)) W(k) d2k
     Computation of Dphi is in radians^2 at the wavelength of r0.
     """
-
     W[0, 0] = 0.0
     W[0, 0] = -np.sum(W)
-    Dphi = 2*np.abs(np.fft.fft2(W)) *  (uk**2)
+    Dphi = 2*np.abs(np.fft.fft2(W)) * (uk**2)
     return Dphi
 
 
@@ -416,11 +400,9 @@ def fake_generatePupil(N, deadSegments, rotdegree, pixelSize, wavelength,
 
 
 def computeEeltOTF(pup):
-    """
-    """
-    # Computation of telescope OTF
+    """Compute the telescope OTF."""
     Nx, Ny = pup.shape
-    FTOtel = np.fft.fft2( np.abs(np.fft.fft2(pup))**2 ).real
+    FTOtel = np.fft.fft2(np.abs(np.fft.fft2(pup))**2).real
     FTOtel /= np.sum(pup)**2 * Nx * Ny
     return FTOtel
 
@@ -474,12 +456,11 @@ def core_generatePsf(Dphi, FTOtel):
         plt.imshow( psf[N//2-window:N//2+window, N//2-window:N//2+window]**0.3 )
 
     """
-
     # total FTO
     FTO = np.exp(-0.5*Dphi) * FTOtel
 
     # PSF
-    psf = np.fft.fftshift( np.fft.fft2(FTO).real )
+    psf = np.fft.fftshift(np.fft.fft2(FTO).real)
     return psf
 
 
@@ -512,7 +493,6 @@ def createAdHocScaoPsf(N, pixelSize, wavelengthIR, rotdegree, r0Vis, nmRms):
                                       r0Vis, nmRms)
 
     """
-
     # let's compute r0 in the IR using the
     # r0 chromatic translation formula
     wavelengthVis = 500e-9
@@ -568,14 +548,13 @@ def airmassImpact(r0_at_zenith, zenith_distance):
     distance. This function converts a r0 given at zenith into the real r0
     actually observed by the telescope.
     """
-
     z = zenith_distance * np.pi / 180  # the same, in radians
     r0 = r0_at_zenith * np.cos(z)**(3./5)
 
     return r0
 
 
-def get_atmospheric_turbulence(myProfile='EsoMedian'):
+def get_atmospheric_turbulence(myProfile="EsoMedian"):
     """
     Returns the relative level of turbulence at a given height
 
@@ -616,7 +595,7 @@ def get_atmospheric_turbulence(myProfile='EsoMedian'):
     Parameters
     ----------
     myProfile : str, optional
-        Profile name: ['EsoQ1', 'EsoMedian', 'EsoQ4', 'oldEso', 'gendron']
+        Profile name: ["EsoQ1", "EsoMedian", "EsoQ4", "oldEso", "gendron"]
 
     Returns
     -------
@@ -626,15 +605,14 @@ def get_atmospheric_turbulence(myProfile='EsoMedian'):
         Relative strength of turbulence
 
     """
-
     layerAltitude, Cn2h = [], []
 
-    if myProfile == 'oldEso':
+    if myProfile == "oldEso":
         layerAltitude = [47., 140, 281, 562, 1125, 2250, 4500, 9000, 18000.]
         Cn2h = [0.5224, 0.026, 0.0444, 0.116, 0.0989,
                 0.0295, 0.0598, 0.043, 0.06]
 
-    elif myProfile == 'officialEsoMedian' or myProfile == 'EsoMedian' :
+    elif myProfile == "officialEsoMedian" or myProfile == "EsoMedian":
         layerAltitude = [30, 90, 150, 200, 245, 300, 390, 600, 1130, 1880, 2630,
                          3500, 4500, 5500, 6500, 7500, 8500, 9500, 10500, 11500,
                          12500, 13500, 14500, 15500, 16500, 17500, 18500, 19500,
@@ -646,7 +624,7 @@ def get_atmospheric_turbulence(myProfile='EsoMedian'):
         Cn2h = np.array(Cn2h)
         Cn2h /= np.sum(Cn2h)
 
-    elif myProfile == 'EsoQ1':
+    elif myProfile == "EsoQ1":
         layerAltitude = [30, 90, 150, 200, 245, 300, 390, 600, 1130, 1880, 2630,
                          3500, 4500, 5500, 6500, 7500, 8500, 9500, 10500, 11500,
                          12500, 13500, 14500, 15500, 16500, 17500, 18500, 19500,
@@ -658,7 +636,7 @@ def get_atmospheric_turbulence(myProfile='EsoMedian'):
         Cn2h = np.array(Cn2h)
         Cn2h /= np.sum(Cn2h)
 
-    elif myProfile == 'EsoQ4':
+    elif myProfile == "EsoQ4":
         layerAltitude = [30, 90, 150, 200, 245, 300, 390, 600, 1130, 1880, 2630,
                          3500, 4500, 5500, 6500, 7500, 8500, 9500, 10500, 11500,
                          12500, 13500, 14500, 15500, 16500, 17500, 18500, 19500,
@@ -670,7 +648,7 @@ def get_atmospheric_turbulence(myProfile='EsoMedian'):
         Cn2h = np.array(Cn2h)
         Cn2h /= np.sum(Cn2h)
 
-    elif myProfile == 'gendron':
+    elif myProfile == "gendron":
         Cn2h = [1.0]
         layerAltitude = [4414.]
 
@@ -699,11 +677,11 @@ def get_profile_defaults(myProfile="EsoMedian"):
     seeing = 0.67
     zen_dist = 30
     wind_alpha = 1.
-    if myProfile == 'EsoQ1':
+    if myProfile == "EsoQ1":
         seeing = 0.4
         zen_dist = 0
         wind_alpha = 0.88
-    elif myProfile == 'EsoQ4':
+    elif myProfile == "EsoQ4":
         seeing = 1.0
         zen_dist = 60
         wind_alpha = 1.3

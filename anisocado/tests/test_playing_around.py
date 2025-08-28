@@ -1,9 +1,9 @@
-import pytest
+# -*- coding: utf-8 -*-
+"""Various tests to see if things run, no assertions."""
 
 import numpy as np
 
 from matplotlib import pyplot as plt
-from matplotlib.colors import LogNorm
 
 from anisocado import AnalyticalScaoPsf
 from anisocado.misc import on_axis_strehl_for_kernel_size
@@ -24,7 +24,7 @@ class TestMakeStrehlMap:
         print(np.max(sr))
 
         if PLOTS:
-            plt.imshow(sr)  # norm=LogNorm())
+            plt.imshow(sr)
             plt.contourf(x, y, sr, np.arange(0, 1, 0.05))
             plt.colorbar()
             plt.show()
@@ -53,12 +53,10 @@ class TestPsfsAlongXaxis:
 
             if PLOTS:
                 print(wave, np.sum(psf._kernel_sum))
-                plt.plot(x.flatten(), sr, label="{} um".format(wave))
+                plt.plot(x.flatten(), sr, label=f"{wave} um")
 
         if PLOTS:
-            # plt.semilogy()
             plt.legend()
             plt.xlabel("Distance from NGS [arcsec]")
             plt.ylabel("Strehl Ratio")
             plt.show()
-

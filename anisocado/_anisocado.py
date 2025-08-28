@@ -11,26 +11,33 @@ Edited by Kieran Leschinski and Fabian Haberhauer
 import numpy as np
 import matplotlib.pyplot as plt
 
-from anisocado.psf_utils import (get_atmospheric_turbulence, computeEeltOTF,
-                                 computeSpatialFreqArrays, createAdHocScaoPsf,
-                                 anisoplanaticSpectrum, convertSpectrum2Dphi,
-                                 defineDmFrequencyArea, computeBpSpectrum,
-                                 otherSpectrum, airmassImpact, fittingSpectrum,
-                                 aliasingSpectrum, computeWiener, r0Converter,
-                                 fake_generatePupil, core_generatePsf)
+from anisocado.psf_utils import (
+    get_atmospheric_turbulence,
+    computeEeltOTF,
+    computeSpatialFreqArrays,
+    createAdHocScaoPsf,
+    anisoplanaticSpectrum,
+    convertSpectrum2Dphi,
+    defineDmFrequencyArea,
+    computeBpSpectrum,
+    otherSpectrum,
+    airmassImpact,
+    fittingSpectrum,
+    aliasingSpectrum,
+    computeWiener,
+    r0Converter,
+    fake_generatePupil,
+    core_generatePsf,
+)
 
-#  _   _             ____                  _
-# | | | |___  ___   / ___|__ _ ___  ___   / |
-# | | | / __|/ _ \ | |   / _` / __|/ _ \  | |
-# | |_| \__ \  __/ | |__| (_| \__ \  __/  | |
-#  \___/|___/\___|  \____\__,_|___/\___|  |_|
 
+# use-case 1
 
 def shift_scao_psf(plots=False):
     """
     Problem:
     You have an on-axis PSF.
-    You want to 'move' it off-axis, let's say (+15, +20) arcsec.
+    You want to "move" it off-axis, let's say (+15, +20) arcsec.
 
 
     For that, you will need to know:
@@ -39,7 +46,6 @@ def shift_scao_psf(plots=False):
         - the global L0
 
     """
-    ###########
     # Setup
 
     # Let's take an example. I create a PSF, that could be coming from
@@ -58,10 +64,10 @@ def shift_scao_psf(plots=False):
 
     if plots:
         # I can even look at it:
-        plt.imshow(psf.T, origin='l')
-        print('Strehl ratio of initial psf is ', psf.max())
+        plt.imshow(psf.T, origin="l")
+        print("Strehl ratio of initial psf is ", psf.max())
 
-    # OK. That's the starting point.......................
+    # OK. That's the starting point.
 
     # Now I need to know the atmospheric properties, in particular the Cn2h
     # profile. Let me offer you a little selection of atmospheric profiles.
@@ -82,9 +88,8 @@ def shift_scao_psf(plots=False):
     # in arcsecs (this one is for those who'd like to check nothing will change
     # at the end)
     # offx, offy = (0, 0)
-    offx, offy = (0., 16.)   # in arcsecs
+    offx, offy = (0., 16.)  # [arcsec]
 
-    ####################
     # Generate PSF
 
     # Then let's start the work. I will create spatial frequency arrays.
@@ -112,21 +117,16 @@ def shift_scao_psf(plots=False):
 
     psf_aniso = core_generatePsf(Dphi, fto)
 
-    print('Strehl off-axis is', psf_aniso.max())
-    plt.imshow(psf_aniso.T, origin='l' )
+    print("Strehl off-axis is", psf_aniso.max())
+    plt.imshow(psf_aniso.T, origin="lower")
 
     return psf_aniso
 
-#  _   _             ____                 ____
-# | | | |___  ___   / ___|__ _ ___  ___  |___ \
-# | | | / __|/ _ \ | |   / _` / __|/ _ \   __) |
-# | |_| \__ \  __/ | |__| (_| \__ \  __/  / __/
-#  \___/|___/\___|  \____\__,_|___/\___| |_____|
 
+# use-case 2
 
 def exnihilo_scao_psf():
     """
-
     You want to generate SCAO PSFs ex-nihilo, using a simple, approximative
     simulation software.
     You are aware that the simulated PSFs will be perfectly smooth (infinitely
@@ -136,8 +136,6 @@ def exnihilo_scao_psf():
     For this you need to know all the parameters of the simulation.
 
     """
-
-    ###########
     # Setup
 
     # nb of pixels of the image to be simulated.
@@ -160,7 +158,8 @@ def exnihilo_scao_psf():
     L0 = 25.   # 25 metres is the Armazones median value
     seeing = 0.8          # in arcseconds
     r0Vis = 0.103 / seeing  # r0Vis is in metres here, 0.103 is in metres.arcsec
-    r0IR = r0Converter(r0Vis, 500e-9, wavelengthIR) # convert r0 at 500nm to IR
+    # convert r0 at 500nm to IR
+    r0IR = r0Converter(r0Vis, 500e-9, wavelengthIR)
 
     # Just to use that wonderful function, i decide that the seeing given here
     # was expressed at zenith, while our telescope observes at 30° from zenith.
@@ -169,7 +168,8 @@ def exnihilo_scao_psf():
     # telescope, so that their apparent distance grows with airmass --> this is
     # very bad for anisoplanatism !..
     zenDist = 30.  # I observe at 30° from zenith
-    r0IR = airmassImpact(r0IR, zenDist)  # apparent seeing degrades with airmass
+    # apparent seeing degrades with airmass
+    r0IR = airmassImpact(r0IR, zenDist)
 
     layerAltitude = np.array(layerAltitude)
     layerAltitude *= 1/np.cos(zenDist*np.pi/180)  # layers appear further away
@@ -192,12 +192,9 @@ def exnihilo_scao_psf():
     # Here is the position of the object in the field
     offx, offy = (10., 0.)
 
-
-    #################
     # PSF generation
 
-    # Let's go. Let's define some basic parameters (arrays of spatial
-    # frequencies)
+    # Let's define some basic parameters (arrays of spatial frequencies)
     kx, ky, uk = computeSpatialFreqArrays(N, pixelSize, wavelengthIR)
     M4 = defineDmFrequencyArea(kx, ky, rotdegree)
 
@@ -223,22 +220,16 @@ def exnihilo_scao_psf():
     FTOtel = computeEeltOTF(pup)
     psf = core_generatePsf(Dphi, FTOtel)
 
-    print('Strehl is ', psf.max())
-    plt.imshow( np.log(psf) )
+    print("Strehl is ", psf.max())
+    plt.imshow(np.log(psf))
 
     return psf
 
 
-#  _   _             ____                 _____
-# | | | |___  ___   / ___|__ _ ___  ___  |___ /
-# | | | / __|/ _ \ | |   / _` / __|/ _ \   |_ \
-# | |_| \__ \  __/ | |__| (_| \__ \  __/  ___) |
-#  \___/|___/\___|  \____\__,_|___/\___| |____/
-
+# use-case 3
 
 def instantaneous_scao_psf():
     """
-
     The dirty one.
     Let's try to simulate the fluctuations due to short exposures.
 
