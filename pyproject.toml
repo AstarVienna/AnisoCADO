@@ -35,6 +35,9 @@ classifiers=[
     "Topic :: Scientific/Engineering :: Astronomy",
 ]
 
+[tool.poetry.group.dev]
+optional = true
+
 [tool.poetry.group.dev.dependencies]
 pylint = "^3.3.7"
 black = "^25.1.0"
