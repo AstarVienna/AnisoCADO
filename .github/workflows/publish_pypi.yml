@@ -1,0 +1,10 @@
+name: Release on PyPI
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  Release:
+    uses: AstarVienna/DevOps/.github/workflows/publish_pypi.yml@main
+    secrets: inherit
