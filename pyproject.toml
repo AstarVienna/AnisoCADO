@@ -1,6 +1,6 @@
 [project]
 name = "AnisoCADO"
-version = "0.4.1a0"
+version = "0.5.0b0"
 description = "Generate off-axis SCAO PSFs for the ELT"
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
@@ -41,25 +41,40 @@ classifiers=[
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^3.3.7"
-black = "^25.1.0"
-mypy = "^1.17.0"
+pylint = "^4.0.4"
+black = "^25.12.0"
+mypy = "^1.19.1"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^8.3.5"
-pytest-cov = "^6.1.1"
+pytest = "^9.0.2"
+pytest-cov = "^7.0.0"
 
 [tool.poetry.group.docs]
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "^7.3.7"
-sphinx-book-theme = "^1.1.3"
-sphinx-copybutton = "^0.5.2"
-sphinxcontrib-apidoc = "^0.6.0"
-sphinxcontrib-mermaid = "^1.0.0"
-myst-nb = "^1.2.0"
+sphinx = "^8.1.3"
+sphinx-book-theme = "^1.1.4"
+sphinx-copybutton = ">=0.5.2,<1.0"
+sphinxcontrib-apidoc = ">=0.6.0,<1.0"
+sphinxcontrib-mermaid = "^2.0"
+myst-nb = "^1.3.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers"
+markers = [
+    "webtest: marks tests as requiring network (deselect with '-m \"not webtest\"')",
+]
+filterwarnings = [
+    "error",
+    # Should fix at some point
+    "ignore::ResourceWarning",
+]
+
+[tool.coverage.report]
+omit = ["anisocado/tests/*", "docs/*"]
