@@ -451,7 +451,10 @@ class AnalyticalScaoPsf:
         hdr["STREHL"] = (self.strehl_ratio, "Strehl ratio")
         hdr["PSFSUM"] = self._kernel_sum, "Sum of on-axis kernel used for SR"
 
-        dic = {key: self.__dict__[key] for key in self.kwarg_names}
+        dic = {
+            f"HIERARCH {key}" if len(key) > 8 else key: self.__dict__[key]
+            for key in self.kwarg_names
+        }
         hdr.update(dic)
         hdr.update(kwargs)
         hdu_psf = fits.ImageHDU(data=self.psf_latest, header=hdr)
