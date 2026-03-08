@@ -8,8 +8,8 @@ on:
     branches:
       - main
   schedule:
-    # Run every day at 5:00 UTC
-    - cron: "0 5 * * *"
+    # Runs at 05:00 UTC, only on Monday and Wednesday
+    - cron: "0 5 * * MON,WED"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
