@@ -1,6 +1,6 @@
 [project]
 name = "AnisoCADO"
-version = "0.6.0"
+version = "0.6.1.dev0"
 description = "Generate off-axis SCAO PSFs for the ELT"
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
