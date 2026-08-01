@@ -41,13 +41,13 @@ classifiers=[
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^4.0.4"
-black = "^26.3.1"
-mypy = "^1.19.1"
+pylint = "^4.0.6"
+black = "^26.5.1"
+mypy = "^2.3.0"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^9.0.2"
-pytest-cov = "^7.0.0"
+pytest = "^9.1.1"
+pytest-cov = "^7.1.0"
 
 [tool.poetry.group.docs]
 optional = true
