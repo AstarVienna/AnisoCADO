@@ -16,11 +16,9 @@ maintainers = [
     {name = "Fabian Haberhauer", email = "fabian.haberhauer@univie.ac.at"},
 ]
 dependencies = [
-    "numpy (>=1.26.4,<2.3.0) ; python_version >= '3.10' and python_version < '3.13'",
-    "numpy (>=2.3.5,<3.0.0) ; python_version >= '3.13'",
-
-    "astropy (>=6.1.7,<8.0.0)",
-    "matplotlib (>=3.10.1,<4.0.0)",
+    "numpy (>=2.2.6,<3.0.0)",
+    "astropy (>=7.0.2,<9.0.0)",
+    "matplotlib (>=3.10.9,<4.0.0)",
 ]
 
 [project.urls]
