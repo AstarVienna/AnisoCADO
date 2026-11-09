@@ -39,7 +39,7 @@ classifiers=[
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^4.0.6"
+pylint = "^4.0.9"
 black = "^26.10.1"
 mypy = "^2.3.0"
 
